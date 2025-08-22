@@ -1,0 +1,8 @@
+name = "retailaer"
+compatibility_date = "2025-08-22"
+
+[env.production]
+route = "retailaer.us/*"
+
+[[env.production.routes]]
+pattern = "retailaer.us/*"
