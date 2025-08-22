@@ -1,0 +1,316 @@
+/*
+  RetailAer Sample Site CSS
+  Swappable Color Palette System
+*/
+
+/* Default: Chartreuse Jet Palette */
+:root {
+  --palette-accent: #A6CE39;    /* chartreuse */
+  --palette-base: #005F6B;      /* teal base */
+  --palette-highlight: #A6CE39; /* same as accent for this palette */
+  --palette-neutral: #1C1C1C;   /* dark slate */
+  --palette-background: #EDE6D6; /* alpine oat */
+  --palette-text: #1C1C1C;      /* dark slate */
+  --palette-text-muted: #4A4A4A; /* neutral gray */
+}
+
+/* Alternative: Dynamic Flight Palette */
+:root[data-palette="dynamic-flight"] {
+  --palette-accent: #D3212D;    /* cherry red */
+  --palette-base: #002C54;      /* navy blue */
+  --palette-highlight: #FAD02E;  /* butter yellow */
+  --palette-neutral: #4A4A4A;   /* slate gray */
+  --palette-background: #F5F5F5; /* light background */
+  --palette-text: #1C1C1C;      /* dark text */
+  --palette-text-muted: #666666; /* muted text */
+}
+
+/* Semantic color assignments */
+:root {
+  --accent: var(--palette-accent);
+  --base: var(--palette-base);
+  --highlight: var(--palette-highlight);
+  --neutral: var(--palette-neutral);
+  --background: var(--palette-background);
+  --text: var(--palette-text);
+  --text-muted: var(--palette-text-muted);
+  
+  /* Legacy aliases for existing code */
+  --teal: var(--palette-base);
+  --dark: var(--palette-neutral);
+  --oat: var(--palette-background);
+  --gray: var(--palette-text-muted);
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background-color: var(--background);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+/* Side navigation */
+.side-nav {
+  position: fixed;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 220px;
+  background-color: var(--neutral);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 2rem 1rem;
+  box-sizing: border-box;
+}
+
+.side-nav a {
+  color: #fff;
+  text-decoration: none;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.side-nav a.active {
+  color: var(--accent);
+}
+
+.side-nav .cta {
+  margin-top: auto;
+  display: block;
+  padding: 0.6rem 1rem;
+  background-color: var(--accent);
+  color: var(--neutral);
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* Main content positioning */
+main {
+  margin-right: 220px; /* account for nav width */
+  padding: 2rem;
+  box-sizing: border-box;
+  min-height: 100vh;
+}
+
+/* Hero section */
+.hero {
+  margin-bottom: 3rem;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--base);
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.hero h1 {
+  font-size: 3.2rem;
+  font-weight: 700;
+  margin: 0.5rem 0;
+  line-height: 1.1;
+}
+
+.hero .subhead {
+  font-size: 1.125rem;
+  max-width: 40rem;
+  color: var(--text-muted);
+}
+
+.cta-row {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.btn-primary,
+.btn-outline {
+  display: inline-block;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.btn-primary {
+  background-color: var(--accent);
+  color: var(--neutral);
+}
+
+.btn-outline {
+  border: 2px solid var(--text);
+  color: var(--text);
+}
+
+.btn-primary:hover,
+.btn-outline:hover {
+  opacity: 0.85;
+}
+
+/* Media carousel */
+.media-carousel {
+  display: flex;
+  overflow-x: auto;
+  margin-top: 2rem;
+  padding-bottom: 1rem;
+  gap: 1rem;
+}
+
+.media-card {
+  flex: 0 0 auto;
+  background-color: var(--base);
+  color: #fff;
+  padding: 0.75rem;
+  border-radius: 4px;
+  min-width: 200px;
+}
+
+.media-card small {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+.media-card p {
+  margin: 0.25rem 0 0;
+  font-size: 0.9rem;
+}
+
+/* Solutions grid */
+.solutions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.solution-card {
+  background-color: var(--background);
+  border: 1px solid var(--text-muted);
+  border-radius: 4px;
+  padding: 1rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+  position: relative;
+}
+
+.solution-card::before {
+  content: '';
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--base);
+}
+
+.solution-card h3 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  color: var(--text);
+}
+
+.solution-card p {
+  margin: 0;
+  flex-grow: 1;
+  color: var(--text-muted);
+}
+
+.solution-card a {
+  margin-top: 1rem;
+  align-self: flex-start;
+  background-color: var(--accent);
+  color: var(--neutral);
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.solution-card a:hover {
+  opacity: 0.85;
+}
+
+/* Insights grid */
+.insights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.insight-card {
+  background-color: var(--background);
+  border: 1px solid var(--text-muted);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.insight-card header {
+  background-color: var(--base);
+  color: #fff;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.insight-card .body {
+  padding: 1rem;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+/* Contact page */
+.contact-container {
+  max-width: 600px;
+  margin-top: 1rem;
+}
+
+.contact-container .btn-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.btn-sales {
+  display: inline-block;
+  flex: 1;
+  background-color: var(--accent);
+  color: var(--neutral);
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  text-align: center;
+  text-decoration: none;
+  font-weight: 600;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.btn-support {
+  display: inline-block;
+  flex: 1;
+  border: 2px solid var(--text);
+  color: var(--text);
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  text-align: center;
+  text-decoration: none;
+  font-weight: 600;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.btn-sales:hover,
+.btn-support:hover {
+  opacity: 0.85;
+}
