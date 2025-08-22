@@ -1,8 +1,6 @@
 name = "retailaer"
 compatibility_date = "2025-08-22"
+pages_build_output_dir = "."
 
 [env.production]
 route = "retailaer.us/*"
-
-[[env.production.routes]]
-pattern = "retailaer.us/*"
