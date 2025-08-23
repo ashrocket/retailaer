@@ -93,7 +93,7 @@ body {
 /* Main content positioning */
 main {
   margin-right: 220px; /* account for nav width */
-  padding: 6rem 2rem 2rem;
+  padding: 18rem 2rem 2rem;
   box-sizing: border-box;
   min-height: 100vh;
 }
@@ -313,4 +313,15 @@ main {
 .btn-sales:hover,
 .btn-support:hover {
   opacity: 0.85;
+}
+
+/* Footer */
+footer {
+  margin-right: 220px;
+  padding: 2rem;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--text-muted);
+  margin-top: 3rem;
 }
