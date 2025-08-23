@@ -47,9 +47,36 @@ body {
   margin: 0;
   padding: 0;
   font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-  background-color: var(--background);
+  background: linear-gradient(135deg, var(--background) 0%, rgba(166, 206, 57, 0.05) 50%, var(--background) 100%);
   color: var(--text);
   line-height: 1.5;
+  position: relative;
+}
+
+/* Decorative elements for the top space */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 220px; /* account for nav */
+  height: 25vh;
+  background: linear-gradient(180deg, rgba(166, 206, 57, 0.1) 0%, transparent 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 5vh;
+  left: 5vw;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(166, 206, 57, 0.2) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 1;
+  pointer-events: none;
 }
 
 /* Side navigation */
@@ -96,11 +123,19 @@ main {
   padding: 25vh 2rem 2rem;
   box-sizing: border-box;
   min-height: 100vh;
+  background: linear-gradient(135deg, var(--background) 0%, rgba(166, 206, 57, 0.1) 100%);
 }
 
 /* Hero section */
 .hero {
   margin-bottom: 3rem;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  padding: 3rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 50rem;
 }
 
 .eyebrow {
