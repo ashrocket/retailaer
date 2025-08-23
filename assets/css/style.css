@@ -317,16 +317,19 @@ main {
 
 /* Footer */
 footer {
-  margin-right: 220px;
-  padding: 2rem;
+  position: fixed;
+  bottom: 20px;
+  right: 240px; /* account for nav width + margin */
+  left: 20px;
+  padding: 1rem 2rem;
   text-align: center;
   font-size: 0.9rem;
-  color: var(--text);
   background-color: var(--neutral);
   color: #fff;
-  border-top: 3px solid var(--accent);
-  margin-top: 6rem;
+  border-radius: 8px;
   font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 999;
 }
 
 /* Version badge in top left */
