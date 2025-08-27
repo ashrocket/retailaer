@@ -1,33 +1,28 @@
 /*
   RetailAer Sample Site CSS
-  Swappable Color Palette System v1.3.0
+  Class-Based Palette System v1.4.0
+  Reliable color switching without flash or race conditions
 */
 
-/* Default: Chartreuse Jet Palette */
-:root {
-  --palette-primary: #A6CE39;    /* bright chartreuse - main accent */
-  --palette-secondary: #005F6B;   /* deep teal - secondary elements */
-  --palette-tertiary: #A6CE39;    /* chartreuse highlight */
-  --palette-neutral-dark: #1C1C1C; /* dark slate - text */
-  --palette-neutral-light: #EDE6D6; /* warm oat - backgrounds */
-  --palette-neutral-mid: #4A4A4A;   /* gray - muted text */
-  
-  /* Semantic assignments */
-  --accent: var(--palette-primary);
-  --teal: var(--palette-secondary);
-  --dark: var(--palette-neutral-dark);
-  --oat: var(--palette-neutral-light);
-  --gray: var(--palette-neutral-mid);
+/* Default/Fallback: Chartreuse Jet Palette */
+:root,
+.palette-chartreuse {
+  --accent: #A6CE39;      /* bright chartreuse - main accent */
+  --teal: #005F6B;        /* deep teal - secondary elements */
+  --highlight: #A6CE39;   /* chartreuse highlight */
+  --dark: #1C1C1C;        /* dark slate - text */
+  --oat: #EDE6D6;         /* warm oat - backgrounds */
+  --gray: #4A4A4A;        /* gray - muted text */
 }
 
-/* Alternative: Dynamic Flight Palette - Bold Aviation Colors */
-:root[data-palette="dynamic-flight"] {
-  --palette-primary: #D3212D;      /* bold red - main accent */
-  --palette-secondary: #002C54;    /* navy blue - secondary elements */
-  --palette-tertiary: #FAD02E;     /* bright yellow - highlights */
-  --palette-neutral-dark: #1A1A1A; /* near black - text */
-  --palette-neutral-light: #F8F9FA; /* cool white - backgrounds */
-  --palette-neutral-mid: #6C757D;  /* cool gray - muted text */
+/* Dynamic Flight Palette - Bold Aviation Colors */
+.palette-dynamic-flight {
+  --accent: #D3212D;      /* bold red - main accent */
+  --teal: #002C54;        /* navy blue - secondary elements */
+  --highlight: #FAD02E;   /* bright yellow - highlights */
+  --dark: #1A1A1A;        /* near black - text */
+  --oat: #F8F9FA;         /* cool white - backgrounds */
+  --gray: #6C757D;        /* cool gray - muted text */
 }
 
 html,

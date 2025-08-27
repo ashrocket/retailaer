@@ -4,6 +4,26 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>RetailAer – Chartreuse Jet</title>
+  <script>
+    // Critical: Set palette class immediately to prevent flash
+    (function() {
+      const path = window.location.pathname;
+      let palette = 'chartreuse'; // default
+      
+      if (path === '/v1.b') {
+        palette = 'dynamic-flight';
+      } else if (path === '/v1.a') {
+        palette = 'chartreuse';
+      } else {
+        // Check localStorage for saved preference
+        const saved = localStorage.getItem('retailaer-palette');
+        if (saved) palette = saved;
+      }
+      
+      // Set body class immediately
+      document.documentElement.className = palette === 'dynamic-flight' ? 'palette-dynamic-flight' : 'palette-chartreuse';
+    })();
+  </script>
   <link rel="stylesheet" href="assets/css/style.css" />
   <script defer src="assets/js/config.js"></script>
   <script>

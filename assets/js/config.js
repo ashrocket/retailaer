@@ -1,11 +1,16 @@
 // Palette management functions
 function setPalette(palette) {
-  const root = document.documentElement;
+  const body = document.body;
   
+  // Remove existing palette classes
+  body.classList.remove('palette-chartreuse', 'palette-dynamic-flight');
+  
+  // Add new palette class
   if (palette === 'dynamic-flight') {
-    root.setAttribute('data-palette', 'dynamic-flight');
+    body.classList.add('palette-dynamic-flight');
   } else {
-    root.removeAttribute('data-palette');
+    body.classList.add('palette-chartreuse');
+    palette = 'chartreuse'; // normalize the value
   }
   
   // Store preference
@@ -64,8 +69,13 @@ window.addEventListener('popstate', function(event) {
   }
 });
 
-// Initialize palette on page load
+// Initialize palette on page load  
 document.addEventListener('DOMContentLoaded', function() {
+  // Apply palette class to body (the critical script sets it on documentElement)
+  const htmlClass = document.documentElement.className;
+  if (htmlClass) {
+    document.body.className = htmlClass;
+  }
   checkPaletteFromURL();
 });
 
