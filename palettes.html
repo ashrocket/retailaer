@@ -141,12 +141,12 @@
 
   <script>
     function selectPalette(palette) {
-      // Use the global setPalette function
-      setPalette(palette);
+      // Store the palette selection
+      localStorage.setItem('retailaer-palette', palette);
       
-      // Update URL without page reload
-      const newUrl = palette === 'dynamic-flight' ? '/v1.b' : '/v1.a';
-      window.history.pushState({ palette: palette }, '', newUrl);
+      // Redirect to home page with palette URL
+      const targetUrl = palette === 'dynamic-flight' ? '/v1.b' : '/v1.a';
+      window.location.href = targetUrl;
     }
   </script>
   
