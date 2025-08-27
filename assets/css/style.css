@@ -1,24 +1,33 @@
 /*
   RetailAer Sample Site CSS
-  Palette: Chartreuse Jet & Dynamic Flight
+  Swappable Color Palette System v1.3.0
 */
 
+/* Default: Chartreuse Jet Palette */
 :root {
-  /* Chartreuse Jet palette (default) */
-  --accent: #A6CE39; /* chartreuse */
-  --teal: #005F6B;  /* teal base */
-  --dark: #1C1C1C;  /* dark slate */
-  --oat: #EDE6D6;  /* alpine oat */
-  --gray: #4A4A4A; /* neutral gray */
+  --palette-primary: #A6CE39;    /* bright chartreuse - main accent */
+  --palette-secondary: #005F6B;   /* deep teal - secondary elements */
+  --palette-tertiary: #A6CE39;    /* chartreuse highlight */
+  --palette-neutral-dark: #1C1C1C; /* dark slate - text */
+  --palette-neutral-light: #EDE6D6; /* warm oat - backgrounds */
+  --palette-neutral-mid: #4A4A4A;   /* gray - muted text */
+  
+  /* Semantic assignments */
+  --accent: var(--palette-primary);
+  --teal: var(--palette-secondary);
+  --dark: var(--palette-neutral-dark);
+  --oat: var(--palette-neutral-light);
+  --gray: var(--palette-neutral-mid);
 }
 
+/* Alternative: Dynamic Flight Palette - Bold Aviation Colors */
 :root[data-palette="dynamic-flight"] {
-  /* Dynamic Flight palette */
-  --accent: #3498db; /* bright blue */
-  --teal: #2ecc71;  /* emerald green */
-  --dark: #2c3e50;  /* deep blue-gray */
-  --oat: #ecf0f1;   /* light gray-white */
-  --gray: #34495e;  /* grayish blue */
+  --palette-primary: #D3212D;      /* bold red - main accent */
+  --palette-secondary: #002C54;    /* navy blue - secondary elements */
+  --palette-tertiary: #FAD02E;     /* bright yellow - highlights */
+  --palette-neutral-dark: #1A1A1A; /* near black - text */
+  --palette-neutral-light: #F8F9FA; /* cool white - backgrounds */
+  --palette-neutral-mid: #6C757D;  /* cool gray - muted text */
 }
 
 html,
@@ -36,36 +45,60 @@ body {
   top: 0;
   bottom: 0;
   width: 220px;
-  background: #fff;
-  border-left: 1px solid #ddd;
+  background: var(--dark);
   display: flex;
   flex-direction: column;
-  padding: 1rem;
-  gap: 0.5rem;
+  padding: 2rem 1rem;
+  box-sizing: border-box;
 }
 
 .side-nav a {
   text-decoration: none;
-  color: var(--teal);
-  padding: 0.5rem;
-  border-radius: 4px;
+  color: #ffffff;
+  padding: 0.75rem 0;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
 }
 
-.side-nav a.active,
+.side-nav a.active {
+  color: var(--accent);
+  font-weight: 600;
+}
+
 .side-nav a:hover {
-  background-color: var(--accent);
+  color: var(--accent);
+}
+
+.side-nav .cta {
+  margin-top: auto;
+  background: var(--accent);
   color: var(--dark);
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 600;
+  transition: opacity 0.2s ease;
+}
+
+.side-nav .cta:hover {
+  opacity: 0.85;
 }
 
 main {
   margin-right: 220px;
   padding: 2rem;
+  min-height: 100vh;
+  box-sizing: border-box;
 }
 
 .hero {
   padding: 4rem 2rem;
   background: var(--oat);
   text-align: left;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(0,0,0,0.1);
 }
 
 .hero h1 {
@@ -221,6 +254,37 @@ main {
   opacity: 0.85;
 }
 
+/* Version badge */
+.version-badge {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background: var(--accent);
+  color: var(--dark);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Footer */
+footer {
+  position: fixed;
+  bottom: 20px;
+  right: 240px;
+  left: 20px;
+  background: var(--dark);
+  color: #ffffff;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 0.9rem;
+  z-index: 999;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
 /* Responsive adjustments */
 @media (max-width: 960px) {
   /* Convert side nav into bottom nav */
@@ -237,18 +301,18 @@ main {
     align-items: center;
     padding: 0.5rem 1rem;
     box-sizing: border-box;
-    border-left: none;
-    border-top: 1px solid #ddd;
+    background: var(--dark);
   }
 
   .side-nav a {
     margin: 0;
     font-size: 0.8rem;
+    padding: 0.5rem;
   }
 
   main {
     margin: 0;
-    padding: 4rem 1rem 6rem; /* bottom padding for nav */
+    padding: 2rem 1rem 8rem; /* bottom padding for nav + footer */
   }
 
   /* Scale down hero */
@@ -263,6 +327,7 @@ main {
   footer {
     position: static;
     margin-top: 2rem;
-    border-radius: 0;
+    margin-bottom: 5rem;
+    border-radius: 4px;
   }
 }
