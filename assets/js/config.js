@@ -1,3 +1,77 @@
+// Palette management functions
+function setPalette(palette) {
+  const root = document.documentElement;
+  
+  if (palette === 'dynamic-flight') {
+    root.setAttribute('data-palette', 'dynamic-flight');
+  } else {
+    root.removeAttribute('data-palette');
+  }
+  
+  // Store preference
+  localStorage.setItem('retailaer-palette', palette);
+  
+  // Update active states if palette controls exist
+  const buttons = document.querySelectorAll('.palette-controls button, .btn-select');
+  buttons.forEach(btn => btn.classList.remove('active'));
+  
+  const cards = document.querySelectorAll('.palette-card');
+  cards.forEach(card => card.classList.remove('active'));
+  
+  if (palette === 'dynamic-flight') {
+    const dynamicBtn = document.getElementById('btn-dynamic') || document.getElementById('btn-dynamic-flight');
+    const dynamicCard = document.getElementById('card-dynamic-flight');
+    if (dynamicBtn) {
+      dynamicBtn.classList.add('active');
+      if (dynamicBtn.classList.contains('btn-select')) {
+        dynamicBtn.textContent = 'Selected';
+      }
+    }
+    if (dynamicCard) dynamicCard.classList.add('active');
+  } else {
+    const chartreuseBtn = document.getElementById('btn-chartreuse');
+    const chartreuseCard = document.getElementById('card-chartreuse');
+    if (chartreuseBtn) {
+      chartreuseBtn.classList.add('active');
+      if (chartreuseBtn.classList.contains('btn-select')) {
+        chartreuseBtn.textContent = 'Selected';
+      }
+    }
+    if (chartreuseCard) chartreuseCard.classList.add('active');
+  }
+}
+
+// URL-based palette routing
+function checkPaletteFromURL() {
+  const path = window.location.pathname;
+  if (path === '/v1.b') {
+    setPalette('dynamic-flight');
+  } else if (path === '/v1.a') {
+    setPalette('chartreuse');
+  } else {
+    // Load from localStorage or default
+    const saved = localStorage.getItem('retailaer-palette');
+    setPalette(saved || 'chartreuse');
+  }
+}
+
+// Handle browser back/forward buttons
+window.addEventListener('popstate', function(event) {
+  if (event.state && event.state.palette) {
+    setPalette(event.state.palette);
+  } else {
+    checkPaletteFromURL();
+  }
+});
+
+// Initialize palette on page load
+document.addEventListener('DOMContentLoaded', function() {
+  checkPaletteFromURL();
+});
+
+// Make setPalette globally available for inline onclick handlers
+window.setPalette = setPalette;
+
 // Load configuration and update email links
 fetch('/config.json')
   .then(response => response.json())

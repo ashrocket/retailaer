@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="assets/css/style.css" />
   <script defer src="assets/js/config.js"></script>
   <style>
-    .palette-controls {
+    .palette-info {
       position: fixed;
       bottom: 20px;
       left: 20px;
@@ -18,29 +18,20 @@
       font-size: 0.9rem;
       z-index: 1000;
     }
-    .palette-controls button {
-      display: block;
-      width: 100%;
-      margin: 0.5rem 0;
-      padding: 0.5rem;
-      border: none;
-      border-radius: 4px;
-      background: #333;
-      color: white;
-      cursor: pointer;
+    .palette-info a {
+      color: var(--accent);
+      text-decoration: none;
     }
-    .palette-controls button.active {
-      background: var(--accent);
-      color: var(--neutral);
+    .palette-info a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
   <div class="version-badge">v1.2.0</div>
-  <div class="palette-controls">
-    <strong>Color Palettes:</strong>
-    <button onclick="setPalette('chartreuse')" id="btn-chartreuse" class="active">Chartreuse Jet</button>
-    <button onclick="setPalette('dynamic-flight')" id="btn-dynamic">Dynamic Flight</button>
+  <div class="palette-info">
+    <strong>Palette Demo</strong><br>
+    <a href="palettes.html">Change colors</a>
   </div>
 
   <nav class="side-nav">
@@ -49,6 +40,7 @@
     <a href="insights.html">Insights</a>
     <a href="company.html">Company</a>
     <a href="contact.html">Contact</a>
+    <a href="palettes.html">Palettes</a>
     <a href="mailto:sales+cta@retailaer.com" class="cta">Book a Demo</a>
   </nav>
   
@@ -97,34 +89,6 @@
     </div>
   </main>
 
-  <script>
-    function setPalette(palette) {
-      const root = document.documentElement;
-      const buttons = document.querySelectorAll('.palette-controls button');
-      
-      // Remove active class from all buttons
-      buttons.forEach(btn => btn.classList.remove('active'));
-      
-      if (palette === 'dynamic-flight') {
-        root.setAttribute('data-palette', 'dynamic-flight');
-        document.getElementById('btn-dynamic').classList.add('active');
-      } else {
-        root.removeAttribute('data-palette');
-        document.getElementById('btn-chartreuse').classList.add('active');
-      }
-      
-      // Store preference
-      localStorage.setItem('retailaer-palette', palette);
-    }
-    
-    // Load saved palette on page load
-    document.addEventListener('DOMContentLoaded', function() {
-      const saved = localStorage.getItem('retailaer-palette');
-      if (saved) {
-        setPalette(saved);
-      }
-    });
-  </script>
   <footer>
     © 2025 RetailAer. All rights reserved. Version 1.2.0
   </footer>
