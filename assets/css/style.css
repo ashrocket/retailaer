@@ -1,6 +1,6 @@
 /*
   RetailAer Sample Site CSS
-  Class-Based Palette System v1.4.0
+  Class-Based Palette System v1.5.0
   Reliable color switching without flash or race conditions
 */
 
@@ -23,6 +23,16 @@
   --dark: #1A1A1A;        /* near black - text */
   --oat: #F8F9FA;         /* cool white - backgrounds */
   --gray: #6C757D;        /* cool gray - muted text */
+}
+
+/* RetailAir Classic Palette - Based on retailaer.com */
+.palette-retailair-classic {
+  --accent: #00BBA4;      /* teal - main accent from retailaer.com */
+  --teal: #2F4858;        /* dark blue-gray - secondary elements */
+  --highlight: #59CF9F;   /* light green - highlights */
+  --dark: #2F4858;        /* dark blue-gray - text */
+  --oat: #FFFFFF;         /* clean white - backgrounds */
+  --gray: rgba(47, 72, 88, 0.72); /* muted blue-gray - muted text */
 }
 
 html,

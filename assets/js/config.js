@@ -3,18 +3,20 @@ function setPalette(palette) {
   const body = document.body;
   
   // Remove existing palette classes
-  body.classList.remove('palette-chartreuse', 'palette-dynamic-flight');
+  body.classList.remove('palette-chartreuse', 'palette-dynamic-flight', 'palette-retailair-classic');
   
   // Add new palette class
   if (palette === 'dynamic-flight') {
     body.classList.add('palette-dynamic-flight');
+  } else if (palette === 'retailair-classic') {
+    body.classList.add('palette-retailair-classic');
   } else {
     body.classList.add('palette-chartreuse');
     palette = 'chartreuse'; // normalize the value
   }
   
   // Store preference
-  localStorage.setItem('retailaer-palette', palette);
+  localStorage.setItem('retailair-palette', palette);
   
   // Update active states if palette controls exist
   const buttons = document.querySelectorAll('.palette-controls button, .btn-select');
@@ -33,6 +35,16 @@ function setPalette(palette) {
       }
     }
     if (dynamicCard) dynamicCard.classList.add('active');
+  } else if (palette === 'retailair-classic') {
+    const classicBtn = document.getElementById('btn-retailair-classic');
+    const classicCard = document.getElementById('card-retailair-classic');
+    if (classicBtn) {
+      classicBtn.classList.add('active');
+      if (classicBtn.classList.contains('btn-select')) {
+        classicBtn.textContent = 'Selected';
+      }
+    }
+    if (classicCard) classicCard.classList.add('active');
   } else {
     const chartreuseBtn = document.getElementById('btn-chartreuse');
     const chartreuseCard = document.getElementById('card-chartreuse');
@@ -49,13 +61,15 @@ function setPalette(palette) {
 // URL-based palette routing
 function checkPaletteFromURL() {
   const path = window.location.pathname;
-  if (path === '/v1.b') {
+  if (path === '/v1.b.html' || path === '/v1.b') {
     setPalette('dynamic-flight');
-  } else if (path === '/v1.a') {
+  } else if (path === '/v1.a.html' || path === '/v1.a') {
     setPalette('chartreuse');
+  } else if (path === '/v1.c.html' || path === '/v1.c') {
+    setPalette('retailair-classic');
   } else {
     // Load from localStorage or default
-    const saved = localStorage.getItem('retailaer-palette');
+    const saved = localStorage.getItem('retailair-palette');
     setPalette(saved || 'chartreuse');
   }
 }
@@ -91,9 +105,9 @@ fetch('/config.json')
     const supportEmail = config.email.support;
     
     // Update all mailto links
-    document.querySelectorAll('a[href*="@retailaer.com"]').forEach(link => {
+    document.querySelectorAll('a[href*="@retailair.com"]').forEach(link => {
       const href = link.getAttribute('href');
-      const newHref = href.replace('@retailaer.com', `@${domain}`);
+      const newHref = href.replace('@retailair.com', `@${domain}`);
       link.setAttribute('href', newHref);
     });
     

@@ -3,32 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RetailAer – Modern Offer &amp; Order</title>
+  <title>RetailAir – Modern Offer &amp; Order</title>
   <script>
     // Critical: Set palette class immediately to prevent flash
     (function() {
       const path = window.location.pathname;
       let palette = 'chartreuse'; // default
       
-      if (path === '/v1.b') {
+      if (path === '/v1.b.html' || path === '/v1.b') {
         palette = 'dynamic-flight';
-      } else if (path === '/v1.a') {
+      } else if (path === '/v1.a.html' || path === '/v1.a') {
         palette = 'chartreuse';
+      } else if (path === '/v1.c.html' || path === '/v1.c') {
+        palette = 'retailair-classic';
       } else {
         // Check localStorage for saved preference
-        const saved = localStorage.getItem('retailaer-palette');
+        const saved = localStorage.getItem('retailair-palette');
         if (saved) palette = saved;
       }
       
       // Set body class immediately
-      document.documentElement.className = palette === 'dynamic-flight' ? 'palette-dynamic-flight' : 'palette-chartreuse';
+      document.documentElement.className = palette === 'dynamic-flight' ? 'palette-dynamic-flight' : palette === 'retailair-classic' ? 'palette-retailair-classic' : 'palette-chartreuse';
     })();
   </script>
   <link rel="stylesheet" href="assets/css/style.css" />
   <script defer src="assets/js/config.js"></script>
 </head>
 <body>
-  <div class="version-badge">v1.4.0</div>
+  <div class="version-badge">v1.5.0</div>
   <nav class="side-nav">
     <a href="index.html" class="active">Home</a>
     <a href="solutions.html">Solutions</a>
@@ -36,7 +38,7 @@
     <a href="company.html">Company</a>
     <a href="contact.html">Contact</a>
     <a href="palettes.html">Palettes</a>
-    <a href="mailto:sales+cta@retailaer.com" class="cta">Book a Demo</a>
+    <a href="mailto:sales+cta@retailair.com" class="cta">Book a Demo</a>
   </nav>
   <main>
     <section class="hero">
@@ -44,7 +46,7 @@
       <h1>Modern Offer &amp; Order. Real Revenue Lift.</h1>
       <p class="subhead">Customer‑first airline retailing—dynamic offers, simplified orders, and payments that don’t get in the way.</p>
       <div class="cta-row">
-        <a href="mailto:sales+homepage.hero@retailaer.com" class="btn-primary">Book a Demo</a>
+        <a href="mailto:sales+homepage.hero@retailair.com" class="btn-primary">Book a Demo</a>
         <a href="solutions.html" class="btn-outline">See how it works</a>
       </div>
       <div class="media-carousel">
@@ -64,7 +66,7 @@
     </section>
   </main>
   <footer>
-    © 2025 RetailAer. All rights reserved. Version 1.4.0
+    © 2025 RetailAir. All rights reserved. Version 1.5.0
   </footer>
 </body>
 </html>
