@@ -1,5 +1,4 @@
 # wrangler.toml
-name = 'retailaerus'
 name = "retailaer"
 compatibility_date = "2025-08-22"
-pages_build_output_dir = "."   # or your real build folder (e.g. dist)
+pages_build_output_dir = "."
