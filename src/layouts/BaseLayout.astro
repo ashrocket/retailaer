@@ -1,4 +1,6 @@
 ---
+import FeedbackWidget from '../components/FeedbackWidget.astro';
+
 interface Props {
   title: string;
   description?: string;
@@ -78,6 +80,8 @@ const { title, description = "Customer-first airline retailing—dynamic offers,
       </div>
     </div>
   </footer>
+
+  <FeedbackWidget />
 
   <script src="/css/figma-scripts.js"></script>
 </body>

@@ -1,0 +1,370 @@
+---
+// Feedback widget component
+---
+
+<div id="feedback-widget" class="feedback-widget">
+  <button id="feedback-trigger" class="feedback-trigger" aria-label="Report an issue">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      <path d="M12 7v2m0 4h.01"/>
+    </svg>
+  </button>
+
+  <div id="feedback-panel" class="feedback-panel hidden">
+    <div class="feedback-header">
+      <h3>What's wrong with the website?</h3>
+      <button id="feedback-close" class="feedback-close" aria-label="Close">×</button>
+    </div>
+
+    <div class="feedback-body">
+      <p class="feedback-description">Help us improve! Your feedback will be posted as a GitHub issue.</p>
+
+      <form id="feedback-form">
+        <div class="form-group">
+          <label for="feedback-title">Brief description</label>
+          <input
+            type="text"
+            id="feedback-title"
+            name="title"
+            placeholder="e.g., Contact form doesn't work"
+            required
+            maxlength="100"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="feedback-details">Details (optional)</label>
+          <textarea
+            id="feedback-details"
+            name="details"
+            placeholder="What happened? What did you expect?"
+            rows="4"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="feedback-email">Your email (optional)</label>
+          <input
+            type="email"
+            id="feedback-email"
+            name="email"
+            placeholder="you@example.com"
+          />
+        </div>
+
+        <div class="feedback-actions">
+          <button type="button" id="feedback-cancel" class="btn-secondary">Cancel</button>
+          <button type="submit" class="btn-primary">Submit Feedback</button>
+        </div>
+      </form>
+
+      <div id="feedback-success" class="feedback-success hidden">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+          <polyline points="22 4 12 14.01 9 11.01"/>
+        </svg>
+        <p>Thanks for your feedback!</p>
+        <p class="feedback-success-note">We've created a GitHub issue and will look into it.</p>
+      </div>
+
+      <div id="feedback-error" class="feedback-error hidden">
+        <p>Sorry, something went wrong. Please try again or <a href="https://github.com/ashrocket/retailaer/issues/new" target="_blank">create an issue directly on GitHub</a>.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .feedback-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+  }
+
+  .feedback-trigger {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--color-primary, #0a5c5c);
+    color: white;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  .feedback-trigger:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  .feedback-panel {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 380px;
+    max-width: calc(100vw - 40px);
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .feedback-panel.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(10px);
+  }
+
+  .feedback-header {
+    padding: 20px;
+    background: var(--color-primary, #0a5c5c);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .feedback-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  .feedback-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+  }
+
+  .feedback-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .feedback-body {
+    padding: 20px;
+  }
+
+  .feedback-description {
+    margin: 0 0 20px 0;
+    font-size: 14px;
+    color: #666;
+  }
+
+  .form-group {
+    margin-bottom: 16px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    font-size: 14px;
+    color: #333;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.2s ease;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--color-primary, #0a5c5c);
+  }
+
+  .form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  .feedback-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .feedback-actions button {
+    flex: 1;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-primary {
+    background: var(--color-primary, #0a5c5c);
+    color: white;
+    border: none;
+  }
+
+  .btn-primary:hover {
+    background: var(--color-primary-dark, #084a4f);
+  }
+
+  .btn-secondary {
+    background: #f5f5f5;
+    color: #333;
+    border: 1px solid #ddd;
+  }
+
+  .btn-secondary:hover {
+    background: #ececec;
+  }
+
+  .feedback-success,
+  .feedback-error {
+    text-align: center;
+    padding: 20px 0;
+  }
+
+  .feedback-success svg {
+    color: #10b981;
+    margin-bottom: 16px;
+  }
+
+  .feedback-success p {
+    margin: 8px 0;
+  }
+
+  .feedback-success-note {
+    font-size: 13px;
+    color: #666;
+  }
+
+  .feedback-error {
+    color: #ef4444;
+  }
+
+  .feedback-error a {
+    color: var(--color-primary, #0a5c5c);
+    text-decoration: underline;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  @media (max-width: 768px) {
+    .feedback-panel {
+      bottom: 80px;
+      right: 10px;
+      left: 10px;
+      width: auto;
+      max-width: none;
+    }
+
+    .feedback-trigger {
+      bottom: 10px;
+      right: 10px;
+    }
+  }
+</style>
+
+<script>
+  // Feedback widget functionality
+  const trigger = document.getElementById('feedback-trigger');
+  const panel = document.getElementById('feedback-panel');
+  const closeBtn = document.getElementById('feedback-close');
+  const cancelBtn = document.getElementById('feedback-cancel');
+  const form = document.getElementById('feedback-form');
+  const successMsg = document.getElementById('feedback-success');
+  const errorMsg = document.getElementById('feedback-error');
+
+  function openPanel() {
+    panel?.classList.remove('hidden');
+  }
+
+  function closePanel() {
+    panel?.classList.add('hidden');
+    form?.reset();
+    successMsg?.classList.add('hidden');
+    errorMsg?.classList.add('hidden');
+    form?.classList.remove('hidden');
+  }
+
+  trigger?.addEventListener('click', openPanel);
+  closeBtn?.addEventListener('click', closePanel);
+  cancelBtn?.addEventListener('click', closePanel);
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(form as HTMLFormElement);
+    const title = formData.get('title') as string;
+    const details = formData.get('details') as string;
+    const email = formData.get('email') as string;
+
+    // Build issue body
+    let body = details || 'No additional details provided.';
+
+    if (email) {
+      body += `\n\n---\n**Reporter:** ${email}`;
+    }
+
+    body += `\n**Page:** ${window.location.href}`;
+    body += `\n**User Agent:** ${navigator.userAgent}`;
+
+    try {
+      const response = await fetch('/api/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, body })
+      });
+
+      if (response.ok) {
+        form?.classList.add('hidden');
+        successMsg?.classList.remove('hidden');
+
+        // Close after 3 seconds
+        setTimeout(closePanel, 3000);
+      } else {
+        throw new Error('Failed to submit');
+      }
+    } catch (error) {
+      console.error('Feedback error:', error);
+      form?.classList.add('hidden');
+      errorMsg?.classList.remove('hidden');
+    }
+  });
+
+  // Close on escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !panel?.classList.contains('hidden')) {
+      closePanel();
+    }
+  });
+
+  // Close when clicking outside
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    if (!panel?.contains(target) && !trigger?.contains(target) && !panel?.classList.contains('hidden')) {
+      closePanel();
+    }
+  });
+</script>
