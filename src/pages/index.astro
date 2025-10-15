@@ -24,9 +24,24 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
       <div class="hero-visual">
         <svg class="airplane-icon" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M100 160L140 120L180 140L160 180L100 160Z" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M60 80L100 40L140 80L100 100L60 80Z" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M100 40V100M100 100V160M100 100L20 60L40 40L100 100L160 40L180 60L100 100Z" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- Fuselage (body) -->
+          <path d="M100 30 L100 130" stroke="white" stroke-width="6" stroke-linecap="round"/>
+
+          <!-- Wings -->
+          <path d="M40 80 L160 80" stroke="white" stroke-width="6" stroke-linecap="round"/>
+
+          <!-- Tail wings (horizontal stabilizer) -->
+          <path d="M70 130 L130 130" stroke="white" stroke-width="5" stroke-linecap="round"/>
+
+          <!-- Vertical stabilizer (tail fin) -->
+          <path d="M100 130 L100 160 L115 145 Z" fill="white" stroke="white" stroke-width="3" stroke-linejoin="round"/>
+
+          <!-- Cockpit/nose -->
+          <circle cx="100" cy="35" r="12" fill="white" opacity="0.9"/>
+
+          <!-- Wing details/engines -->
+          <circle cx="60" cy="80" r="8" fill="white" opacity="0.8"/>
+          <circle cx="140" cy="80" r="8" fill="white" opacity="0.8"/>
         </svg>
       </div>
     </div>
