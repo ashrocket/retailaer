@@ -1,4 +1,4 @@
-# RetailAer Tools
+# Retailaer Tools
 
 Utilities for website development and content migration.
 

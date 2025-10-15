@@ -1,4 +1,4 @@
-# RetailAer Website - Project Guide
+# Retailaer Website - Project Guide
 
 **Last Updated:** 2025-10-14
 **Status:** Phase 3 - Figma Design Complete, Ready for Production
@@ -7,7 +7,7 @@
 
 ## Project Overview
 
-**Goal:** Redesign and rebuild the RetailAer marketing website with a modern, professional appearance suitable for a B2B SaaS provider in the airline retailing industry.
+**Goal:** Redesign and rebuild the Retailaer marketing website with a modern, professional appearance suitable for a B2B SaaS provider in the airline retailing industry.
 
 **Approach:** Figma-based design implemented in vanilla HTML/CSS/JS with Cloudflare Pages deployment.
 
@@ -24,7 +24,7 @@
 ## Business Context
 
 ### Company Profile
-- **Name:** RetailAer
+- **Name:** Retailaer
 - **Industry:** Airline technology / Travel tech B2B SaaS
 - **Product:** Customer-first Offer and Order Management solution for airlines
 - **Target Audience:** Airlines, airline executives, travel tech partners
@@ -248,7 +248,7 @@ retailaer/
 - CTA
 
 ### 3. Company (`company-figma.html`)
-- About RetailAer
+- About Retailaer
 - Mission and values
 - Key stats
 - Team/contact CTA

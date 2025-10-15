@@ -1,6 +1,6 @@
-# RetailAer Website
+# Retailaer Website
 
-Modern, responsive marketing website for RetailAer - the world's first customer-centric Offer and Order Management solution for airlines.
+Modern, responsive marketing website for Retailaer - the world's first customer-centric Offer and Order Management solution for airlines.
 
 ## 🚀 Quick Start
 
@@ -235,7 +235,7 @@ git push  # Auto-deploys to retailaer.us
 
 ## 📊 Business Context
 
-**Company:** RetailAer
+**Company:** Retailaer
 **Industry:** Airline Technology / Travel Tech B2B SaaS
 **Product:** Customer-first Offer and Order Management for airlines
 

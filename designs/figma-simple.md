@@ -34,7 +34,7 @@ Create a simple image (in PowerPoint, Keynote, Canva, or even TextEdit screensho
 RETAILAER WEBSITE DESIGN BRIEF
 ═══════════════════════════════════════════
 
-COMPANY: RetailAer - Airline Technology B2B SaaS
+COMPANY: Retailaer - Airline Technology B2B SaaS
 PRODUCT: Offer & Order Management for Airlines
 
 TARGET: Airline executives, travel tech leaders
@@ -90,9 +90,9 @@ REQUIREMENTS
 Copy and paste this into Figma AI:
 
 ```
-Design a modern B2B SaaS website for RetailAer, an airline technology platform.
+Design a modern B2B SaaS website for Retailaer, an airline technology platform.
 
-COMPANY: RetailAer - Offer & Order Management for airlines
+COMPANY: Retailaer - Offer & Order Management for airlines
 TARGET: Airline executives, travel tech decision-makers
 TONE: Modern, professional, innovative, trustworthy
 

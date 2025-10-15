@@ -1,4 +1,4 @@
-# Deployment Guide - RetailAer Website
+# Deployment Guide - Retailaer Website
 
 ## Quick Deploy ⚡
 
@@ -25,7 +25,7 @@ Your website is ready to deploy! Here's how:
 git add .
 
 # Commit
-git commit -m "Launch new RetailAer website with contact form"
+git commit -m "Launch new Retailaer website with contact form"
 
 # Push to deploy (Cloudflare Pages auto-deploys)
 git push
@@ -123,12 +123,12 @@ const emailResponse = await fetch('https://api.mailchannels.net/tx/v1/send', {
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
     personalizations: [{
-      to: [{ email: 'YOUR-EMAIL@retailaer.com', name: 'RetailAer Sales' }],
+      to: [{ email: 'YOUR-EMAIL@retailaer.com', name: 'Retailaer Sales' }],
       reply_to: { email: email, name: name }
     }],
     from: {
       email: 'noreply@retailaer.us',
-      name: 'RetailAer Contact Form'
+      name: 'Retailaer Contact Form'
     },
     subject: `New Contact Form: ${name} from ${company}`,
     content: [{

@@ -1,4 +1,4 @@
-# Design Tokens - RetailAer Website Redesign
+# Design Tokens - Retailaer Website Redesign
 
 Extracted from Figma design: [retailaerwebsitedesign.jpg](figma/retailaerwebsitedesign.jpg)
 

@@ -1,8 +1,8 @@
-# Figma AI Design Brief for RetailAer Website
+# Figma AI Design Brief for Retailaer Website
 
 ## Overview
 
-This document provides the complete prompt and context files to use with Figma's AI design tool to generate a professional B2B SaaS website design for RetailAer, an airline retailing platform.
+This document provides the complete prompt and context files to use with Figma's AI design tool to generate a professional B2B SaaS website design for Retailaer, an airline retailing platform.
 
 ---
 
@@ -45,7 +45,7 @@ Create a file called `content-brief.txt` with this content:
 RETAILAER WEBSITE CONTENT BRIEF
 ================================
 
-COMPANY: RetailAer
+COMPANY: Retailaer
 INDUSTRY: B2B SaaS - Airline Technology
 PRODUCT: Customer-first Offer and Order Management platform for airlines
 
@@ -113,13 +113,13 @@ DESIGN REQUIREMENTS:
 Copy and paste this prompt into Figma AI:
 
 ```
-Design a modern, professional B2B SaaS website for RetailAer, an airline technology company that provides offer and order management solutions to airlines.
+Design a modern, professional B2B SaaS website for Retailaer, an airline technology company that provides offer and order management solutions to airlines.
 
 DESIGN BRIEF:
 Create a complete website design system with homepage and 4 internal page templates (Solutions, Company, Insights/Blog, Contact).
 
 BRAND & AUDIENCE:
-- Company: RetailAer - Customer-first airline retailing platform
+- Company: Retailaer - Customer-first airline retailing platform
 - Target: Airline executives, travel tech decision-makers
 - Tone: Modern, professional, innovative but trustworthy
 - Industry: B2B SaaS for airline technology
@@ -174,7 +174,7 @@ PAGES TO DESIGN:
    - CTA: "Book a Demo"
 
 3. COMPANY PAGE
-   - Hero: "About RetailAer"
+   - Hero: "About Retailaer"
    - Mission/Vision section
    - Timeline: Company milestones (12 years)
    - Values/approach
@@ -218,7 +218,7 @@ REFERENCES:
 - Industry context: Airline/travel tech
 - Avoid: Generic corporate blue, stock photos, cluttered layouts
 
-Create a cohesive design system with all pages using the same visual language, components, and brand identity. The design should feel premium, trustworthy, and innovative - making RetailAer stand out as a modern leader in airline retailing technology.
+Create a cohesive design system with all pages using the same visual language, components, and brand identity. The design should feel premium, trustworthy, and innovative - making Retailaer stand out as a modern leader in airline retailing technology.
 ```
 
 ---
@@ -228,7 +228,7 @@ Create a cohesive design system with all pages using the same visual language, c
 If Figma AI has character limits, use this condensed version:
 
 ```
-Design a modern B2B SaaS website for RetailAer, an airline technology platform.
+Design a modern B2B SaaS website for Retailaer, an airline technology platform.
 
 TARGET: Airline executives, travel tech decision-makers
 TONE: Modern, professional, innovative, trustworthy

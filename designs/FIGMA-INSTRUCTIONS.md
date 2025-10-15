@@ -1,4 +1,4 @@
-# Figma AI Instructions - RetailAer Website
+# Figma AI Instructions - Retailaer Website
 
 **Quick Start Guide for generating designs with Figma AI**
 
@@ -49,9 +49,9 @@ This text file contains the complete design specifications formatted for easy re
 Copy this entire prompt and paste into Figma AI:
 
 ```
-Design a modern B2B SaaS website for RetailAer, an airline technology platform.
+Design a modern B2B SaaS website for Retailaer, an airline technology platform.
 
-COMPANY: RetailAer - Offer & Order Management for airlines
+COMPANY: Retailaer - Offer & Order Management for airlines
 TARGET: Airline executives, travel tech decision-makers
 TONE: Modern, professional, innovative, trustworthy
 
