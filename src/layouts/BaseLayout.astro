@@ -1,0 +1,84 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Customer-first airline retailing—dynamic offers, simplified orders, and payments that don't get in the way." } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+  <meta name="description" content={description}>
+
+  <!-- Google Fonts - Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/css/design-system.css">
+  <link rel="stylesheet" href="/css/figma-styles.css">
+  <link rel="stylesheet" href="/css/homepage.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="/" class="navbar-brand">Retailaer</a>
+      <ul class="navbar-nav">
+        <li><a href="/solutions">Solutions</a></li>
+        <li><a href="/company">Company</a></li>
+        <li><a href="/insights">Insights</a></li>
+        <li><a href="/contact">Contact</a></li>
+        <li><a href="mailto:sales@retailair.com" class="btn btn-primary">Book a Demo</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <slot />
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4 class="footer-brand">Retailaer</h4>
+          <p class="text-white">Modern airline retailing platform</p>
+        </div>
+        <div class="footer-col">
+          <h5>Solutions</h5>
+          <ul>
+            <li><a href="/solutions">Platform Overview</a></li>
+            <li><a href="/solutions#airlines">For Airlines</a></li>
+            <li><a href="/solutions#travel-brands">For Travel Brands</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Company</h5>
+          <ul>
+            <li><a href="/company">About Us</a></li>
+            <li><a href="/insights">Insights</a></li>
+            <li><a href="/contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Connect</h5>
+          <ul>
+            <li><a href="mailto:sales@retailair.com">sales@retailair.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© {new Date().getFullYear()} Retailaer. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/css/figma-scripts.js"></script>
+</body>
+</html>
