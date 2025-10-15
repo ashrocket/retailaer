@@ -1,0 +1,62 @@
+RETAILAER WEBSITE CONTENT BRIEF
+================================
+
+COMPANY: RetailAer
+INDUSTRY: B2B SaaS - Airline Technology
+PRODUCT: Customer-first Offer and Order Management platform for airlines
+
+TARGET AUDIENCE:
+- Airline executives (CTO, CIO, VP of Digital)
+- Travel technology decision-makers
+- Airline retailing teams
+
+BRAND PERSONALITY:
+- Modern and innovative
+- Professional and trustworthy
+- Technical but approachable
+- Customer-focused
+
+KEY METRICS:
+- 12 years in business
+- 5M+ orders processed
+- 300+ capabilities
+
+VALUE PROPOSITION:
+"Empowering modern airline retailing with what probably is the world's only Customer-First Offer and Order Management solution."
+
+TAGLINE:
+"Modern Offer & Order. Real Revenue Lift."
+
+SUBHEADLINE:
+"Customer-first airline retailing—dynamic offers, simplified orders, and payments that don't get in the way."
+
+9 KEY BENEFITS:
+1. Enhance Customer Loyalty
+2. Personalized Experiences
+3. Drive Repeat Business
+4. Higher Conversion Rates
+5. Boost Ancillary Sales
+6. Streamlined Processes
+7. Reduced Dependencies
+8. Stay Ahead of Competition
+9. Positive Reputation
+
+PRIMARY CTAs:
+- "Book a Demo"
+- "Get In Touch"
+- "See How It Works"
+- "Learn More"
+
+NAVIGATION PAGES:
+- Home
+- Solutions
+- Company
+- Insights (Blog)
+- Contact
+
+DESIGN REQUIREMENTS:
+- Fresh, modern aesthetic (not corporate/boring)
+- Professional B2B credibility
+- Clean typography and ample whitespace
+- Mobile-responsive
+- Accessible (WCAG AA compliance)

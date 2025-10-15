@@ -1,0 +1,75 @@
+# Claude Code Access Control
+# Commands that can be executed without user approval
+# This file allows Claude to run these commands autonomously for efficiency
+
+# Git operations - safe read-only and standard workflow commands
+git status
+git diff
+git diff --cached
+git log
+git log --oneline
+git log --graph --oneline --all
+git branch
+git branch -a
+git show
+git add .
+git add *
+git commit -m
+git push
+git pull
+
+# File operations - standard read operations
+ls
+ls -la
+ls -lah
+cat
+head
+tail
+grep
+find
+tree
+
+# Node/NPM operations (when package.json exists)
+npm install
+npm run build
+npm run dev
+npm run test
+npm run lint
+npm list
+npm outdated
+
+# Cloudflare Wrangler operations
+wrangler pages deploy
+wrangler pages deployment list
+wrangler pages deployment tail
+wrangler dev
+wrangler deploy
+wrangler tail
+
+# Build and optimization tools
+node tools/content-scraper.js
+node tools/image-optimizer.js
+python tools/content-scraper.py
+
+# File system operations
+mkdir
+cp
+mv
+touch
+chmod
+
+# Testing and validation
+lighthouse
+npx lighthouse
+curl
+wget
+
+# Safe system info
+pwd
+whoami
+date
+uname -a
+
+# Process monitoring
+ps aux | grep
+top -l 1
