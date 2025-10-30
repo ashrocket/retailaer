@@ -33,7 +33,7 @@ export const ALLOWED_AUTHORS: Author[] = [
     name: 'Ashley Raiteri',
     linkedinUsername: 'ashleyraiteri',
     linkedinUrl: 'https://www.linkedin.com/in/ashleyraiteri',
-    email: 'ashleyraiteri@gmail.com',
+    email: 'ashley@raiteri.net',
   },
 ];
 
