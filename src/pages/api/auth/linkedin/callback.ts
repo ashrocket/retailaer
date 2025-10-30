@@ -8,12 +8,15 @@ import { isAuthorized, getAuthorByLinkedIn } from '../../../../config/authors';
 
 export const prerender = false;
 
-export const GET: APIRoute = async ({ request, redirect, cookies, url }) => {
-  const clientId = import.meta.env.LINKEDIN_CLIENT_ID;
-  const clientSecret = import.meta.env.LINKEDIN_CLIENT_SECRET;
-  const jwtSecret = import.meta.env.JWT_SECRET;
+export const GET: APIRoute = async ({ request, redirect, cookies, url, locals }) => {
+  // Try multiple ways to access env vars (Cloudflare compatibility)
+  const runtime = locals.runtime;
+  const clientId = runtime?.env?.LINKEDIN_CLIENT_ID || import.meta.env.LINKEDIN_CLIENT_ID;
+  const clientSecret = runtime?.env?.LINKEDIN_CLIENT_SECRET || import.meta.env.LINKEDIN_CLIENT_SECRET;
+  const jwtSecret = runtime?.env?.JWT_SECRET || import.meta.env.JWT_SECRET;
 
   if (!clientId || !clientSecret || !jwtSecret) {
+    console.error('OAuth env vars not found:', { clientId: !!clientId, clientSecret: !!clientSecret, jwtSecret: !!jwtSecret });
     return new Response('OAuth not configured', { status: 500 });
   }
 

@@ -7,10 +7,13 @@ import type { APIRoute } from 'astro';
 
 export const prerender = false;
 
-export const GET: APIRoute = async ({ redirect, url }) => {
-  const clientId = import.meta.env.LINKEDIN_CLIENT_ID;
+export const GET: APIRoute = async ({ redirect, url, locals }) => {
+  // Try multiple ways to access env vars (Cloudflare compatibility)
+  const runtime = locals.runtime;
+  const clientId = runtime?.env?.LINKEDIN_CLIENT_ID || import.meta.env.LINKEDIN_CLIENT_ID;
 
   if (!clientId) {
+    console.error('LINKEDIN_CLIENT_ID not found in env');
     return new Response('LinkedIn OAuth not configured', { status: 500 });
   }
 
