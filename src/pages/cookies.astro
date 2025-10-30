@@ -1,0 +1,344 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Cookie Policy - Retailaer">
+  <div class="legal-page">
+    <div class="container">
+      <h1>Cookie Policy</h1>
+      <p class="last-updated">Last Updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+
+      <section class="legal-section">
+        <h2>1. What Are Cookies?</h2>
+        <p>
+          Cookies are small text files that are placed on your device when you visit a website. They are widely used to
+          make websites work more efficiently and provide information to website owners.
+        </p>
+        <p>
+          Cookies can be "persistent" (remain on your device until deleted or expire) or "session" (deleted when you close your browser).
+        </p>
+      </section>
+
+      <section class="legal-section">
+        <h2>2. How We Use Cookies</h2>
+        <p>Retailaer uses cookies and similar technologies to:</p>
+        <ul>
+          <li>Remember your preferences and settings</li>
+          <li>Understand how you use our website</li>
+          <li>Improve your user experience</li>
+          <li>Analyze website performance and traffic</li>
+          <li>Deliver relevant content and marketing</li>
+          <li>Protect against fraud and abuse</li>
+        </ul>
+      </section>
+
+      <section class="legal-section">
+        <h2>3. Types of Cookies We Use</h2>
+
+        <h3>3.1 Strictly Necessary Cookies</h3>
+        <p>
+          These cookies are essential for the website to function properly. They enable core functionality such as
+          security, network management, and accessibility.
+        </p>
+        <table class="cookie-table">
+          <thead>
+            <tr>
+              <th>Cookie Name</th>
+              <th>Purpose</th>
+              <th>Duration</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>cookie_consent</code></td>
+              <td>Stores your cookie preferences</td>
+              <td>1 year</td>
+            </tr>
+            <tr>
+              <td><code>session_id</code></td>
+              <td>Maintains your session state</td>
+              <td>Session</td>
+            </tr>
+          </tbody>
+        </table>
+        <p><strong>Legal Basis:</strong> These cookies are necessary for the legitimate operation of our website and do not require consent.</p>
+
+        <h3>3.2 Performance and Analytics Cookies</h3>
+        <p>
+          These cookies collect information about how visitors use our website, such as which pages are visited most often.
+          All information is aggregated and anonymized.
+        </p>
+        <table class="cookie-table">
+          <thead>
+            <tr>
+              <th>Cookie Name</th>
+              <th>Provider</th>
+              <th>Purpose</th>
+              <th>Duration</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>_ga</code></td>
+              <td>Google Analytics</td>
+              <td>Distinguishes users</td>
+              <td>2 years</td>
+            </tr>
+            <tr>
+              <td><code>_gid</code></td>
+              <td>Google Analytics</td>
+              <td>Distinguishes users</td>
+              <td>24 hours</td>
+            </tr>
+            <tr>
+              <td><code>_gat</code></td>
+              <td>Google Analytics</td>
+              <td>Throttles request rate</td>
+              <td>1 minute</td>
+            </tr>
+          </tbody>
+        </table>
+        <p><strong>Legal Basis:</strong> Your consent (where required by law).</p>
+
+        <h3>3.3 Functionality Cookies</h3>
+        <p>
+          These cookies allow the website to remember choices you make (such as language or region) and provide enhanced,
+          personalized features.
+        </p>
+        <table class="cookie-table">
+          <thead>
+            <tr>
+              <th>Cookie Name</th>
+              <th>Purpose</th>
+              <th>Duration</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>language</code></td>
+              <td>Stores your language preference</td>
+              <td>1 year</td>
+            </tr>
+            <tr>
+              <td><code>user_preferences</code></td>
+              <td>Stores UI customization preferences</td>
+              <td>1 year</td>
+            </tr>
+          </tbody>
+        </table>
+        <p><strong>Legal Basis:</strong> Your consent or legitimate interest in providing personalized service.</p>
+
+        <h3>3.4 Marketing and Targeting Cookies</h3>
+        <p>
+          These cookies track your browsing habits to deliver advertising that is relevant to you and your interests.
+          They may also be used to limit the number of times you see an advertisement.
+        </p>
+        <p><em>Note: We currently do not use marketing or targeting cookies. This section is included for transparency.</em></p>
+        <p><strong>Legal Basis:</strong> Your explicit consent (required).</p>
+      </section>
+
+      <section class="legal-section">
+        <h2>4. Third-Party Cookies</h2>
+        <p>Some cookies are placed by third-party services that appear on our pages. These include:</p>
+        <ul>
+          <li><strong>Google Analytics:</strong> Website analytics and performance tracking</li>
+          <li><strong>Cloudflare:</strong> Security and performance optimization</li>
+        </ul>
+        <p>
+          We do not control these third-party cookies. Please review their privacy policies for more information:
+        </p>
+        <ul>
+          <li><a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a></li>
+          <li><a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener">Cloudflare Privacy Policy</a></li>
+        </ul>
+      </section>
+
+      <section class="legal-section">
+        <h2>5. Managing Your Cookie Preferences</h2>
+        <p>You have several options to manage or disable cookies:</p>
+
+        <h3>5.1 Cookie Consent Banner</h3>
+        <p>
+          When you first visit our website, you will see a cookie consent banner where you can accept or decline
+          non-essential cookies. You can change your preferences at any time by clicking the "Cookie Settings"
+          link in the footer.
+        </p>
+
+        <h3>5.2 Browser Settings</h3>
+        <p>Most web browsers allow you to control cookies through their settings. To find out more, visit:</p>
+        <ul>
+          <li><a href="https://support.google.com/chrome/answer/95647" target="_blank" rel="noopener">Google Chrome</a></li>
+          <li><a href="https://support.mozilla.org/en-US/kb/cookies-information-websites-store-on-your-computer" target="_blank" rel="noopener">Mozilla Firefox</a></li>
+          <li><a href="https://support.apple.com/guide/safari/manage-cookies-sfri11471/mac" target="_blank" rel="noopener">Safari</a></li>
+          <li><a href="https://support.microsoft.com/en-us/microsoft-edge/delete-cookies-in-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09" target="_blank" rel="noopener">Microsoft Edge</a></li>
+        </ul>
+        <p><strong>Note:</strong> Disabling cookies may affect website functionality and your user experience.</p>
+
+        <h3>5.3 Opt-Out Tools</h3>
+        <p>You can opt out of specific third-party cookies:</p>
+        <ul>
+          <li><a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Google Analytics Opt-Out Browser Add-On</a></li>
+          <li><a href="https://www.youronlinechoices.com/" target="_blank" rel="noopener">Your Online Choices (EU)</a></li>
+          <li><a href="https://optout.aboutads.info/" target="_blank" rel="noopener">Digital Advertising Alliance (US)</a></li>
+        </ul>
+      </section>
+
+      <section class="legal-section">
+        <h2>6. Do Not Track Signals</h2>
+        <p>
+          Some browsers have a "Do Not Track" feature that signals websites you visit that you do not want your online
+          activity tracked. We currently do not respond to "Do Not Track" signals, as there is no industry standard for
+          how to respond to such signals.
+        </p>
+      </section>
+
+      <section class="legal-section">
+        <h2>7. Updates to This Policy</h2>
+        <p>
+          We may update this Cookie Policy from time to time to reflect changes in technology, legal requirements, or our practices.
+          The "Last Updated" date at the top of this page indicates when the policy was last revised.
+        </p>
+      </section>
+
+      <section class="legal-section">
+        <h2>8. Contact Us</h2>
+        <p>If you have questions about our use of cookies, contact us:</p>
+        <ul>
+          <li><strong>Email:</strong> <a href="mailto:privacy@retailaer.com">privacy@retailaer.com</a></li>
+          <li><strong>Privacy Policy:</strong> <a href="/privacy">View our Privacy Policy</a></li>
+        </ul>
+      </section>
+    </div>
+  </div>
+
+  <style>
+    .legal-page {
+      max-width: 900px;
+      margin: 120px auto 80px;
+      padding: 0 2rem;
+    }
+
+    .legal-page h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--color-primary, #0a5c5c);
+      margin-bottom: 0.5rem;
+    }
+
+    .last-updated {
+      color: #6b7280;
+      font-size: 0.875rem;
+      margin-bottom: 3rem;
+    }
+
+    .legal-section {
+      margin-bottom: 3rem;
+    }
+
+    .legal-section h2 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: var(--color-primary, #0a5c5c);
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .legal-section h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #374151;
+      margin-top: 1.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .legal-section p {
+      color: #4b5563;
+      line-height: 1.75;
+      margin-bottom: 1rem;
+    }
+
+    .legal-section ul {
+      margin: 1rem 0;
+      padding-left: 2rem;
+    }
+
+    .legal-section li {
+      color: #4b5563;
+      line-height: 1.75;
+      margin-bottom: 0.5rem;
+    }
+
+    .legal-section a {
+      color: var(--color-primary, #0a5c5c);
+      text-decoration: underline;
+    }
+
+    .legal-section a:hover {
+      color: #083f3f;
+    }
+
+    .legal-section strong {
+      color: #1f2937;
+      font-weight: 600;
+    }
+
+    .cookie-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 0.875rem;
+    }
+
+    .cookie-table th {
+      background: #f3f4f6;
+      color: #1f2937;
+      font-weight: 600;
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .cookie-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #e5e7eb;
+      color: #4b5563;
+    }
+
+    .cookie-table code {
+      background: #f3f4f6;
+      padding: 0.125rem 0.375rem;
+      border-radius: 3px;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 0.8125rem;
+      color: #1f2937;
+    }
+
+    @media (max-width: 768px) {
+      .legal-page {
+        margin: 100px auto 60px;
+        padding: 0 1rem;
+      }
+
+      .legal-page h1 {
+        font-size: 2rem;
+      }
+
+      .legal-section h2 {
+        font-size: 1.5rem;
+      }
+
+      .legal-section h3 {
+        font-size: 1.125rem;
+      }
+
+      .cookie-table {
+        font-size: 0.75rem;
+      }
+
+      .cookie-table th,
+      .cookie-table td {
+        padding: 0.5rem;
+      }
+    }
+  </style>
+</BaseLayout>
