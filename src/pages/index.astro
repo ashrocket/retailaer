@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ExpandableFeatureCards from '../components/ExpandableFeatureCards.astro';
 ---
 
 <BaseLayout title="Retailaer – Modern Offer & Order. Real Revenue Lift.">
@@ -161,116 +162,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <p>Built for IATA NDC and ONE Order standards</p>
       </div>
 
-      <div class="grid grid-cols-3 features-grid">
-        <!-- Feature 1 -->
-        <div class="card">
-          <div class="card-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 2L2 7L12 12L22 7L12 2Z"/>
-              <path d="M2 17L12 22L22 17"/>
-              <path d="M2 12L12 17L22 12"/>
-            </svg>
-          </div>
-          <h3 class="card-title">Revenue Growth</h3>
-          <p class="card-text">Boost income with personalized offers</p>
-        </div>
-
-        <!-- Feature 2 -->
-        <div class="card">
-          <div class="card-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
-              <line x1="9" y1="9" x2="9.01" y2="9"/>
-              <line x1="15" y1="9" x2="15.01" y2="9"/>
-            </svg>
-          </div>
-          <h3 class="card-title">Lightning Fast</h3>
-          <p class="card-text">Sub-100ms offer generation, 99.99% uptime SLA</p>
-        </div>
-
-        <!-- Feature 3 -->
-        <div class="card">
-          <div class="card-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-              <circle cx="12" cy="7" r="4"/>
-            </svg>
-          </div>
-          <h3 class="card-title">Customer-First</h3>
-          <p class="card-text">Designed around the customer and satisfaction</p>
-        </div>
-
-        <!-- Feature 4 -->
-        <div class="card">
-          <div class="card-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M12 6v6l4 2"/>
-            </svg>
-          </div>
-          <h3 class="card-title">Global Scale</h3>
-          <p class="card-text">Handles 10K requests/sec (~3M daily visitors) across 5M+ orders</p>
-        </div>
-
-        <!-- Feature 5 -->
-        <div class="card">
-          <div class="card-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-            </svg>
-          </div>
-          <h3 class="card-title">Enterprise Security</h3>
-          <p class="card-text">Bank-level security with compliance certification</p>
-        </div>
-
-        <!-- Feature 6 -->
-        <div class="card">
-          <div class="card-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-            </svg>
-          </div>
-          <h3 class="card-title">Data Insights</h3>
-          <p class="card-text">Real-time revenue analytics and conversion tracking</p>
-        </div>
-
-        <!-- Feature 7 -->
-        <div class="card">
-          <div class="card-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 2L2 7L12 12L22 7L12 2Z"/>
-              <path d="M2 17L12 22L22 17"/>
-            </svg>
-          </div>
-          <h3 class="card-title">Modern Tech</h3>
-          <p class="card-text">Cloud-native architecture, API-first design</p>
-        </div>
-
-        <!-- Feature 8 -->
-        <div class="card">
-          <div class="card-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            </svg>
-          </div>
-          <h3 class="card-title">24/7 Support</h3>
-          <p class="card-text">Round-the-clock dedicated support for your team</p>
-        </div>
-
-        <!-- Feature 9 -->
-        <div class="card">
-          <div class="card-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
-              <polyline points="17 6 23 6 23 12"/>
-            </svg>
-          </div>
-          <h3 class="card-title">Industry Leader</h3>
-          <p class="card-text">Trusted by leading airlines across the globe</p>
-        </div>
-      </div>
+      <ExpandableFeatureCards />
     </div>
   </section>
 
