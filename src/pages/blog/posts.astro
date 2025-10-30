@@ -1,0 +1,291 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { readdir, readFile } from 'node:fs/promises';
+import { join } from 'node:path';
+
+export const prerender = false;
+
+// Read all blog posts from the content directory
+let posts: any[] = [];
+
+try {
+  const contentDir = join(process.cwd(), 'src/content/blog');
+  const files = await readdir(contentDir).catch(() => []);
+
+  posts = await Promise.all(
+    files
+      .filter(file => file.endsWith('.json'))
+      .map(async file => {
+        const content = await readFile(join(contentDir, file), 'utf-8');
+        return JSON.parse(content);
+      })
+  );
+
+  // Sort by date, newest first
+  posts.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+} catch (error) {
+  console.error('Error loading posts:', error);
+}
+---
+
+<BaseLayout title="Blog Posts - Retailaer">
+  <div class="posts-container">
+    <div class="posts-header">
+      <h1>Blog Posts</h1>
+      <a href="/blog/editor" class="btn btn-primary">Create New Post</a>
+    </div>
+
+    {posts.length === 0 ? (
+      <div class="empty-state">
+        <p>No blog posts yet. Create your first post!</p>
+        <a href="/blog/editor" class="btn btn-primary">Create Post</a>
+      </div>
+    ) : (
+      <div class="posts-grid">
+        {posts.map(post => (
+          <div class="post-card" data-status={post.status}>
+            <div class="post-card-header">
+              <span class={`status-badge ${post.status}`}>
+                {post.status === 'published' ? '✓ Published' : '📝 Draft'}
+              </span>
+              <span class="post-date">
+                {new Date(post.updatedAt).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric'
+                })}
+              </span>
+            </div>
+
+            <h2 class="post-title">{post.title}</h2>
+
+            {post.excerpt && (
+              <p class="post-excerpt">{post.excerpt}</p>
+            )}
+
+            <div class="post-meta">
+              <span class="post-author">By {post.author}</span>
+              <span class="post-slug">/{post.slug}</span>
+            </div>
+
+            <div class="post-actions">
+              <a href={`/blog/editor?id=${post.id}`} class="btn btn-secondary btn-sm">
+                Edit
+              </a>
+              {post.status === 'published' && (
+                <a href={`/blog/${post.slug}`} class="btn btn-secondary btn-sm" target="_blank">
+                  View
+                </a>
+              )}
+              <button class="btn btn-danger btn-sm" data-delete-id={post.id}>
+                Delete
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+
+  <style>
+    .posts-container {
+      max-width: 1200px;
+      margin: 100px auto 50px;
+      padding: 0 2rem;
+    }
+
+    .posts-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 3rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--color-border, #e5e7eb);
+    }
+
+    .posts-header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--color-primary, #0a5c5c);
+      margin: 0;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: #f9fafb;
+      border-radius: 8px;
+      border: 2px dashed #e5e7eb;
+    }
+
+    .empty-state p {
+      font-size: 1.25rem;
+      color: #6b7280;
+      margin-bottom: 1.5rem;
+    }
+
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 2rem;
+    }
+
+    .post-card {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 1.5rem;
+      transition: box-shadow 0.2s, transform 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .post-card:hover {
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .post-card[data-status="draft"] {
+      border-left: 4px solid #f59e0b;
+    }
+
+    .post-card[data-status="published"] {
+      border-left: 4px solid #10b981;
+    }
+
+    .post-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .status-badge.published {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .status-badge.draft {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .post-date {
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+
+    .post-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #111827;
+      margin: 0 0 1rem 0;
+      line-height: 1.3;
+    }
+
+    .post-excerpt {
+      color: #6b7280;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+      flex-grow: 1;
+    }
+
+    .post-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      border-top: 1px solid #e5e7eb;
+      border-bottom: 1px solid #e5e7eb;
+      margin-bottom: 1rem;
+      font-size: 0.875rem;
+    }
+
+    .post-author {
+      color: #374151;
+      font-weight: 500;
+    }
+
+    .post-slug {
+      color: #6b7280;
+      font-family: monospace;
+    }
+
+    .post-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .btn-sm {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+    }
+
+    .btn-danger {
+      background: #dc2626;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-danger:hover {
+      background: #b91c1c;
+    }
+
+    @media (max-width: 768px) {
+      .posts-container {
+        padding: 0 1rem;
+        margin-top: 80px;
+      }
+
+      .posts-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+
+      .posts-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+
+  <script>
+    // Delete post functionality
+    document.querySelectorAll('[data-delete-id]').forEach(button => {
+      button.addEventListener('click', async (e) => {
+        const id = (e.target as HTMLElement).dataset.deleteId;
+
+        if (!confirm('Are you sure you want to delete this post?')) {
+          return;
+        }
+
+        try {
+          const response = await fetch(`/api/blog/${id}`, {
+            method: 'DELETE',
+          });
+
+          if (response.ok) {
+            window.location.reload();
+          } else {
+            alert('Failed to delete post');
+          }
+        } catch (error) {
+          console.error('Delete error:', error);
+          alert('Error deleting post');
+        }
+      });
+    });
+  </script>
+</BaseLayout>

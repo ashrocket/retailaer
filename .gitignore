@@ -47,3 +47,4 @@ temp/
 # Wrangler
 .wrangler/
 wrangler.toml.local
+.dev.vars
