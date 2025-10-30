@@ -883,6 +883,7 @@
     successMsg?.classList.add('hidden');
     errorMsg?.classList.add('hidden');
     form?.classList.remove('hidden');
+    selectionsContainer?.classList.add('hidden');
   }
 
   // Event listeners
@@ -967,6 +968,7 @@
         selections = [];
         setCookie('feedback_selections', '', -1); // Delete cookie
         clearDraft(); // Clear form draft
+        selectionsContainer?.classList.add('hidden'); // Hide selections UI
 
         form?.classList.add('hidden');
         successMsg?.classList.remove('hidden');
