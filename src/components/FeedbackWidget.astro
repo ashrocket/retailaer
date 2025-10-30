@@ -551,6 +551,9 @@
   const selectionOverlay = document.getElementById('selection-overlay');
   const elementHighlight = document.getElementById('element-highlight');
 
+  const titleInput = document.getElementById('feedback-title') as HTMLInputElement;
+  const detailsInput = document.getElementById('feedback-details') as HTMLTextAreaElement;
+
   // Cookie utility functions
   function setCookie(name: string, value: string, days: number = 365) {
     const expires = new Date();
@@ -843,15 +846,34 @@
     }
   }
 
+  // Save form draft
+  function saveDraft() {
+    if (titleInput) setCookie('feedback_draft_title', titleInput.value, 1);
+    if (detailsInput) setCookie('feedback_draft_details', detailsInput.value, 1);
+  }
+
+  // Load form draft
+  function loadDraft() {
+    const savedTitle = getCookie('feedback_draft_title');
+    const savedDetails = getCookie('feedback_draft_details');
+    const savedEmail = getCookie('feedback_email');
+
+    if (savedTitle && titleInput) titleInput.value = savedTitle;
+    if (savedDetails && detailsInput) detailsInput.value = savedDetails;
+    if (savedEmail && emailInput) emailInput.value = savedEmail;
+  }
+
+  // Clear form draft
+  function clearDraft() {
+    setCookie('feedback_draft_title', '', -1);
+    setCookie('feedback_draft_details', '', -1);
+  }
+
   // Panel functions
   function openPanel() {
     panel?.classList.remove('hidden');
     loadSelections();
-
-    const savedEmail = getCookie('feedback_email');
-    if (savedEmail && emailInput) {
-      emailInput.value = savedEmail;
-    }
+    loadDraft();
   }
 
   function closePanel() {
@@ -879,6 +901,15 @@
 
   screenshotBtn?.addEventListener('click', () => {
     enterSelectionMode('screenshot');
+  });
+
+  // Auto-save draft as user types
+  titleInput?.addEventListener('input', saveDraft);
+  detailsInput?.addEventListener('input', saveDraft);
+  emailInput?.addEventListener('input', () => {
+    if (emailInput.value.trim().length > 0) {
+      setCookie('feedback_email', emailInput.value.trim());
+    }
   });
 
   // Form submission
@@ -932,9 +963,10 @@
       });
 
       if (response.ok) {
-        // Clear selections
+        // Clear selections and draft
         selections = [];
         setCookie('feedback_selections', '', -1); // Delete cookie
+        clearDraft(); // Clear form draft
 
         form?.classList.add('hidden');
         successMsg?.classList.remove('hidden');
