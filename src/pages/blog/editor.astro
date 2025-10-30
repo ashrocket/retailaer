@@ -57,43 +57,54 @@ const session = requireAuth(Astro.cookies);
   </div>
 
   <style>
-    .editor-container {
-      max-width: 1200px;
-      margin: 100px auto 50px;
-      padding: 0 2rem;
+    /* LinkedIn-inspired editor styles */
+    * {
+      box-sizing: border-box;
     }
 
+    .editor-container {
+      max-width: 730px; /* LinkedIn's article width */
+      margin: 0 auto;
+      padding: 0;
+      background: white;
+      min-height: 100vh;
+    }
+
+    /* Top bar - like LinkedIn */
     .editor-header {
+      position: sticky;
+      top: 60px; /* Below main nav */
+      background: white;
+      border-bottom: 1px solid #e0e0e0;
+      padding: 12px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 2rem;
-      padding-bottom: 1rem;
-      border-bottom: 2px solid var(--color-border, #e5e7eb);
+      z-index: 100;
     }
 
     .editor-header-left {
       display: flex;
       align-items: center;
-      gap: 1.5rem;
+      gap: 12px;
     }
 
     .editor-header h1 {
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--color-primary, #0a5c5c);
+      font-size: 16px;
+      font-weight: 600;
+      color: #000000de;
       margin: 0;
     }
 
     .user-badge {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 1rem;
-      background: #f0f7f7;
-      border-radius: 20px;
-      font-size: 0.875rem;
-      color: #0a5c5c;
+      gap: 8px;
+      padding: 4px 12px;
+      background: #f3f6f8;
+      border-radius: 16px;
+      font-size: 14px;
+      color: #00000099;
     }
 
     .user-avatar {
@@ -104,67 +115,124 @@ const session = requireAuth(Astro.cookies);
     }
 
     .user-name {
-      font-weight: 500;
+      font-weight: 400;
     }
 
     .editor-actions {
       display: flex;
-      gap: 1rem;
+      gap: 8px;
+      align-items: center;
     }
 
-    .editor-meta {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-
-    .title-input {
-      font-size: 2rem;
-      font-weight: 700;
+    .editor-actions .btn {
+      height: 32px;
+      padding: 0 16px;
+      border-radius: 16px;
+      font-size: 14px;
+      font-weight: 600;
       border: none;
-      border-bottom: 2px solid #e5e7eb;
-      padding: 0.5rem 0;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .editor-actions .btn-secondary {
+      background: transparent;
+      color: #666;
+      border: 1px solid #666;
+    }
+
+    .editor-actions .btn-secondary:hover {
+      background: #f3f6f8;
+      border-color: #000000de;
+      color: #000000de;
+    }
+
+    .editor-actions .btn-primary {
+      background: #0A66C2; /* LinkedIn blue */
+      color: white;
+      border: none;
+    }
+
+    .editor-actions .btn-primary:hover {
+      background: #004182;
+    }
+
+    .editor-actions a.btn {
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* LinkedIn-style meta fields - hidden by default */
+    .editor-meta {
+      padding: 24px 48px;
+      border-bottom: 1px solid #e0e0e0;
+      background: #fafafa;
+    }
+
+    .editor-meta.hidden {
+      display: none;
+    }
+
+    /* Title input - Large and bold like LinkedIn */
+    .title-input {
+      width: 100%;
+      font-size: 48px;
+      font-weight: 400;
+      line-height: 1.2;
+      border: none;
+      padding: 48px 48px 24px;
       outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .title-input:focus {
-      border-bottom-color: var(--color-primary, #0a5c5c);
-    }
-
-    .slug-input,
-    .author-input,
-    .excerpt-input {
-      font-size: 1rem;
-      border: 1px solid #e5e7eb;
-      border-radius: 4px;
-      padding: 0.75rem;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .slug-input:focus,
-    .author-input:focus,
-    .excerpt-input:focus {
-      border-color: var(--color-primary, #0a5c5c);
-    }
-
-    .excerpt-input {
-      resize: vertical;
-      font-family: inherit;
-    }
-
-    .milkdown-container {
-      min-height: 500px;
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
-      padding: 2rem;
+      font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', 'Fira Sans', Ubuntu, Oxygen, 'Oxygen Sans', Cantarell, 'Droid Sans', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Lucida Grande', Helvetica, Arial, sans-serif;
+      color: #000000de;
       background: white;
     }
 
-    /* Milkdown theme overrides */
+    .title-input::placeholder {
+      color: #00000061;
+    }
+
+    /* Subtitle/excerpt - lighter weight */
+    .excerpt-input {
+      width: 100%;
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.4;
+      border: none;
+      padding: 0 48px 24px;
+      outline: none;
+      resize: none;
+      min-height: 60px;
+      font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      color: #00000099;
+      background: white;
+    }
+
+    .excerpt-input::placeholder {
+      color: #00000061;
+    }
+
+    /* Hidden metadata fields */
+    .slug-input,
+    .author-input {
+      display: none;
+    }
+
+    /* Editor content area - clean and spacious */
+    .milkdown-container {
+      padding: 24px 48px 100px;
+      min-height: 500px;
+      background: white;
+      border: none;
+    }
+
+    /* Milkdown LinkedIn-style overrides */
     :global(.milkdown) {
+      font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      font-size: 21px;
+      line-height: 1.58;
+      color: #000000de;
       min-height: 400px;
     }
 
@@ -172,25 +240,92 @@ const session = requireAuth(Astro.cookies);
       outline: none;
     }
 
+    :global(.milkdown p) {
+      margin-bottom: 1.58em;
+    }
+
+    :global(.milkdown h1) {
+      font-size: 32px;
+      font-weight: 600;
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+    }
+
+    :global(.milkdown h2) {
+      font-size: 26px;
+      font-weight: 600;
+      margin-top: 1.4em;
+      margin-bottom: 0.4em;
+    }
+
+    :global(.milkdown h3) {
+      font-size: 21px;
+      font-weight: 600;
+      margin-top: 1.3em;
+      margin-bottom: 0.3em;
+    }
+
+    :global(.milkdown blockquote) {
+      border-left: 3px solid #e0e0e0;
+      padding-left: 20px;
+      margin-left: 0;
+      font-style: italic;
+      color: #00000099;
+    }
+
+    :global(.milkdown code) {
+      background: #f3f6f8;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+      font-size: 0.9em;
+    }
+
+    :global(.milkdown a) {
+      color: #0A66C2;
+      text-decoration: none;
+    }
+
+    :global(.milkdown a:hover) {
+      text-decoration: underline;
+    }
+
     @media (max-width: 768px) {
       .editor-container {
-        padding: 0 1rem;
-        margin-top: 80px;
+        padding: 0;
       }
 
       .editor-header {
+        padding: 12px 16px;
+        top: 0;
+      }
+
+      .editor-header-left {
         flex-direction: column;
         align-items: flex-start;
-        gap: 1rem;
+        gap: 8px;
       }
 
       .editor-actions {
-        width: 100%;
-        flex-direction: column;
+        flex-wrap: wrap;
       }
 
       .title-input {
-        font-size: 1.5rem;
+        font-size: 36px;
+        padding: 32px 24px 16px;
+      }
+
+      .excerpt-input {
+        font-size: 18px;
+        padding: 0 24px 16px;
+      }
+
+      .milkdown-container {
+        padding: 16px 24px 80px;
+      }
+
+      :global(.milkdown) {
+        font-size: 18px;
       }
     }
   </style>
