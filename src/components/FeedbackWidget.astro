@@ -1,5 +1,5 @@
 ---
-// Feedback widget component
+// Enhanced Feedback widget with selection and screenshot capabilities
 ---
 
 <div id="feedback-widget" class="feedback-widget">
@@ -17,7 +17,31 @@
     </div>
 
     <div class="feedback-body">
-      <p class="feedback-description">Help us improve! Your feedback will be posted as a GitHub issue.</p>
+      <p class="feedback-description">Help us improve! Select text, sections, or add screenshots.</p>
+
+      <!-- Selection Tools -->
+      <div class="selection-tools">
+        <button type="button" id="select-text-btn" class="tool-btn" title="Select text or section">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/>
+          </svg>
+          <span>Select Element</span>
+        </button>
+        <button type="button" id="screenshot-btn" class="tool-btn" title="Take screenshot">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <path d="M21 15l-5-5L5 21"/>
+          </svg>
+          <span>Screenshot</span>
+        </button>
+      </div>
+
+      <!-- Selections List -->
+      <div id="selections-container" class="selections-container hidden">
+        <h4>Selected Items:</h4>
+        <ul id="selections-list" class="selections-list"></ul>
+      </div>
 
       <form id="feedback-form">
         <div class="form-group">
@@ -72,6 +96,16 @@
       </div>
     </div>
   </div>
+
+  <!-- Selection Mode Overlay -->
+  <div id="selection-overlay" class="selection-overlay hidden">
+    <div class="selection-instructions">
+      Click on any element to select it, or press ESC to cancel
+    </div>
+  </div>
+
+  <!-- Element Highlight -->
+  <div id="element-highlight" class="element-highlight hidden"></div>
 </div>
 
 <style>
@@ -106,13 +140,15 @@
     position: fixed;
     bottom: 90px;
     right: 20px;
-    width: 380px;
+    width: 420px;
     max-width: calc(100vw - 40px);
+    max-height: calc(100vh - 120px);
     background: white;
     border-radius: 12px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-    overflow: hidden;
+    overflow-y: auto;
     transition: all 0.3s ease;
+    z-index: 1001;
   }
 
   .feedback-panel.hidden {
@@ -128,6 +164,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
   }
 
   .feedback-header h3 {
@@ -162,11 +201,150 @@
   }
 
   .feedback-description {
-    margin: 0 0 20px 0;
+    margin: 0 0 16px 0;
     font-size: 14px;
     color: #666;
   }
 
+  /* Selection Tools */
+  .selection-tools {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .tool-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 12px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .tool-btn:hover {
+    background: #f3f4f6;
+    border-color: var(--color-primary, #0a5c5c);
+    color: var(--color-primary, #0a5c5c);
+  }
+
+  .tool-btn.active {
+    background: var(--color-primary, #0a5c5c);
+    border-color: var(--color-primary, #0a5c5c);
+    color: white;
+  }
+
+  .tool-btn svg {
+    flex-shrink: 0;
+  }
+
+  /* Selections List */
+  .selections-container {
+    margin-bottom: 16px;
+    padding: 12px;
+    background: #f9fafb;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+  }
+
+  .selections-container h4 {
+    margin: 0 0 10px 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+  }
+
+  .selections-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .selection-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    margin-bottom: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .selection-item:hover {
+    border-color: var(--color-primary, #0a5c5c);
+    background: #f0f9ff;
+  }
+
+  .selection-item-icon {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary, #0a5c5c);
+  }
+
+  .selection-item-content {
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .selection-item-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #1f2937;
+  }
+
+  .selection-item-meta {
+    font-size: 11px;
+    color: #9ca3af;
+    margin-top: 2px;
+  }
+
+  .selection-item-delete {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    color: #ef4444;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+  }
+
+  .selection-item-delete:hover {
+    background: #fee2e2;
+  }
+
+  .selection-item.screenshot .selection-item-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .screenshot-thumb {
+    width: 40px;
+    height: 30px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid #e5e7eb;
+  }
+
+  /* Form Styles */
   .form-group {
     margin-bottom: 16px;
   }
@@ -266,6 +444,51 @@
     text-decoration: underline;
   }
 
+  /* Selection Mode Overlay */
+  .selection-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 999;
+    cursor: crosshair;
+  }
+
+  .selection-overlay.hidden {
+    display: none;
+  }
+
+  .selection-instructions {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    font-size: 14px;
+    font-weight: 500;
+    color: #1f2937;
+    z-index: 1000;
+  }
+
+  /* Element Highlight */
+  .element-highlight {
+    position: absolute;
+    pointer-events: none;
+    border: 2px solid var(--color-accent, #f5b800);
+    background: rgba(245, 184, 0, 0.1);
+    z-index: 998;
+    transition: all 0.1s ease;
+  }
+
+  .element-highlight.hidden {
+    display: none;
+  }
+
   .hidden {
     display: none !important;
   }
@@ -283,11 +506,33 @@
       bottom: 10px;
       right: 10px;
     }
+
+    .selection-tools {
+      flex-direction: column;
+    }
   }
 </style>
 
 <script>
-  // Feedback widget functionality
+  import html2canvas from 'html2canvas';
+
+  // Types
+  interface Selection {
+    id: string;
+    type: 'text' | 'element' | 'screenshot';
+    content: string;
+    selector?: string;
+    bounds?: DOMRect;
+    screenshot?: string;
+    timestamp: number;
+  }
+
+  // State
+  let selections: Selection[] = [];
+  let selectionMode: 'text' | 'screenshot' | null = null;
+  let highlightedElement: HTMLElement | null = null;
+
+  // DOM Elements
   const trigger = document.getElementById('feedback-trigger');
   const panel = document.getElementById('feedback-panel');
   const closeBtn = document.getElementById('feedback-close');
@@ -296,6 +541,13 @@
   const successMsg = document.getElementById('feedback-success');
   const errorMsg = document.getElementById('feedback-error');
   const emailInput = document.getElementById('feedback-email') as HTMLInputElement;
+
+  const selectTextBtn = document.getElementById('select-text-btn');
+  const screenshotBtn = document.getElementById('screenshot-btn');
+  const selectionsContainer = document.getElementById('selections-container');
+  const selectionsList = document.getElementById('selections-list');
+  const selectionOverlay = document.getElementById('selection-overlay');
+  const elementHighlight = document.getElementById('element-highlight');
 
   // Cookie utility functions
   function setCookie(name: string, value: string, days: number = 365) {
@@ -317,10 +569,280 @@
     return null;
   }
 
+  // Load selections from cookie
+  function loadSelections() {
+    const saved = getCookie('feedback_selections');
+    if (saved) {
+      try {
+        selections = JSON.parse(saved);
+        renderSelections();
+      } catch (e) {
+        console.error('Failed to load selections:', e);
+        selections = [];
+      }
+    }
+  }
+
+  // Save selections to cookie
+  function saveSelections() {
+    setCookie('feedback_selections', JSON.stringify(selections), 1); // 1 day expiry
+    renderSelections();
+  }
+
+  // Generate CSS selector for element
+  function getSelector(element: HTMLElement): string {
+    if (element.id) return `#${element.id}`;
+
+    let path: string[] = [];
+    let current: HTMLElement | null = element;
+
+    while (current && current !== document.body) {
+      let selector = current.tagName.toLowerCase();
+
+      if (current.className) {
+        const classes = current.className.split(' ').filter(c => c && !c.startsWith('feedback-'));
+        if (classes.length > 0) {
+          selector += '.' + classes.slice(0, 2).join('.');
+        }
+      }
+
+      path.unshift(selector);
+      current = current.parentElement;
+    }
+
+    return path.slice(-3).join(' > '); // Last 3 levels
+  }
+
+  // Get text preview from element
+  function getTextPreview(element: HTMLElement, maxLength: number = 50): string {
+    const text = element.innerText || element.textContent || '';
+    const cleaned = text.trim().replace(/\s+/g, ' ');
+    return cleaned.length > maxLength ? cleaned.substring(0, maxLength) + '...' : cleaned;
+  }
+
+  // Render selections list
+  function renderSelections() {
+    if (!selectionsList || !selectionsContainer) return;
+
+    if (selections.length === 0) {
+      selectionsContainer.classList.add('hidden');
+      return;
+    }
+
+    selectionsContainer.classList.remove('hidden');
+    selectionsList.innerHTML = '';
+
+    selections.forEach((selection, index) => {
+      const li = document.createElement('li');
+      li.className = `selection-item ${selection.type}`;
+      li.dataset.index = index.toString();
+
+      let icon = '';
+      let content = '';
+
+      if (selection.type === 'element' || selection.type === 'text') {
+        icon = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>';
+        content = `
+          <div class="selection-item-text">${selection.content}</div>
+          <div class="selection-item-meta">${selection.selector || ''}</div>
+        `;
+      } else if (selection.type === 'screenshot') {
+        icon = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>';
+        content = `
+          <img src="${selection.screenshot}" class="screenshot-thumb" alt="Screenshot">
+          <div class="selection-item-text">Screenshot</div>
+        `;
+      }
+
+      li.innerHTML = `
+        <div class="selection-item-icon">${icon}</div>
+        <div class="selection-item-content">${content}</div>
+        <button class="selection-item-delete" data-index="${index}" title="Delete">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      `;
+
+      // Hover to highlight
+      if (selection.selector && selection.bounds) {
+        li.addEventListener('mouseenter', () => highlightSelection(selection));
+        li.addEventListener('mouseleave', () => clearHighlight());
+      }
+
+      selectionsList.appendChild(li);
+    });
+
+    // Add delete listeners
+    document.querySelectorAll('.selection-item-delete').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const index = parseInt((e.currentTarget as HTMLElement).dataset.index || '0');
+        deleteSelection(index);
+      });
+    });
+  }
+
+  // Highlight selected element
+  function highlightSelection(selection: Selection) {
+    if (!selection.selector || !elementHighlight) return;
+
+    try {
+      const element = document.querySelector(selection.selector) as HTMLElement;
+      if (!element) return;
+
+      const rect = element.getBoundingClientRect();
+      elementHighlight.style.top = `${rect.top + window.scrollY}px`;
+      elementHighlight.style.left = `${rect.left + window.scrollX}px`;
+      elementHighlight.style.width = `${rect.width}px`;
+      elementHighlight.style.height = `${rect.height}px`;
+      elementHighlight.classList.remove('hidden');
+    } catch (e) {
+      console.error('Failed to highlight:', e);
+    }
+  }
+
+  // Clear highlight
+  function clearHighlight() {
+    elementHighlight?.classList.add('hidden');
+  }
+
+  // Delete selection
+  function deleteSelection(index: number) {
+    selections.splice(index, 1);
+    saveSelections();
+  }
+
+  // Enter selection mode
+  function enterSelectionMode(mode: 'text' | 'screenshot') {
+    selectionMode = mode;
+
+    if (mode === 'text') {
+      selectionOverlay?.classList.remove('hidden');
+      selectTextBtn?.classList.add('active');
+      document.body.style.cursor = 'crosshair';
+
+      // Add mouseover listener
+      document.addEventListener('mousemove', handleElementHover);
+      document.addEventListener('click', handleElementClick);
+    } else if (mode === 'screenshot') {
+      takeScreenshot();
+    }
+  }
+
+  // Exit selection mode
+  function exitSelectionMode() {
+    selectionMode = null;
+    selectionOverlay?.classList.add('hidden');
+    selectTextBtn?.classList.remove('active');
+    document.body.style.cursor = '';
+    clearHighlight();
+
+    document.removeEventListener('mousemove', handleElementHover);
+    document.removeEventListener('click', handleElementClick);
+  }
+
+  // Handle element hover
+  function handleElementHover(e: MouseEvent) {
+    if (!selectionMode || !elementHighlight) return;
+
+    const target = e.target as HTMLElement;
+
+    // Ignore feedback widget elements
+    if (target.closest('#feedback-widget') || target.closest('#selection-overlay')) {
+      clearHighlight();
+      return;
+    }
+
+    highlightedElement = target;
+
+    const rect = target.getBoundingClientRect();
+    elementHighlight.style.top = `${rect.top + window.scrollY}px`;
+    elementHighlight.style.left = `${rect.left + window.scrollX}px`;
+    elementHighlight.style.width = `${rect.width}px`;
+    elementHighlight.style.height = `${rect.height}px`;
+    elementHighlight.classList.remove('hidden');
+  }
+
+  // Handle element click
+  function handleElementClick(e: MouseEvent) {
+    if (!selectionMode) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    const target = e.target as HTMLElement;
+
+    // Ignore feedback widget and overlay
+    if (target.closest('#feedback-widget') || target.closest('#selection-overlay')) {
+      return;
+    }
+
+    // Add selection
+    const selector = getSelector(target);
+    const text = getTextPreview(target);
+    const bounds = target.getBoundingClientRect();
+
+    const selection: Selection = {
+      id: Date.now().toString(),
+      type: 'element',
+      content: text,
+      selector: selector,
+      bounds: {
+        top: bounds.top,
+        left: bounds.left,
+        width: bounds.width,
+        height: bounds.height,
+        right: bounds.right,
+        bottom: bounds.bottom,
+        x: bounds.x,
+        y: bounds.y,
+        toJSON: () => ({})
+      } as DOMRect,
+      timestamp: Date.now()
+    };
+
+    selections.push(selection);
+    saveSelections();
+    exitSelectionMode();
+  }
+
+  // Take screenshot
+  async function takeScreenshot() {
+    try {
+      // Use html2canvas to capture the page
+      const canvas = await html2canvas(document.body, {
+        allowTaint: true,
+        useCORS: true,
+        scale: 0.5, // Reduce size
+        windowWidth: window.innerWidth,
+        windowHeight: window.innerHeight
+      });
+
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+
+      const selection: Selection = {
+        id: Date.now().toString(),
+        type: 'screenshot',
+        content: 'Page screenshot',
+        screenshot: dataUrl,
+        timestamp: Date.now()
+      };
+
+      selections.push(selection);
+      saveSelections();
+
+    } catch (error) {
+      console.error('Screenshot failed:', error);
+      alert('Failed to take screenshot. Please try again.');
+    }
+  }
+
+  // Panel functions
   function openPanel() {
     panel?.classList.remove('hidden');
-    
-    // Load email from cookie if it exists
+    loadSelections();
+
     const savedEmail = getCookie('feedback_email');
     if (savedEmail && emailInput) {
       emailInput.value = savedEmail;
@@ -329,16 +851,32 @@
 
   function closePanel() {
     panel?.classList.add('hidden');
+    exitSelectionMode();
     form?.reset();
     successMsg?.classList.add('hidden');
     errorMsg?.classList.add('hidden');
     form?.classList.remove('hidden');
   }
 
+  // Event listeners
   trigger?.addEventListener('click', openPanel);
   closeBtn?.addEventListener('click', closePanel);
   cancelBtn?.addEventListener('click', closePanel);
 
+  selectTextBtn?.addEventListener('click', () => {
+    if (selectionMode === 'text') {
+      exitSelectionMode();
+    } else {
+      exitSelectionMode();
+      enterSelectionMode('text');
+    }
+  });
+
+  screenshotBtn?.addEventListener('click', () => {
+    enterSelectionMode('screenshot');
+  });
+
+  // Form submission
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -347,13 +885,23 @@
     const details = formData.get('details') as string;
     const email = formData.get('email') as string;
 
-    // Save email to cookie if provided
     if (email && email.trim().length > 0) {
       setCookie('feedback_email', email.trim());
     }
 
-    // Build issue body
     let body = details || 'No additional details provided.';
+
+    // Add selections to body
+    if (selections.length > 0) {
+      body += '\n\n## Selected Elements\n\n';
+      selections.forEach((sel, i) => {
+        if (sel.type === 'element') {
+          body += `${i + 1}. **Element:** ${sel.content}\n   - Selector: \`${sel.selector}\`\n\n`;
+        } else if (sel.type === 'screenshot') {
+          body += `${i + 1}. **Screenshot attached**\n\n`;
+        }
+      });
+    }
 
     if (email) {
       body += `\n\n---\n**Reporter:** ${email}`;
@@ -366,14 +914,25 @@
       const response = await fetch('/api/feedback', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, body })
+        body: JSON.stringify({
+          title,
+          body,
+          selections: selections.map(s => ({
+            type: s.type,
+            content: s.content,
+            selector: s.selector,
+            screenshot: s.type === 'screenshot' ? s.screenshot : undefined
+          }))
+        })
       });
 
       if (response.ok) {
+        // Clear selections
+        selections = [];
+        setCookie('feedback_selections', '', -1); // Delete cookie
+
         form?.classList.add('hidden');
         successMsg?.classList.remove('hidden');
-
-        // Close after 3 seconds
         setTimeout(closePanel, 3000);
       } else {
         throw new Error('Failed to submit');
@@ -385,10 +944,14 @@
     }
   });
 
-  // Close on escape key
+  // Keyboard shortcuts
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !panel?.classList.contains('hidden')) {
-      closePanel();
+    if (e.key === 'Escape') {
+      if (selectionMode) {
+        exitSelectionMode();
+      } else if (!panel?.classList.contains('hidden')) {
+        closePanel();
+      }
     }
   });
 
@@ -399,4 +962,7 @@
       closePanel();
     }
   });
+
+  // Initialize
+  loadSelections();
 </script>
