@@ -4,7 +4,7 @@
  */
 
 import type { APIRoute } from 'astro';
-import { isAuthorized, getAuthorByLinkedIn } from '../../../../config/authors';
+import { isAuthorized, getAuthorByLinkedIn, ALLOWED_AUTHORS } from '../../../../config/authors';
 
 export const prerender = false;
 
@@ -79,46 +79,32 @@ export const GET: APIRoute = async ({ request, redirect, cookies, url, locals })
     }
 
     const profile = await profileResponse.json();
-
     console.log('LinkedIn profile received:', JSON.stringify(profile, null, 2));
 
-    // Extract LinkedIn username from profile URL
-    // LinkedIn OpenID Connect returns 'sub' as a unique identifier, not the vanity URL
-    // We need to extract the username from the profile URL if available
-    let linkedinUsername = '';
+    // LinkedIn OpenID Connect doesn't give us vanity URL, only email
+    // So we'll match by email address instead
+    const email = profile.email?.toLowerCase();
 
-    // Try to get vanity URL from profile if available
-    if (profile.profile) {
-      // profile might contain the vanity URL
-      linkedinUsername = profile.profile.split('/').pop() || '';
-    } else if (profile.sub) {
-      // sub is the LinkedIn ID, but we need the vanity username
-      // For now, log what we got and try to match
-      linkedinUsername = profile.sub.split('/').pop() || '';
-    }
+    console.log('User email:', email);
 
-    console.log('Extracted username:', linkedinUsername);
-    console.log('Authorized usernames:', ['anncederhall', 'lofgrena', 'ashleyraiteri']);
+    // Check if email matches any authorized author
+    const author = getAuthorByLinkedIn(email) ||
+                   ALLOWED_AUTHORS.find(a => a.email?.toLowerCase() === email);
 
-    // Check if user is authorized
-    if (!isAuthorized(linkedinUsername)) {
-      console.log('Unauthorized user attempted login:', linkedinUsername);
-      console.log('Full profile:', profile);
-      return redirect(`/blog/login?error=unauthorized&username=${encodeURIComponent(linkedinUsername)}`);
-    }
-
-    // Get author details
-    const author = getAuthorByLinkedIn(linkedinUsername);
     if (!author) {
-      return redirect('/blog/login?error=author_not_found');
+      console.log('Unauthorized user attempted login with email:', email);
+      console.log('Full profile:', profile);
+      return redirect(`/blog/login?error=unauthorized&email=${encodeURIComponent(email || 'no-email')}`);
     }
+
+    console.log('Authorized user found:', author.name);
 
     // Create session token (simple JWT-like structure)
     const sessionData = {
       authorId: author.id,
       name: profile.name || author.name,
       email: profile.email || author.email,
-      linkedinUsername: linkedinUsername,
+      linkedinUsername: author.linkedinUsername,
       picture: profile.picture,
       exp: Date.now() + (7 * 24 * 60 * 60 * 1000), // 7 days
     };
