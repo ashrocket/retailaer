@@ -454,6 +454,7 @@
     background: rgba(0, 0, 0, 0.3);
     z-index: 999;
     cursor: crosshair;
+    pointer-events: none; /* Allow clicks through overlay */
   }
 
   .selection-overlay.hidden {
@@ -473,6 +474,7 @@
     font-weight: 500;
     color: #1f2937;
     z-index: 1000;
+    pointer-events: auto; /* Instructions box should receive clicks */
   }
 
   /* Element Highlight */
@@ -748,8 +750,11 @@
 
     const target = e.target as HTMLElement;
 
-    // Ignore feedback widget elements
-    if (target.closest('#feedback-widget') || target.closest('#selection-overlay')) {
+    // Ignore feedback widget elements and overlay components
+    if (target.closest('#feedback-widget') ||
+        target.id === 'selection-overlay' ||
+        target.closest('.selection-instructions') ||
+        target.id === 'element-highlight') {
       clearHighlight();
       return;
     }
@@ -768,15 +773,15 @@
   function handleElementClick(e: MouseEvent) {
     if (!selectionMode) return;
 
-    e.preventDefault();
-    e.stopPropagation();
-
     const target = e.target as HTMLElement;
 
-    // Ignore feedback widget and overlay
-    if (target.closest('#feedback-widget') || target.closest('#selection-overlay')) {
+    // Ignore feedback widget and overlay (but allow clicks through overlay)
+    if (target.closest('#feedback-widget') || target.id === 'selection-overlay' || target.closest('.selection-instructions')) {
       return;
     }
+
+    e.preventDefault();
+    e.stopPropagation();
 
     // Add selection
     const selector = getSelector(target);
