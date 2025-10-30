@@ -80,15 +80,31 @@ export const GET: APIRoute = async ({ request, redirect, cookies, url, locals })
 
     const profile = await profileResponse.json();
 
+    console.log('LinkedIn profile received:', JSON.stringify(profile, null, 2));
+
     // Extract LinkedIn username from profile URL
-    // Profile URL format: https://www.linkedin.com/in/{username}
-    const linkedinUrl = profile.sub || ''; // sub contains LinkedIn ID
-    const linkedinUsername = linkedinUrl.split('/').pop() || '';
+    // LinkedIn OpenID Connect returns 'sub' as a unique identifier, not the vanity URL
+    // We need to extract the username from the profile URL if available
+    let linkedinUsername = '';
+
+    // Try to get vanity URL from profile if available
+    if (profile.profile) {
+      // profile might contain the vanity URL
+      linkedinUsername = profile.profile.split('/').pop() || '';
+    } else if (profile.sub) {
+      // sub is the LinkedIn ID, but we need the vanity username
+      // For now, log what we got and try to match
+      linkedinUsername = profile.sub.split('/').pop() || '';
+    }
+
+    console.log('Extracted username:', linkedinUsername);
+    console.log('Authorized usernames:', ['anncederhall', 'lofgrena', 'ashleyraiteri']);
 
     // Check if user is authorized
     if (!isAuthorized(linkedinUsername)) {
       console.log('Unauthorized user attempted login:', linkedinUsername);
-      return redirect('/blog/login?error=unauthorized');
+      console.log('Full profile:', profile);
+      return redirect(`/blog/login?error=unauthorized&username=${encodeURIComponent(linkedinUsername)}`);
     }
 
     // Get author details
