@@ -26,7 +26,7 @@ export const ALLOWED_AUTHORS: Author[] = [
     name: 'Anders Löfgren',
     linkedinUsername: 'lofgrena',
     linkedinUrl: 'https://www.linkedin.com/in/lofgrena',
-    email: 'lofgrea@gmail.com',
+    email: 'lofgren@gmail.com',
   },
   {
     id: 'ashley-raiteri',
