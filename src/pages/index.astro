@@ -1,6 +1,56 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ExpandableFeatureCards from '../components/ExpandableFeatureCards.astro';
+import InsightsCarousel from '../components/InsightsCarousel.astro';
+
+// Sample insights data - TODO: Load from database
+const insights = [
+  {
+    id: '1',
+    slug: 'dynamic-offers-ndc',
+    title: 'Dynamic offers for the IATA NDC era',
+    excerpt: 'How modern airlines are adapting to new distribution standards with flexible offer management.',
+    meta: 'ARTICLE',
+    icon: 'plane',
+    backgroundGradient: 'linear-gradient(135deg, #FFF5E6 0%, #FFE4CC 100%)'
+  },
+  {
+    id: '2',
+    slug: 'orders-without-friction',
+    title: 'Orders without friction',
+    excerpt: 'Streamlining the booking experience while maximizing ancillary opportunities.',
+    meta: 'ARTICLE',
+    icon: 'document',
+    backgroundGradient: 'linear-gradient(135deg, #FFF9E6 0%, #FFEDB3 100%)'
+  },
+  {
+    id: '3',
+    slug: 'payments-cfo-likes',
+    title: 'Payments your CFO likes',
+    excerpt: 'Everything from payments to payouts with ease—secure, reliable, and fully compliant.',
+    meta: 'REPORT',
+    icon: 'chart',
+    backgroundGradient: 'linear-gradient(135deg, #E6F7FF 0%, #CCE7FF 100%)'
+  },
+  {
+    id: '4',
+    slug: 'customer-first-retailing',
+    title: 'The customer-first revolution',
+    excerpt: 'Putting customers at the center transforms your airline retailing strategy and boosts revenue.',
+    meta: 'BLOG POST',
+    icon: 'globe',
+    backgroundGradient: 'linear-gradient(135deg, #F0F7F7 0%, #D9ECEC 100%)'
+  },
+  {
+    id: '5',
+    slug: 'beyond-the-pnr',
+    title: 'Beyond the PNR',
+    excerpt: 'Why traditional PNR systems hold airlines back and how modern order management unlocks opportunities.',
+    meta: 'GUIDE',
+    icon: 'rocket',
+    backgroundGradient: 'linear-gradient(135deg, #F5E6FF 0%, #E6CCFF 100%)'
+  },
+];
 ---
 
 <BaseLayout title="Retailaer – Modern Offer & Order. Real Revenue Lift.">
@@ -224,53 +274,15 @@ import ExpandableFeatureCards from '../components/ExpandableFeatureCards.astro';
       <div class="section-header">
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <h2>Latest Insights</h2>
-          <a href="/insights" class="view-all-link">View all Insights →</a>
+          <a href="/blog/manage" class="view-all-link">Manage Insights →</a>
         </div>
       </div>
 
-      <div class="grid grid-cols-3">
-        <!-- Insight 1 -->
-        <div class="insight-card" style="background: linear-gradient(135deg, #FFF5E6 0%, #FFE4CC 100%);">
-          <div class="insight-image">
-            <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
-              <circle cx="40" cy="40" r="30" stroke="white" stroke-width="4" opacity="0.3"/>
-              <circle cx="40" cy="40" r="20" stroke="white" stroke-width="4" opacity="0.5"/>
-              <circle cx="40" cy="40" r="10" fill="white" opacity="0.7"/>
-            </svg>
-          </div>
-          <div class="insight-meta">ARTICLE</div>
-          <h3 class="insight-title">Dynamic offers for the IATA NDC era</h3>
-          <p class="insight-excerpt">How modern airlines are adapting to new distribution standards with flexible offer management.</p>
-        </div>
-
-        <!-- Insight 2 -->
-        <div class="insight-card" style="background: linear-gradient(135deg, #FFF9E6 0%, #FFEDB3 100%);">
-          <div class="insight-image">
-            <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
-              <rect x="20" y="20" width="40" height="40" stroke="white" stroke-width="4" opacity="0.3" rx="4"/>
-              <rect x="27" y="27" width="26" height="26" stroke="white" stroke-width="4" opacity="0.5" rx="4"/>
-              <rect x="34" y="34" width="12" height="12" fill="white" opacity="0.7" rx="2"/>
-            </svg>
-          </div>
-          <div class="insight-meta">ARTICLE</div>
-          <h3 class="insight-title">Orders without friction</h3>
-          <p class="insight-excerpt">Streamlining the booking experience while maximizing ancillary opportunities.</p>
-        </div>
-
-        <!-- Insight 3 -->
-        <div class="insight-card" style="background: linear-gradient(135deg, #E6F7FF 0%, #CCE7FF 100%);">
-          <div class="insight-image">
-            <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
-              <path d="M40 20L50 35H30L40 20Z" stroke="white" stroke-width="4" opacity="0.3"/>
-              <path d="M40 35L50 50H30L40 35Z" stroke="white" stroke-width="4" opacity="0.5"/>
-              <path d="M40 50L50 65H30L40 50Z" fill="white" opacity="0.7"/>
-            </svg>
-          </div>
-          <div class="insight-meta">REPORT</div>
-          <h3 class="insight-title">Payments your CFO likes</h3>
-          <p class="insight-excerpt">Everything from payments to payouts with ease—secure, reliable, and fully compliant.</p>
-        </div>
-      </div>
+      <InsightsCarousel
+        insights={insights}
+        autoRotateInterval={15000}
+        visibleCount={3}
+      />
     </div>
   </section>
 

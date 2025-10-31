@@ -1,0 +1,465 @@
+---
+export interface InsightCard {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  meta: string;
+  icon: string;
+  backgroundGradient: string;
+}
+
+interface Props {
+  insights: InsightCard[];
+  autoRotateInterval?: number; // milliseconds (default: 15000)
+  visibleCount?: number; // how many cards visible at once (default: 3)
+}
+
+const {
+  insights,
+  autoRotateInterval = 15000,
+  visibleCount = 3
+} = Astro.props;
+
+// Icon mapping
+const iconMap: Record<string, string> = {
+  'plane': '✈️',
+  'document': '📄',
+  'chart': '📊',
+  'globe': '🌐',
+  'rocket': '🚀'
+};
+---
+
+<div class="insights-carousel-wrapper">
+  <div class="insights-carousel" data-visible={visibleCount} data-interval={autoRotateInterval}>
+    <div class="carousel-track">
+      {insights.map((insight) => (
+        <a
+          href={`/blog/${insight.slug}`}
+          class="insight-card"
+          style={`background: ${insight.backgroundGradient}`}
+        >
+          <div class="insight-image">
+            <span class="insight-icon">{iconMap[insight.icon] || '✈️'}</span>
+          </div>
+          <div class="insight-meta">{insight.meta}</div>
+          <h3 class="insight-title">{insight.title}</h3>
+          <p class="insight-excerpt">{insight.excerpt}</p>
+        </a>
+      ))}
+    </div>
+  </div>
+
+  <!-- Carousel Controls -->
+  <div class="carousel-controls">
+    <button class="carousel-btn prev" aria-label="Previous">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
+    </button>
+    <div class="carousel-indicators">
+      {insights.map((_, index) => (
+        <button
+          class={`indicator ${index === 0 ? 'active' : ''}`}
+          data-index={index}
+          aria-label={`Go to slide ${index + 1}`}
+        ></button>
+      ))}
+    </div>
+    <button class="carousel-btn next" aria-label="Next">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9 18l6-6-6-6"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<style>
+  .insights-carousel-wrapper {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .insights-carousel {
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 32px;
+  }
+
+  .carousel-track {
+    display: flex;
+    gap: 24px;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .insight-card {
+    flex: 0 0 calc((100% - 48px) / 3);
+    min-width: 0;
+    padding: 32px 28px;
+    border-radius: 20px;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .insight-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0);
+    transition: background 0.3s;
+    pointer-events: none;
+  }
+
+  .insight-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  }
+
+  .insight-card:hover::before {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  .insight-image {
+    margin-bottom: 20px;
+  }
+
+  .insight-icon {
+    font-size: 48px;
+    line-height: 1;
+    display: block;
+  }
+
+  .insight-meta {
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(0, 0, 0, 0.5);
+    margin-bottom: 16px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+  }
+
+  .insight-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+
+  .insight-excerpt {
+    font-size: 15px;
+    color: rgba(0, 0, 0, 0.65);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* Carousel Controls */
+  .carousel-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+  }
+
+  .carousel-btn {
+    background: white;
+    border: 2px solid #e5e7eb;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    color: #6b7280;
+  }
+
+  .carousel-btn:hover {
+    background: #0a5c5c;
+    border-color: #0a5c5c;
+    color: white;
+    transform: scale(1.05);
+  }
+
+  .carousel-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    transform: scale(1);
+  }
+
+  .carousel-btn:disabled:hover {
+    background: white;
+    border-color: #e5e7eb;
+    color: #6b7280;
+  }
+
+  .carousel-indicators {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #d1d5db;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    padding: 0;
+  }
+
+  .indicator:hover {
+    background: #9ca3af;
+    transform: scale(1.2);
+  }
+
+  .indicator.active {
+    background: #0a5c5c;
+    width: 32px;
+    border-radius: 5px;
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .insight-card {
+      flex: 0 0 calc((100% - 24px) / 2);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .insights-carousel-wrapper {
+      padding: 0 16px;
+    }
+
+    .insight-card {
+      flex: 0 0 100%;
+    }
+
+    .carousel-track {
+      gap: 16px;
+    }
+
+    .insight-card {
+      padding: 24px 20px;
+    }
+
+    .insight-title {
+      font-size: 20px;
+    }
+
+    .insight-excerpt {
+      font-size: 14px;
+    }
+
+    .carousel-controls {
+      gap: 16px;
+    }
+
+    .carousel-btn {
+      width: 40px;
+      height: 40px;
+    }
+  }
+</style>
+
+<script>
+  class InsightsCarousel {
+    private carousel: HTMLElement;
+    private track: HTMLElement;
+    private cards: NodeListOf<HTMLElement>;
+    private prevBtn: HTMLButtonElement;
+    private nextBtn: HTMLButtonElement;
+    private indicators: NodeListOf<HTMLButtonElement>;
+    private currentIndex: number = 0;
+    private visibleCount: number;
+    private autoRotateInterval: number;
+    private autoRotateTimer: number | null = null;
+    private isDragging: boolean = false;
+    private startX: number = 0;
+    private currentTranslate: number = 0;
+    private prevTranslate: number = 0;
+
+    constructor(element: HTMLElement) {
+      this.carousel = element;
+      this.track = this.carousel.querySelector('.carousel-track') as HTMLElement;
+      this.cards = this.carousel.querySelectorAll('.insight-card');
+
+      const wrapper = this.carousel.closest('.insights-carousel-wrapper') as HTMLElement;
+      this.prevBtn = wrapper.querySelector('.carousel-btn.prev') as HTMLButtonElement;
+      this.nextBtn = wrapper.querySelector('.carousel-btn.next') as HTMLButtonElement;
+      this.indicators = wrapper.querySelectorAll('.indicator');
+
+      this.visibleCount = parseInt(this.carousel.dataset.visible || '3');
+      this.autoRotateInterval = parseInt(this.carousel.dataset.interval || '15000');
+
+      this.init();
+    }
+
+    init() {
+      // Button controls
+      this.prevBtn?.addEventListener('click', () => this.prev());
+      this.nextBtn?.addEventListener('click', () => this.next());
+
+      // Indicator controls
+      this.indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => this.goToSlide(index));
+      });
+
+      // Touch/drag support
+      this.track.addEventListener('mousedown', this.dragStart.bind(this));
+      this.track.addEventListener('touchstart', this.dragStart.bind(this));
+      this.track.addEventListener('mousemove', this.drag.bind(this));
+      this.track.addEventListener('touchmove', this.drag.bind(this));
+      this.track.addEventListener('mouseup', this.dragEnd.bind(this));
+      this.track.addEventListener('touchend', this.dragEnd.bind(this));
+      this.track.addEventListener('mouseleave', this.dragEnd.bind(this));
+
+      // Prevent default drag behavior on links
+      this.cards.forEach(card => {
+        card.addEventListener('dragstart', (e) => e.preventDefault());
+      });
+
+      // Start auto-rotate
+      this.startAutoRotate();
+
+      // Pause on hover
+      this.carousel.addEventListener('mouseenter', () => this.stopAutoRotate());
+      this.carousel.addEventListener('mouseleave', () => this.startAutoRotate());
+
+      // Update on resize
+      window.addEventListener('resize', () => this.updatePosition());
+
+      // Initial update
+      this.updateButtons();
+    }
+
+    dragStart(e: MouseEvent | TouchEvent) {
+      this.isDragging = true;
+      this.startX = this.getPositionX(e);
+      this.track.style.transition = 'none';
+      this.stopAutoRotate();
+    }
+
+    drag(e: MouseEvent | TouchEvent) {
+      if (!this.isDragging) return;
+
+      const currentX = this.getPositionX(e);
+      const diff = currentX - this.startX;
+      this.currentTranslate = this.prevTranslate + diff;
+    }
+
+    dragEnd() {
+      if (!this.isDragging) return;
+
+      this.isDragging = false;
+      const movedBy = this.currentTranslate - this.prevTranslate;
+
+      // Determine if we should move to next/prev slide
+      if (movedBy < -50 && this.currentIndex < this.cards.length - this.visibleCount) {
+        this.next();
+      } else if (movedBy > 50 && this.currentIndex > 0) {
+        this.prev();
+      } else {
+        this.updatePosition();
+      }
+
+      this.startAutoRotate();
+    }
+
+    getPositionX(e: MouseEvent | TouchEvent): number {
+      return e.type.includes('mouse')
+        ? (e as MouseEvent).pageX
+        : (e as TouchEvent).touches[0].clientX;
+    }
+
+    next() {
+      if (this.currentIndex < this.cards.length - this.visibleCount) {
+        this.currentIndex++;
+        this.updatePosition();
+      }
+    }
+
+    prev() {
+      if (this.currentIndex > 0) {
+        this.currentIndex--;
+        this.updatePosition();
+      }
+    }
+
+    goToSlide(index: number) {
+      if (index >= 0 && index <= this.cards.length - this.visibleCount) {
+        this.currentIndex = index;
+        this.updatePosition();
+      }
+    }
+
+    updatePosition() {
+      this.track.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+
+      // Calculate card width including gap
+      const cardWidth = this.cards[0].offsetWidth;
+      const gap = 24;
+      const offset = -(this.currentIndex * (cardWidth + gap));
+
+      this.track.style.transform = `translateX(${offset}px)`;
+      this.prevTranslate = offset;
+      this.currentTranslate = offset;
+
+      this.updateButtons();
+      this.updateIndicators();
+    }
+
+    updateButtons() {
+      if (this.prevBtn) {
+        this.prevBtn.disabled = this.currentIndex === 0;
+      }
+      if (this.nextBtn) {
+        this.nextBtn.disabled = this.currentIndex >= this.cards.length - this.visibleCount;
+      }
+    }
+
+    updateIndicators() {
+      this.indicators.forEach((indicator, index) => {
+        indicator.classList.toggle('active', index === this.currentIndex);
+      });
+    }
+
+    startAutoRotate() {
+      this.stopAutoRotate();
+      this.autoRotateTimer = window.setInterval(() => {
+        if (this.currentIndex >= this.cards.length - this.visibleCount) {
+          this.currentIndex = 0;
+        } else {
+          this.currentIndex++;
+        }
+        this.updatePosition();
+      }, this.autoRotateInterval);
+    }
+
+    stopAutoRotate() {
+      if (this.autoRotateTimer) {
+        clearInterval(this.autoRotateTimer);
+        this.autoRotateTimer = null;
+      }
+    }
+  }
+
+  // Initialize all carousels
+  document.addEventListener('DOMContentLoaded', () => {
+    const carousels = document.querySelectorAll('.insights-carousel');
+    carousels.forEach(carousel => {
+      new InsightsCarousel(carousel as HTMLElement);
+    });
+  });
+</script>
