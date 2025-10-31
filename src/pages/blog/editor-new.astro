@@ -1,0 +1,578 @@
+---
+import { requireAuth } from '../../lib/auth';
+
+export const prerender = false;
+
+// Require authentication
+const session = requireAuth(Astro.cookies);
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Write Article - Retailaer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Slim Header with CTAs -->
+  <header class="editor-header">
+    <div class="header-left">
+      <a href="/" class="logo">Retailaer</a>
+      <span class="divider">|</span>
+      <span class="page-title">Write Article</span>
+    </div>
+    <div class="header-actions">
+      <button id="save-draft" class="btn-text">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M8 2a.5.5 0 01.5.5v11.793l3.146-3.147a.5.5 0 01.708.708l-4 4a.5.5 0 01-.708 0l-4-4a.5.5 0 01.708-.708L7.5 14.293V2.5A.5.5 0 018 2z"/>
+        </svg>
+        Save Draft
+      </button>
+      <a href="/blog/posts" class="btn-text">All Posts</a>
+      <div class="user-menu">
+        {session.picture && <img src={session.picture} alt={session.name} class="avatar" />}
+        <button class="btn-text" id="user-menu-btn">
+          {session.name}
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M4 6l4 4 4-4z"/>
+          </svg>
+        </button>
+        <div class="dropdown hidden" id="user-dropdown">
+          <a href="/api/auth/logout">Logout</a>
+        </div>
+      </div>
+      <button id="publish-btn" class="btn-primary">Publish</button>
+    </div>
+  </header>
+
+  <!-- Editor Container -->
+  <div class="editor-container">
+    <!-- Cover Image Upload -->
+    <div class="cover-upload-area">
+      <input type="file" id="cover-input" accept="image/*" class="hidden" />
+      <button class="cover-placeholder" id="cover-btn">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+          <rect width="48" height="36" fill="#e5e7eb" rx="4"/>
+          <circle cx="34" cy="12" r="4" fill="#f5b800"/>
+          <path d="M0 36L15 21L26 32L37 21L48 32V36H0Z" fill="#94a3b8"/>
+        </svg>
+        <span>Add cover image</span>
+      </button>
+      <img id="cover-preview" class="cover-image hidden" />
+    </div>
+
+    <!-- Title -->
+    <input
+      type="text"
+      id="title"
+      placeholder="Title"
+      class="title-input"
+      maxlength="150"
+    />
+
+    <!-- Editor Body -->
+    <div
+      id="editor"
+      class="editor-body"
+      contenteditable="true"
+      data-placeholder="Write your article... (supports formatting, links, and images)"
+    ></div>
+
+    <!-- Floating Toolbar (appears on text selection) -->
+    <div id="floating-toolbar" class="floating-toolbar hidden">
+      <button data-cmd="bold" title="Bold (Ctrl+B)"><strong>B</strong></button>
+      <button data-cmd="italic" title="Italic (Ctrl+I)"><em>I</em></button>
+      <button data-cmd="insertUnorderedList" title="Bullet List">•</button>
+      <button data-cmd="insertOrderedList" title="Numbered List">1.</button>
+      <button data-cmd="formatBlock:h2" title="Heading">H</button>
+      <button id="link-btn" title="Add Link">🔗</button>
+    </div>
+  </div>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #fafafa;
+      color: #1a1a1a;
+    }
+
+    /* Slim Header - Retailaer Colors */
+    .editor-header {
+      background: white;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo {
+      font-size: 18px;
+      font-weight: 700;
+      color: #0a5c5c;
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+
+    .divider {
+      color: #e5e7eb;
+    }
+
+    .page-title {
+      font-size: 14px;
+      color: #6b7280;
+      font-weight: 500;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .btn-text {
+      background: none;
+      border: none;
+      color: #4b5563;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 6px 12px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-text:hover {
+      background: #f0f7f7;
+      color: #0a5c5c;
+    }
+
+    .btn-primary {
+      background: #0a5c5c;
+      color: white;
+      border: none;
+      padding: 8px 24px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: #084a4f;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(10, 92, 92, 0.2);
+    }
+
+    .user-menu {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 8px;
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      min-width: 150px;
+    }
+
+    .dropdown a {
+      display: block;
+      padding: 12px 16px;
+      color: #374151;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .dropdown a:hover {
+      background: #f0f7f7;
+      color: #0a5c5c;
+    }
+
+    /* Editor Container */
+    .editor-container {
+      max-width: 740px;
+      margin: 32px auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+    }
+
+    /* Cover Image */
+    .cover-upload-area {
+      position: relative;
+      min-height: 200px;
+      background: #f9fafb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cover-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      background: none;
+      border: 2px dashed #e5e7eb;
+      border-radius: 8px;
+      padding: 32px;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: #6b7280;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .cover-placeholder:hover {
+      border-color: #0a5c5c;
+      color: #0a5c5c;
+      background: #f0f7f7;
+    }
+
+    .cover-image {
+      width: 100%;
+      max-height: 400px;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Title */
+    .title-input {
+      width: 100%;
+      border: none;
+      outline: none;
+      font-size: 40px;
+      font-weight: 600;
+      padding: 32px 48px 16px;
+      color: #1a1a1a;
+      font-family: inherit;
+      line-height: 1.2;
+    }
+
+    .title-input::placeholder {
+      color: #9ca3af;
+    }
+
+    /* Editor Body */
+    .editor-body {
+      min-height: 500px;
+      padding: 0 48px 48px;
+      outline: none;
+      font-size: 18px;
+      line-height: 1.7;
+      color: #374151;
+    }
+
+    .editor-body:empty:before {
+      content: attr(data-placeholder);
+      color: #9ca3af;
+    }
+
+    .editor-body h2 {
+      font-size: 28px;
+      font-weight: 600;
+      margin: 32px 0 16px;
+      color: #1a1a1a;
+    }
+
+    .editor-body h3 {
+      font-size: 22px;
+      font-weight: 600;
+      margin: 24px 0 12px;
+      color: #1a1a1a;
+    }
+
+    .editor-body p {
+      margin-bottom: 16px;
+    }
+
+    .editor-body ul,
+    .editor-body ol {
+      margin: 16px 0;
+      padding-left: 24px;
+    }
+
+    .editor-body li {
+      margin: 8px 0;
+    }
+
+    .editor-body a {
+      color: #0a5c5c;
+      text-decoration: underline;
+    }
+
+    .editor-body a:hover {
+      color: #084a4f;
+    }
+
+    .editor-body img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin: 24px 0;
+    }
+
+    .editor-body blockquote {
+      border-left: 3px solid #f5b800;
+      padding-left: 20px;
+      margin: 24px 0;
+      font-style: italic;
+      color: #6b7280;
+    }
+
+    /* Floating Toolbar */
+    .floating-toolbar {
+      position: absolute;
+      background: #1a1a1a;
+      border-radius: 8px;
+      padding: 6px;
+      display: flex;
+      gap: 4px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      z-index: 100;
+    }
+
+    .floating-toolbar button {
+      background: none;
+      border: none;
+      color: white;
+      padding: 6px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+
+    .floating-toolbar button:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 768px) {
+      .editor-header {
+        padding: 12px;
+      }
+
+      .header-left {
+        gap: 8px;
+      }
+
+      .page-title {
+        display: none;
+      }
+
+      .header-actions {
+        gap: 8px;
+      }
+
+      .btn-text span {
+        display: none;
+      }
+
+      .editor-container {
+        margin: 16px;
+        border-radius: 8px;
+      }
+
+      .title-input {
+        font-size: 32px;
+        padding: 24px;
+      }
+
+      .editor-body {
+        padding: 0 24px 24px;
+        font-size: 16px;
+      }
+    }
+  </style>
+
+  <script>
+    // Cover image upload
+    const coverInput = document.getElementById('cover-input') as HTMLInputElement;
+    const coverBtn = document.getElementById('cover-btn');
+    const coverPreview = document.getElementById('cover-preview') as HTMLImageElement;
+
+    coverBtn?.addEventListener('click', () => coverInput?.click());
+
+    coverInput?.addEventListener('change', (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          if (coverPreview && coverBtn) {
+            coverPreview.src = e.target?.result as string;
+            coverPreview.classList.remove('hidden');
+            coverBtn.classList.add('hidden');
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // User dropdown
+    const userMenuBtn = document.getElementById('user-menu-btn');
+    const userDropdown = document.getElementById('user-dropdown');
+
+    userMenuBtn?.addEventListener('click', () => {
+      userDropdown?.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!userMenuBtn?.contains(e.target as Node) && !userDropdown?.contains(e.target as Node)) {
+        userDropdown?.classList.add('hidden');
+      }
+    });
+
+    // Floating toolbar for text selection
+    const floatingToolbar = document.getElementById('floating-toolbar');
+    const editor = document.getElementById('editor');
+
+    document.addEventListener('selectionchange', () => {
+      const selection = window.getSelection();
+      if (selection && selection.toString().length > 0 && floatingToolbar) {
+        const range = selection.getRangeAt(0);
+        const rect = range.getBoundingClientRect();
+
+        floatingToolbar.style.top = `${rect.top + window.scrollY - 50}px`;
+        floatingToolbar.style.left = `${rect.left + (rect.width / 2)}px`;
+        floatingToolbar.style.transform = 'translateX(-50%)';
+        floatingToolbar.classList.remove('hidden');
+      } else {
+        floatingToolbar?.classList.add('hidden');
+      }
+    });
+
+    // Toolbar commands
+    floatingToolbar?.querySelectorAll('button[data-cmd]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const cmd = (e.currentTarget as HTMLElement).dataset.cmd;
+        if (cmd) {
+          if (cmd.includes(':')) {
+            const [command, value] = cmd.split(':');
+            document.execCommand(command, false, value);
+          } else {
+            document.execCommand(cmd);
+          }
+        }
+        editor?.focus();
+      });
+    });
+
+    // Link button
+    document.getElementById('link-btn')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      const url = prompt('Enter URL:');
+      if (url) {
+        document.execCommand('createLink', false, url);
+      }
+      editor?.focus();
+    });
+
+    // Auto-save draft
+    let saveTimeout: number;
+    function saveDraft() {
+      clearTimeout(saveTimeout);
+      saveTimeout = window.setTimeout(() => {
+        const title = (document.getElementById('title') as HTMLInputElement).value;
+        const content = (document.getElementById('editor') as HTMLElement).innerHTML;
+        const cover = (document.getElementById('cover-preview') as HTMLImageElement).src;
+
+        localStorage.setItem('article-draft', JSON.stringify({
+          title,
+          content,
+          cover,
+          timestamp: Date.now()
+        }));
+
+        console.log('Draft saved');
+      }, 1000);
+    }
+
+    document.getElementById('title')?.addEventListener('input', saveDraft);
+    document.getElementById('editor')?.addEventListener('input', saveDraft);
+
+    // Save draft button
+    document.getElementById('save-draft')?.addEventListener('click', () => {
+      saveDraft();
+      alert('Draft saved!');
+    });
+
+    // Load draft
+    const draft = localStorage.getItem('article-draft');
+    if (draft) {
+      const { title, content, cover } = JSON.parse(draft);
+      if (title) (document.getElementById('title') as HTMLInputElement).value = title;
+      if (content) (document.getElementById('editor') as HTMLElement).innerHTML = content;
+      if (cover && cover.startsWith('data:')) {
+        const preview = document.getElementById('cover-preview') as HTMLImageElement;
+        const btn = document.getElementById('cover-btn');
+        if (preview && btn) {
+          preview.src = cover;
+          preview.classList.remove('hidden');
+          btn.classList.add('hidden');
+        }
+      }
+    }
+
+    // Publish button
+    document.getElementById('publish-btn')?.addEventListener('click', () => {
+      const title = (document.getElementById('title') as HTMLInputElement).value;
+      const content = (document.getElementById('editor') as HTMLElement).innerHTML;
+
+      if (!title || !content) {
+        alert('Please add a title and content before publishing.');
+        return;
+      }
+
+      // TODO: Implement publish flow
+      console.log('Publishing:', { title, content });
+      alert('Publishing feature coming soon!');
+    });
+  </script>
+</body>
+</html>
