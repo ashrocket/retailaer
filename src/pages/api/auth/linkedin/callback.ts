@@ -86,10 +86,10 @@ export const GET: APIRoute = async ({ request, redirect, cookies, url, locals })
     const email = profile.email?.toLowerCase();
 
     console.log('User email:', email);
+    console.log('Allowed authors:', ALLOWED_AUTHORS.map(a => ({ name: a.name, email: a.email })));
 
     // Check if email matches any authorized author
-    const author = getAuthorByLinkedIn(email) ||
-                   ALLOWED_AUTHORS.find(a => a.email?.toLowerCase() === email);
+    const author = ALLOWED_AUTHORS.find(a => a.email?.toLowerCase() === email);
 
     if (!author) {
       console.log('Unauthorized user attempted login with email:', email);
