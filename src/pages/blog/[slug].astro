@@ -1,0 +1,697 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export const prerender = false;
+
+// Get the slug from the URL
+const { slug } = Astro.params;
+
+// TODO: Load from database
+// For now, using mock data that matches our sample insights
+const mockPosts: Record<string, any> = {
+  'dynamic-offers-ndc': {
+    id: '1',
+    slug: 'dynamic-offers-ndc',
+    title: 'Dynamic offers for the IATA NDC era',
+    coverImage: null,
+    content: `
+      <p>The airline industry is undergoing a significant transformation with the adoption of IATA's New Distribution Capability (NDC) standard. This shift is enabling airlines to create more dynamic and personalized offers for their customers.</p>
+
+      <h2>The Challenge with Traditional Distribution</h2>
+      <p>For decades, airlines have been constrained by legacy distribution systems that limit their ability to differentiate their products and services. Traditional EDIFACT messaging provides only basic information about flights and fares, making it difficult for airlines to showcase their unique value propositions.</p>
+
+      <h2>NDC: A Game Changer</h2>
+      <p>NDC changes this paradigm by providing airlines with the tools to create rich, dynamic offers that can include:</p>
+      <ul>
+        <li>Detailed product descriptions and imagery</li>
+        <li>Personalized bundles and ancillary services</li>
+        <li>Real-time pricing and availability</li>
+        <li>Branded fares with clear differentiation</li>
+      </ul>
+
+      <h2>Implementing Dynamic Offers</h2>
+      <p>Successfully implementing dynamic offers requires a modern offer management platform that can:</p>
+      <ul>
+        <li>Integrate with multiple data sources in real-time</li>
+        <li>Apply sophisticated pricing and bundling logic</li>
+        <li>Deliver consistent experiences across all channels</li>
+        <li>Track and analyze offer performance</li>
+      </ul>
+
+      <h2>The Retailaer Advantage</h2>
+      <p>Retailaer's offer management platform is designed specifically for the NDC era, providing airlines with the flexibility and power they need to compete effectively in modern distribution channels.</p>
+
+      <blockquote>
+        "Dynamic offers aren't just about technology—they're about transforming how airlines engage with their customers and partners."
+      </blockquote>
+
+      <h2>Looking Forward</h2>
+      <p>As more airlines adopt NDC and distribution partners upgrade their systems, the opportunity for dynamic, personalized offers will only grow. Airlines that invest in modern offer management capabilities today will be well-positioned to capitalize on these opportunities.</p>
+    `,
+    author: 'Retailaer Team',
+    authorEmail: 'team@retailaer.com',
+    publishedAt: '2025-10-15',
+    readTimeMinutes: 6,
+    category: 'Technology',
+    preview: {
+      meta: 'ARTICLE',
+      backgroundGradient: 'linear-gradient(135deg, #FFF5E6 0%, #FFE4CC 100%)'
+    }
+  },
+  'orders-without-friction': {
+    id: '2',
+    slug: 'orders-without-friction',
+    title: 'Orders without friction',
+    coverImage: null,
+    content: `
+      <p>In today's competitive airline market, the booking experience can make or break a sale. Customers expect a seamless, intuitive process that gets them from search to confirmation quickly and effortlessly.</p>
+
+      <h2>The Cost of Friction</h2>
+      <p>Every additional step, confusing option, or technical hiccup in the booking process increases the likelihood of cart abandonment. Studies show that even small improvements in user experience can lead to significant increases in conversion rates.</p>
+
+      <h2>What Creates Friction?</h2>
+      <ul>
+        <li>Complex navigation and multi-step processes</li>
+        <li>Unclear pricing and hidden fees</li>
+        <li>Limited payment options</li>
+        <li>Slow page loads and system timeouts</li>
+        <li>Inflexible booking rules and restrictions</li>
+      </ul>
+
+      <h2>The Frictionless Approach</h2>
+      <p>Creating a frictionless booking experience requires thinking holistically about the customer journey:</p>
+
+      <h3>Simplify the Flow</h3>
+      <p>Reduce the number of steps required to complete a booking. Use progressive disclosure to show only the most relevant options at each stage.</p>
+
+      <h3>Transparent Pricing</h3>
+      <p>Show all costs upfront. Surprise fees at checkout are one of the biggest sources of customer frustration and abandonment.</p>
+
+      <h3>Smart Defaults</h3>
+      <p>Use data and personalization to pre-select the most likely options for each customer, reducing the cognitive load of decision-making.</p>
+
+      <h2>Maximizing Ancillary Revenue</h2>
+      <p>Contrary to popular belief, reducing friction doesn't mean reducing revenue opportunities. When done right, a streamlined experience can actually increase ancillary sales by:</p>
+      <ul>
+        <li>Presenting relevant offers at the right moment</li>
+        <li>Making bundle deals easy to understand and select</li>
+        <li>Using intelligent recommendations based on the customer's preferences</li>
+      </ul>
+
+      <h2>Conclusion</h2>
+      <p>The goal is simple: make it as easy as possible for customers to give you their money. Modern order management systems like Retailaer are designed to minimize friction while maximizing both customer satisfaction and revenue.</p>
+    `,
+    author: 'Retailaer Team',
+    authorEmail: 'team@retailaer.com',
+    publishedAt: '2025-10-10',
+    readTimeMinutes: 5,
+    category: 'Customer Experience',
+    preview: {
+      meta: 'ARTICLE',
+      backgroundGradient: 'linear-gradient(135deg, #FFF9E6 0%, #FFEDB3 100%)'
+    }
+  },
+  'payments-cfo-likes': {
+    id: '3',
+    slug: 'payments-cfo-likes',
+    title: 'Payments your CFO likes',
+    coverImage: null,
+    content: `
+      <p>Payment processing is often viewed as a necessary evil—a cost center that needs to be minimized. But with the right approach, payments can become a strategic advantage that drives both customer satisfaction and financial performance.</p>
+
+      <h2>What CFOs Care About</h2>
+      <p>When it comes to payments, CFOs are focused on several key metrics:</p>
+      <ul>
+        <li>Processing costs and fees</li>
+        <li>Payment acceptance rates</li>
+        <li>Fraud prevention and chargebacks</li>
+        <li>Cash flow and settlement timing</li>
+        <li>Compliance and regulatory requirements</li>
+        <li>Reconciliation and reporting accuracy</li>
+      </ul>
+
+      <h2>The Total Cost of Payments</h2>
+      <p>It's not just about the percentage fee charged by payment processors. The total cost includes:</p>
+      <ul>
+        <li>Direct processing fees</li>
+        <li>Currency conversion costs</li>
+        <li>Failed payment retry expenses</li>
+        <li>Fraud losses and chargeback fees</li>
+        <li>Staff time for reconciliation and dispute resolution</li>
+        <li>Technology integration and maintenance costs</li>
+      </ul>
+
+      <h2>Optimization Strategies</h2>
+
+      <h3>Multi-Currency Support</h3>
+      <p>Allow customers to pay in their local currency while you receive funds in yours. This improves conversion rates and reduces FX risk.</p>
+
+      <h3>Intelligent Routing</h3>
+      <p>Route transactions through the most cost-effective payment processor for each transaction type, region, and payment method.</p>
+
+      <h3>Fraud Prevention</h3>
+      <p>Implement sophisticated fraud detection that blocks bad transactions without creating friction for legitimate customers.</p>
+
+      <h3>Automated Reconciliation</h3>
+      <p>Reduce manual work and errors by automatically matching payments to bookings and identifying discrepancies.</p>
+
+      <h2>The Retailaer Payment Advantage</h2>
+      <p>Retailaer's payment infrastructure is designed with both customer experience and financial efficiency in mind:</p>
+      <ul>
+        <li>Support for 100+ payment methods globally</li>
+        <li>Built-in fraud detection and prevention</li>
+        <li>Automated reconciliation and reporting</li>
+        <li>PCI DSS Level 1 compliance</li>
+        <li>Optimized routing for lowest processing costs</li>
+      </ul>
+
+      <blockquote>
+        "The best payment system is one that customers love and CFOs trust."
+      </blockquote>
+
+      <h2>Conclusion</h2>
+      <p>Modern payment technology has evolved far beyond simple transaction processing. By leveraging advanced capabilities like intelligent routing, multi-currency support, and automated reconciliation, airlines can simultaneously improve the customer experience and financial performance—something any CFO can appreciate.</p>
+    `,
+    author: 'Retailaer Team',
+    authorEmail: 'team@retailaer.com',
+    publishedAt: '2025-10-05',
+    readTimeMinutes: 7,
+    category: 'Finance & Operations',
+    preview: {
+      meta: 'REPORT',
+      backgroundGradient: 'linear-gradient(135deg, #E6F7FF 0%, #CCE7FF 100%)'
+    }
+  },
+  'customer-first-retailing': {
+    id: '4',
+    slug: 'customer-first-retailing',
+    title: 'The customer-first revolution',
+    coverImage: null,
+    content: `
+      <p>For too long, airline systems have been built around internal processes rather than customer needs. The customer-first revolution is changing this, putting the traveler at the center of everything.</p>
+
+      <h2>The Old Way: PNR-Centric Systems</h2>
+      <p>Traditional airline systems organize everything around the Passenger Name Record (PNR)—a booking-centric approach that made sense when most customers made a single reservation and never looked back. But today's travelers expect more flexibility and control.</p>
+
+      <h2>The New Way: Customer-Centric Systems</h2>
+      <p>Modern platforms like Retailaer organize data around the customer, not the booking. This fundamental shift enables:</p>
+      <ul>
+        <li>Persistent customer profiles across all interactions</li>
+        <li>Personalized offers based on history and preferences</li>
+        <li>Seamless management of multiple bookings</li>
+        <li>Flexible modifications and upgrades</li>
+      </ul>
+
+      <h2>Real Business Impact</h2>
+      <p>Customer-first isn't just a buzzword—it drives measurable business results:</p>
+      <ul>
+        <li>Higher conversion rates from personalized offers</li>
+        <li>Increased customer lifetime value</li>
+        <li>Reduced customer service costs</li>
+        <li>Improved brand loyalty and reputation</li>
+      </ul>
+
+      <h2>Making the Transition</h2>
+      <p>Moving to a customer-first approach doesn't require ripping out existing systems. Modern platforms can integrate with legacy infrastructure while providing new customer-centric capabilities on top.</p>
+    `,
+    author: 'Retailaer Team',
+    authorEmail: 'team@retailaer.com',
+    publishedAt: '2025-09-28',
+    readTimeMinutes: 5,
+    category: 'Strategy',
+    preview: {
+      meta: 'BLOG POST',
+      backgroundGradient: 'linear-gradient(135deg, #F0F7F7 0%, #D9ECEC 100%)'
+    }
+  },
+  'beyond-the-pnr': {
+    id: '5',
+    slug: 'beyond-the-pnr',
+    title: 'Beyond the PNR',
+    coverImage: null,
+    content: `
+      <p>The Passenger Name Record has been the foundation of airline systems for decades. But as customer expectations evolve and technology advances, it's time to think beyond the PNR.</p>
+
+      <h2>Understanding the PNR's Limitations</h2>
+      <p>PNRs were designed for a different era:</p>
+      <ul>
+        <li>One booking per customer per trip</li>
+        <li>Limited modification capabilities</li>
+        <li>No persistent customer relationship</li>
+        <li>Siloed data across different systems</li>
+      </ul>
+
+      <h2>The Order Management Alternative</h2>
+      <p>Modern order management systems treat each purchase as part of an ongoing customer relationship rather than isolated transaction. This enables:</p>
+
+      <h3>Flexibility</h3>
+      <p>Customers can easily modify, split, combine, or transfer orders without creating new bookings.</p>
+
+      <h3>Visibility</h3>
+      <p>All customer interactions are visible in one place, enabling better service and personalization.</p>
+
+      <h3>Continuity</h3>
+      <p>The relationship persists beyond individual transactions, enabling long-term engagement.</p>
+
+      <h2>Real-World Benefits</h2>
+      <ul>
+        <li>Reduced customer service workload</li>
+        <li>More flexible change and cancellation policies</li>
+        <li>Better data for personalization</li>
+        <li>Easier integration with partner systems</li>
+      </ul>
+
+      <h2>The Path Forward</h2>
+      <p>You don't have to abandon PNRs overnight. The smart approach is to layer modern order management on top of existing systems, gradually expanding capabilities while maintaining backward compatibility.</p>
+    `,
+    author: 'Retailaer Team',
+    authorEmail: 'team@retailaer.com',
+    publishedAt: '2025-09-20',
+    readTimeMinutes: 6,
+    category: 'Technology',
+    preview: {
+      meta: 'GUIDE',
+      backgroundGradient: 'linear-gradient(135deg, #F5E6FF 0%, #E6CCFF 100%)'
+    }
+  }
+};
+
+// Get the post or 404
+const post = mockPosts[slug as string];
+
+if (!post) {
+  return Astro.redirect('/404');
+}
+
+// Format date
+const publishDate = new Date(post.publishedAt).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+});
+---
+
+<BaseLayout title={`${post.title} - Retailaer`}>
+  <article class="blog-post">
+    <!-- Hero Section with optional cover image -->
+    {post.coverImage && (
+      <div class="post-hero">
+        <img src={post.coverImage} alt={post.title} />
+      </div>
+    )}
+
+    <div class="post-container">
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb">
+        <a href="/">Home</a>
+        <span>/</span>
+        <a href="/#insights">Insights</a>
+        <span>/</span>
+        <span>{post.title}</span>
+      </nav>
+
+      <!-- Header -->
+      <header class="post-header">
+        <div class="post-meta">
+          <span class="badge">{post.preview.meta}</span>
+          {post.category && <span class="category">{post.category}</span>}
+        </div>
+        <h1 class="post-title">{post.title}</h1>
+        <div class="post-info">
+          <span class="author">By {post.author}</span>
+          <span class="separator">•</span>
+          <time datetime={post.publishedAt}>{publishDate}</time>
+          {post.readTimeMinutes && (
+            <>
+              <span class="separator">•</span>
+              <span class="read-time">{post.readTimeMinutes} min read</span>
+            </>
+          )}
+        </div>
+      </header>
+
+      <!-- Content -->
+      <div class="post-content" set:html={post.content}></div>
+
+      <!-- Footer -->
+      <footer class="post-footer">
+        <div class="share-section">
+          <h3>Share this article</h3>
+          <div class="share-buttons">
+            <a
+              href={`https://www.linkedin.com/sharing/share-offsite/?url=${Astro.url.href}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="share-btn linkedin"
+            >
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M5 3c0 1.1-.7 2-2 2-1.2 0-2-.9-2-1.9C1 2 1.8 1 3 1s2 .9 2 2zM1 19h4V6H1v13zM14.6 6.2c-2.1 0-3.3 1.2-3.8 2h-.1l-.2-1.7H6.9c0 1.1.1 2.4.1 3.9V19h4v-7.1c0-.4 0-.7.1-1 .3-.7.8-1.6 1.9-1.6 1.4 0 2 1.2 2 2.8V19h4v-7.4c0-3.7-1.9-5.4-4.4-5.4z"/>
+              </svg>
+              LinkedIn
+            </a>
+            <a
+              href={`https://twitter.com/intent/tweet?url=${Astro.url.href}&text=${post.title}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="share-btn twitter"
+            >
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M20 3.8c-.7.3-1.5.5-2.4.6.8-.5 1.5-1.3 1.8-2.3-.8.5-1.7.8-2.6 1-.8-.8-1.8-1.3-3-1.3-2.3 0-4.1 1.8-4.1 4.1 0 .3 0 .6.1.9C6.4 6.7 3.4 5.1 1.4 2.6c-.3.6-.5 1.2-.5 1.9 0 1.4.7 2.7 1.8 3.4-.7 0-1.3-.2-1.8-.5v.1c0 2 1.4 3.6 3.3 4-.3.1-.7.1-1.1.1-.3 0-.5 0-.8-.1.5 1.6 2 2.8 3.8 2.8-1.4 1.1-3.2 1.8-5.1 1.8-.3 0-.7 0-1-.1 1.8 1.2 4 1.8 6.3 1.8 7.5 0 11.7-6.3 11.7-11.7v-.5c.8-.6 1.5-1.3 2-2.1z"/>
+              </svg>
+              Twitter
+            </a>
+            <button
+              class="share-btn copy"
+              data-url={Astro.url.href}
+              title="Copy link"
+            >
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/>
+                <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/>
+              </svg>
+              Copy Link
+            </button>
+          </div>
+        </div>
+
+        <div class="back-link">
+          <a href="/#insights" class="btn-secondary">← Back to Insights</a>
+        </div>
+      </footer>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .blog-post {
+    background: white;
+  }
+
+  .post-hero {
+    width: 100%;
+    max-height: 500px;
+    overflow: hidden;
+  }
+
+  .post-hero img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+
+  .post-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 48px 24px;
+  }
+
+  .breadcrumb {
+    display: flex;
+    gap: 8px;
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 32px;
+  }
+
+  .breadcrumb a {
+    color: #0a5c5c;
+    text-decoration: none;
+  }
+
+  .breadcrumb a:hover {
+    text-decoration: underline;
+  }
+
+  .post-header {
+    margin-bottom: 48px;
+  }
+
+  .post-meta {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .badge {
+    background: #f0f7f7;
+    color: #0a5c5c;
+    padding: 6px 16px;
+    border-radius: 16px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  .category {
+    color: #6b7280;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .post-title {
+    font-size: 48px;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1.2;
+    margin-bottom: 24px;
+  }
+
+  .post-info {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    font-size: 15px;
+    color: #6b7280;
+  }
+
+  .author {
+    font-weight: 500;
+  }
+
+  .separator {
+    color: #d1d5db;
+  }
+
+  .post-content {
+    font-size: 18px;
+    line-height: 1.8;
+    color: #374151;
+  }
+
+  .post-content p {
+    margin-bottom: 24px;
+  }
+
+  .post-content h2 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 48px 0 24px;
+    line-height: 1.3;
+  }
+
+  .post-content h3 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 36px 0 16px;
+    line-height: 1.4;
+  }
+
+  .post-content ul,
+  .post-content ol {
+    margin: 24px 0;
+    padding-left: 32px;
+  }
+
+  .post-content li {
+    margin: 12px 0;
+  }
+
+  .post-content a {
+    color: #0a5c5c;
+    text-decoration: underline;
+  }
+
+  .post-content a:hover {
+    color: #084a4f;
+  }
+
+  .post-content blockquote {
+    border-left: 4px solid #f5b800;
+    padding-left: 24px;
+    margin: 32px 0;
+    font-size: 22px;
+    font-style: italic;
+    color: #1a1a1a;
+    font-weight: 500;
+  }
+
+  .post-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    margin: 32px 0;
+  }
+
+  .post-footer {
+    margin-top: 64px;
+    padding-top: 48px;
+    border-top: 2px solid #e5e7eb;
+  }
+
+  .share-section {
+    margin-bottom: 32px;
+  }
+
+  .share-section h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 16px;
+  }
+
+  .share-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .share-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+  }
+
+  .share-btn.linkedin {
+    background: #0077b5;
+    color: white;
+  }
+
+  .share-btn.linkedin:hover {
+    background: #005885;
+    transform: translateY(-2px);
+  }
+
+  .share-btn.twitter {
+    background: #1da1f2;
+    color: white;
+  }
+
+  .share-btn.twitter:hover {
+    background: #0c85d0;
+    transform: translateY(-2px);
+  }
+
+  .share-btn.copy {
+    background: #f3f4f6;
+    color: #374151;
+  }
+
+  .share-btn.copy:hover {
+    background: #e5e7eb;
+    transform: translateY(-2px);
+  }
+
+  .share-btn.copy.copied {
+    background: #0a5c5c;
+    color: white;
+  }
+
+  .back-link {
+    text-align: center;
+  }
+
+  .btn-secondary {
+    display: inline-block;
+    padding: 12px 32px;
+    background: white;
+    color: #0a5c5c;
+    border: 2px solid #0a5c5c;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .btn-secondary:hover {
+    background: #0a5c5c;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(10, 92, 92, 0.2);
+  }
+
+  @media (max-width: 768px) {
+    .post-container {
+      padding: 32px 16px;
+    }
+
+    .post-title {
+      font-size: 32px;
+    }
+
+    .post-content {
+      font-size: 16px;
+    }
+
+    .post-content h2 {
+      font-size: 24px;
+      margin: 32px 0 16px;
+    }
+
+    .post-content h3 {
+      font-size: 20px;
+      margin: 24px 0 12px;
+    }
+
+    .post-content blockquote {
+      font-size: 18px;
+    }
+
+    .share-buttons {
+      flex-direction: column;
+    }
+
+    .share-btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+</style>
+
+<script>
+  // Copy link functionality
+  const copyBtn = document.querySelector('.share-btn.copy');
+  copyBtn?.addEventListener('click', async () => {
+    const url = (copyBtn as HTMLElement).dataset.url;
+    if (url) {
+      try {
+        await navigator.clipboard.writeText(url);
+        copyBtn.classList.add('copied');
+        const originalText = copyBtn.innerHTML;
+        copyBtn.innerHTML = `
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+          </svg>
+          Copied!
+        `;
+        setTimeout(() => {
+          copyBtn.classList.remove('copied');
+          copyBtn.innerHTML = originalText;
+        }, 2000);
+      } catch (err) {
+        console.error('Failed to copy:', err);
+      }
+    }
+  });
+</script>
