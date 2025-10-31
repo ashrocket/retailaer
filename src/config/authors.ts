@@ -19,7 +19,7 @@ export const ALLOWED_AUTHORS: Author[] = [
     name: 'Ann Cederhall',
     linkedinUsername: 'anncederhall',
     linkedinUrl: 'https://www.linkedin.com/in/anncederhall',
-    email: 'ann@retailaer.com',
+    email: 'ann.cederhall@hotmail.com',
   },
   {
     id: 'anders-lofgren',
