@@ -30,7 +30,7 @@ const session = requireAuth(Astro.cookies);
         <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
           <path d="M8 2a.5.5 0 01.5.5v11.793l3.146-3.147a.5.5 0 01.708.708l-4 4a.5.5 0 01-.708 0l-4-4a.5.5 0 01.708-.708L7.5 14.293V2.5A.5.5 0 018 2z"/>
         </svg>
-        Save Draft
+        <span class="save-text">Save Draft</span>
       </button>
       <button id="preview-btn" class="btn-text">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
@@ -38,7 +38,7 @@ const session = requireAuth(Astro.cookies);
         </svg>
         Preview
       </button>
-      <a href="/blog/posts" class="btn-text">All Posts</a>
+      <a href="/blog/manage" class="btn-text">Manage</a>
       <div class="user-menu">
         {session.picture && <img src={session.picture} alt={session.name} class="avatar" />}
         <button class="btn-text" id="user-menu-btn">
@@ -266,6 +266,11 @@ const session = requireAuth(Astro.cookies);
     .btn-text:hover {
       background: #f0f7f7;
       color: #0a5c5c;
+    }
+
+    .btn-text.saved {
+      background: #0a5c5c;
+      color: white;
     }
 
     .btn-primary {
@@ -888,39 +893,81 @@ const session = requireAuth(Astro.cookies);
 
     // Auto-save draft
     let saveTimeout: number;
-    function saveDraft() {
+    let lastSaveTime = 0;
+
+    function saveDraft(showFeedback = false) {
       clearTimeout(saveTimeout);
       saveTimeout = window.setTimeout(() => {
         const title = (document.getElementById('title') as HTMLInputElement).value;
         const content = (document.getElementById('editor') as HTMLElement).innerHTML;
         const cover = (document.getElementById('cover-preview') as HTMLImageElement).src;
 
+        // Get carousel preview settings
+        const previewTitle = (document.getElementById('preview-title') as HTMLInputElement)?.value;
+        const previewExcerpt = (document.getElementById('preview-excerpt') as HTMLTextAreaElement)?.value;
+        const previewMeta = (document.getElementById('preview-meta') as HTMLSelectElement)?.value;
+        const previewIcon = (document.getElementById('preview-icon') as HTMLSelectElement)?.value;
+        const previewGradient = (document.getElementById('preview-gradient') as HTMLSelectElement)?.value;
+
         localStorage.setItem('article-draft', JSON.stringify({
           title,
           content,
           cover,
+          carouselPreview: {
+            title: previewTitle,
+            excerpt: previewExcerpt,
+            meta: previewMeta,
+            icon: previewIcon,
+            backgroundGradient: previewGradient
+          },
           timestamp: Date.now()
         }));
 
-        console.log('Draft saved');
+        lastSaveTime = Date.now();
+
+        if (showFeedback) {
+          const saveBtn = document.getElementById('save-draft');
+          const saveText = saveBtn?.querySelector('.save-text');
+          if (saveText) {
+            const originalText = saveText.textContent;
+            saveText.textContent = 'Saved!';
+            saveBtn?.classList.add('saved');
+            setTimeout(() => {
+              saveText.textContent = originalText;
+              saveBtn?.classList.remove('saved');
+            }, 2000);
+          }
+        }
+
+        console.log('Draft auto-saved at', new Date().toLocaleTimeString());
       }, 1000);
     }
 
-    document.getElementById('title')?.addEventListener('input', saveDraft);
-    document.getElementById('editor')?.addEventListener('input', saveDraft);
+    document.getElementById('title')?.addEventListener('input', () => saveDraft(false));
+    document.getElementById('editor')?.addEventListener('input', () => saveDraft(false));
+
+    // Also auto-save carousel preview changes
+    document.getElementById('preview-title')?.addEventListener('input', () => saveDraft(false));
+    document.getElementById('preview-excerpt')?.addEventListener('input', () => saveDraft(false));
+    document.getElementById('preview-meta')?.addEventListener('change', () => saveDraft(false));
+    document.getElementById('preview-icon')?.addEventListener('change', () => saveDraft(false));
+    document.getElementById('preview-gradient')?.addEventListener('change', () => saveDraft(false));
 
     // Save draft button
     document.getElementById('save-draft')?.addEventListener('click', () => {
-      saveDraft();
-      alert('Draft saved!');
+      clearTimeout(saveTimeout);
+      saveDraft(true);
     });
 
     // Load draft
     const draft = localStorage.getItem('article-draft');
     if (draft) {
-      const { title, content, cover } = JSON.parse(draft);
+      const draftData = JSON.parse(draft);
+      const { title, content, cover, carouselPreview } = draftData;
+
       if (title) (document.getElementById('title') as HTMLInputElement).value = title;
       if (content) (document.getElementById('editor') as HTMLElement).innerHTML = content;
+
       if (cover && cover.startsWith('data:')) {
         const preview = document.getElementById('cover-preview') as HTMLImageElement;
         const btn = document.getElementById('cover-btn');
@@ -930,6 +977,27 @@ const session = requireAuth(Astro.cookies);
           btn.classList.add('hidden');
         }
       }
+
+      // Restore carousel preview settings
+      if (carouselPreview) {
+        const previewTitleInput = document.getElementById('preview-title') as HTMLInputElement;
+        const previewExcerptInput = document.getElementById('preview-excerpt') as HTMLTextAreaElement;
+        const previewMetaSelect = document.getElementById('preview-meta') as HTMLSelectElement;
+        const previewIconSelect = document.getElementById('preview-icon') as HTMLSelectElement;
+        const previewGradientSelect = document.getElementById('preview-gradient') as HTMLSelectElement;
+
+        if (previewTitleInput && carouselPreview.title) previewTitleInput.value = carouselPreview.title;
+        if (previewExcerptInput && carouselPreview.excerpt) previewExcerptInput.value = carouselPreview.excerpt;
+        if (previewMetaSelect && carouselPreview.meta) previewMetaSelect.value = carouselPreview.meta;
+        if (previewIconSelect && carouselPreview.icon) previewIconSelect.value = carouselPreview.icon;
+        if (previewGradientSelect && carouselPreview.backgroundGradient) previewGradientSelect.value = carouselPreview.backgroundGradient;
+
+        // Update the live preview
+        updateCarouselPreview();
+      }
+
+      // Show notification that draft was loaded
+      console.log('Draft loaded from', new Date(draftData.timestamp).toLocaleString());
     }
 
     // Preview button

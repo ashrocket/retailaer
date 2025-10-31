@@ -1,9 +1,13 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { requireAuth } from '../../lib/auth';
 import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 export const prerender = false;
+
+// Require authentication
+const session = requireAuth(Astro.cookies);
 
 // Read all blog posts from the content directory
 let posts: any[] = [];
