@@ -97,6 +97,86 @@ const session = requireAuth(Astro.cookies);
       <button data-cmd="formatBlock:h2" title="Heading">H</button>
       <button id="link-btn" title="Add Link">🔗</button>
     </div>
+
+    <!-- Carousel Preview Customization -->
+    <div class="carousel-preview-section">
+      <button class="section-toggle" id="carousel-toggle">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M4 6l4 4 4-4z"/>
+        </svg>
+        Carousel Preview Settings
+      </button>
+      <div class="carousel-preview-content hidden" id="carousel-content">
+        <p class="section-description">Customize how this post appears in the homepage carousel</p>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="preview-title">Preview Title</label>
+            <input
+              type="text"
+              id="preview-title"
+              placeholder="Leave blank to use article title"
+              maxlength="100"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="preview-excerpt">Preview Excerpt</label>
+            <textarea
+              id="preview-excerpt"
+              placeholder="Short description for the carousel card"
+              rows="3"
+              maxlength="200"
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="preview-meta">Badge Text</label>
+            <select id="preview-meta">
+              <option value="ARTICLE">ARTICLE</option>
+              <option value="BLOG POST">BLOG POST</option>
+              <option value="REPORT">REPORT</option>
+              <option value="CASE STUDY">CASE STUDY</option>
+              <option value="GUIDE">GUIDE</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="preview-icon">Icon</label>
+            <select id="preview-icon">
+              <option value="plane">✈️ Plane</option>
+              <option value="document">📄 Document</option>
+              <option value="chart">📊 Chart</option>
+              <option value="globe">🌐 Globe</option>
+              <option value="rocket">🚀 Rocket</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="preview-gradient">Card Gradient</label>
+            <select id="preview-gradient">
+              <option value="linear-gradient(135deg, #FFF5E6 0%, #FFE4CC 100%)">🟠 Warm Orange</option>
+              <option value="linear-gradient(135deg, #FFF9E6 0%, #FFEDB3 100%)">🟡 Bright Yellow</option>
+              <option value="linear-gradient(135deg, #E6F7FF 0%, #CCE7FF 100%)">🔵 Cool Blue</option>
+              <option value="linear-gradient(135deg, #F0F7F7 0%, #D9ECEC 100%)">🟢 Teal</option>
+              <option value="linear-gradient(135deg, #F5E6FF 0%, #E6CCFF 100%)">🟣 Purple</option>
+              <option value="linear-gradient(135deg, #FFE6F0 0%, #FFCCE0 100%)">🩷 Pink</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Live Preview -->
+        <div class="live-preview-section">
+          <label>Live Preview</label>
+          <div class="carousel-card-preview" id="carousel-card-preview">
+            <div class="preview-icon" id="preview-icon-display">✈️</div>
+            <div class="preview-badge" id="preview-badge-display">ARTICLE</div>
+            <h3 id="preview-title-display">Your article title</h3>
+            <p id="preview-excerpt-display">Your preview excerpt will appear here...</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Preview Modal -->
@@ -376,6 +456,147 @@ const session = requireAuth(Astro.cookies);
       margin: 24px 0;
       font-style: italic;
       color: #6b7280;
+    }
+
+    /* Carousel Preview Section */
+    .carousel-preview-section {
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 2px solid #e5e7eb;
+    }
+
+    .section-toggle {
+      background: none;
+      border: none;
+      color: #0a5c5c;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 0;
+      transition: opacity 0.2s;
+    }
+
+    .section-toggle:hover {
+      opacity: 0.7;
+    }
+
+    .section-toggle svg {
+      transition: transform 0.2s;
+    }
+
+    .section-toggle.active svg {
+      transform: rotate(180deg);
+    }
+
+    .carousel-preview-content {
+      margin-top: 24px;
+      padding: 24px;
+      background: #f9fafb;
+      border-radius: 8px;
+    }
+
+    .section-description {
+      font-size: 14px;
+      color: #6b7280;
+      margin-bottom: 24px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-group:nth-child(2) {
+      grid-column: 1 / -1;
+    }
+
+    .form-group label {
+      font-size: 14px;
+      font-weight: 500;
+      color: #374151;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      padding: 10px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #0a5c5c;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    .live-preview-section {
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .live-preview-section > label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 12px;
+    }
+
+    .carousel-card-preview {
+      padding: 24px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #FFF5E6 0%, #FFE4CC 100%);
+      max-width: 350px;
+      transition: background 0.3s;
+    }
+
+    .preview-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .preview-badge {
+      font-size: 11px;
+      font-weight: 600;
+      color: #6b7280;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .carousel-card-preview h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #1a1a1a;
+    }
+
+    .carousel-card-preview p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #374151;
     }
 
     /* Floating Toolbar */
@@ -767,6 +988,75 @@ const session = requireAuth(Astro.cookies);
       }
     });
 
+    // Carousel preview section toggle
+    const carouselToggle = document.getElementById('carousel-toggle');
+    const carouselContent = document.getElementById('carousel-content');
+
+    carouselToggle?.addEventListener('click', () => {
+      carouselContent?.classList.toggle('hidden');
+      carouselToggle.classList.toggle('active');
+    });
+
+    // Icon mapping
+    const iconMap: Record<string, string> = {
+      'plane': '✈️',
+      'document': '📄',
+      'chart': '📊',
+      'globe': '🌐',
+      'rocket': '🚀'
+    };
+
+    // Update carousel preview live
+    const titleInput = document.getElementById('title') as HTMLInputElement;
+    const previewTitleInput = document.getElementById('preview-title') as HTMLInputElement;
+    const previewExcerptInput = document.getElementById('preview-excerpt') as HTMLTextAreaElement;
+    const previewMetaSelect = document.getElementById('preview-meta') as HTMLSelectElement;
+    const previewIconSelect = document.getElementById('preview-icon') as HTMLSelectElement;
+    const previewGradientSelect = document.getElementById('preview-gradient') as HTMLSelectElement;
+
+    const carouselCard = document.getElementById('carousel-card-preview');
+    const previewTitleDisplay = document.getElementById('preview-title-display');
+    const previewExcerptDisplay = document.getElementById('preview-excerpt-display');
+    const previewBadgeDisplay = document.getElementById('preview-badge-display');
+    const previewIconDisplay = document.getElementById('preview-icon-display');
+
+    function updateCarouselPreview() {
+      // Update title (use custom or fallback to main title)
+      const displayTitle = previewTitleInput?.value || titleInput?.value || 'Your article title';
+      if (previewTitleDisplay) {
+        previewTitleDisplay.textContent = displayTitle;
+      }
+
+      // Update excerpt
+      const displayExcerpt = previewExcerptInput?.value || 'Your preview excerpt will appear here...';
+      if (previewExcerptDisplay) {
+        previewExcerptDisplay.textContent = displayExcerpt;
+      }
+
+      // Update badge
+      if (previewBadgeDisplay && previewMetaSelect) {
+        previewBadgeDisplay.textContent = previewMetaSelect.value;
+      }
+
+      // Update icon
+      if (previewIconDisplay && previewIconSelect) {
+        previewIconDisplay.textContent = iconMap[previewIconSelect.value] || '✈️';
+      }
+
+      // Update gradient
+      if (carouselCard && previewGradientSelect) {
+        carouselCard.style.background = previewGradientSelect.value;
+      }
+    }
+
+    // Attach listeners
+    titleInput?.addEventListener('input', updateCarouselPreview);
+    previewTitleInput?.addEventListener('input', updateCarouselPreview);
+    previewExcerptInput?.addEventListener('input', updateCarouselPreview);
+    previewMetaSelect?.addEventListener('change', updateCarouselPreview);
+    previewIconSelect?.addEventListener('change', updateCarouselPreview);
+    previewGradientSelect?.addEventListener('change', updateCarouselPreview);
+
     // Publish button
     document.getElementById('publish-btn')?.addEventListener('click', () => {
       const title = (document.getElementById('title') as HTMLInputElement).value;
@@ -777,8 +1067,17 @@ const session = requireAuth(Astro.cookies);
         return;
       }
 
+      // Collect carousel preview data
+      const carouselPreview = {
+        title: previewTitleInput?.value || title,
+        excerpt: previewExcerptInput?.value || '',
+        meta: previewMetaSelect?.value || 'ARTICLE',
+        icon: previewIconSelect?.value || 'plane',
+        backgroundGradient: previewGradientSelect?.value || 'linear-gradient(135deg, #FFF5E6 0%, #FFE4CC 100%)'
+      };
+
       // TODO: Implement publish flow
-      console.log('Publishing:', { title, content });
+      console.log('Publishing:', { title, content, carouselPreview });
       alert('Publishing feature coming soon!');
     });
   </script>
