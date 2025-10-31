@@ -32,6 +32,12 @@ const session = requireAuth(Astro.cookies);
         </svg>
         Save Draft
       </button>
+      <button id="preview-btn" class="btn-text">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M8 2C4.5 2 1.5 4.5 0 8c1.5 3.5 4.5 6 8 6s6.5-2.5 8-6c-1.5-3.5-4.5-6-8-6zm0 10c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4zm0-6.5c-1.4 0-2.5 1.1-2.5 2.5s1.1 2.5 2.5 2.5 2.5-1.1 2.5-2.5-1.1-2.5-2.5-2.5z"/>
+        </svg>
+        Preview
+      </button>
       <a href="/blog/posts" class="btn-text">All Posts</a>
       <div class="user-menu">
         {session.picture && <img src={session.picture} alt={session.name} class="avatar" />}
@@ -90,6 +96,17 @@ const session = requireAuth(Astro.cookies);
       <button data-cmd="insertOrderedList" title="Numbered List">1.</button>
       <button data-cmd="formatBlock:h2" title="Heading">H</button>
       <button id="link-btn" title="Add Link">🔗</button>
+    </div>
+  </div>
+
+  <!-- Preview Modal -->
+  <div id="preview-modal" class="modal hidden">
+    <div class="modal-content preview-content">
+      <div class="modal-header">
+        <h2>Preview</h2>
+        <button id="close-preview" class="close-btn">×</button>
+      </div>
+      <div id="preview-body" class="preview-body"></div>
     </div>
   </div>
 
@@ -392,6 +409,141 @@ const session = requireAuth(Astro.cookies);
       display: none !important;
     }
 
+    /* Preview Modal */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      padding: 24px;
+    }
+
+    .preview-content {
+      background: white;
+      border-radius: 12px;
+      max-width: 900px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 32px;
+      border-bottom: 1px solid #e5e7eb;
+      position: sticky;
+      top: 0;
+      background: white;
+      z-index: 1;
+    }
+
+    .modal-header h2 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 32px;
+      color: #6b7280;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+
+    .close-btn:hover {
+      background: #f3f4f6;
+      color: #1a1a1a;
+    }
+
+    .preview-body {
+      padding: 32px 48px 48px;
+    }
+
+    .preview-body img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin: 24px 0;
+    }
+
+    .preview-body h1 {
+      font-size: 40px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      color: #1a1a1a;
+      line-height: 1.2;
+    }
+
+    .preview-body h2 {
+      font-size: 28px;
+      font-weight: 600;
+      margin: 32px 0 16px;
+      color: #1a1a1a;
+    }
+
+    .preview-body h3 {
+      font-size: 22px;
+      font-weight: 600;
+      margin: 24px 0 12px;
+      color: #1a1a1a;
+    }
+
+    .preview-body p {
+      font-size: 18px;
+      line-height: 1.7;
+      color: #374151;
+      margin-bottom: 16px;
+    }
+
+    .preview-body ul,
+    .preview-body ol {
+      font-size: 18px;
+      line-height: 1.7;
+      color: #374151;
+      margin: 16px 0;
+      padding-left: 24px;
+    }
+
+    .preview-body li {
+      margin: 8px 0;
+    }
+
+    .preview-body a {
+      color: #0a5c5c;
+      text-decoration: underline;
+    }
+
+    .preview-body a:hover {
+      color: #084a4f;
+    }
+
+    .preview-body blockquote {
+      border-left: 3px solid #f5b800;
+      padding-left: 20px;
+      margin: 24px 0;
+      font-style: italic;
+      color: #6b7280;
+    }
+
     @media (max-width: 768px) {
       .editor-header {
         padding: 12px;
@@ -558,6 +710,62 @@ const session = requireAuth(Astro.cookies);
         }
       }
     }
+
+    // Preview button
+    const previewModal = document.getElementById('preview-modal');
+    const previewBody = document.getElementById('preview-body');
+    const previewBtn = document.getElementById('preview-btn');
+    const closePreviewBtn = document.getElementById('close-preview');
+
+    previewBtn?.addEventListener('click', () => {
+      const title = (document.getElementById('title') as HTMLInputElement).value;
+      const content = (document.getElementById('editor') as HTMLElement).innerHTML;
+      const coverSrc = (document.getElementById('cover-preview') as HTMLImageElement).src;
+
+      if (!title && !content) {
+        alert('Please add some content to preview.');
+        return;
+      }
+
+      let previewHTML = '';
+
+      // Add cover image if exists
+      if (coverSrc && !coverSrc.includes('undefined')) {
+        previewHTML += `<img src="${coverSrc}" alt="Cover image" />`;
+      }
+
+      // Add title
+      if (title) {
+        previewHTML += `<h1>${title}</h1>`;
+      }
+
+      // Add content
+      previewHTML += content;
+
+      if (previewBody) {
+        previewBody.innerHTML = previewHTML;
+      }
+
+      previewModal?.classList.remove('hidden');
+    });
+
+    closePreviewBtn?.addEventListener('click', () => {
+      previewModal?.classList.add('hidden');
+    });
+
+    // Close modal on outside click
+    previewModal?.addEventListener('click', (e) => {
+      if (e.target === previewModal) {
+        previewModal.classList.add('hidden');
+      }
+    });
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !previewModal?.classList.contains('hidden')) {
+        previewModal?.classList.add('hidden');
+      }
+    });
 
     // Publish button
     document.getElementById('publish-btn')?.addEventListener('click', () => {
