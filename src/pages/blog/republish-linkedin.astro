@@ -67,12 +67,26 @@ const session = requireAuth(Astro.cookies);
           />
           <p class="help-text">Paste the URL of your LinkedIn article or post</p>
         </div>
+
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="capture-screenshot" checked />
+            Capture screenshot of the LinkedIn article
+          </label>
+          <p class="help-text">Takes a visual snapshot including images (recommended for rich content)</p>
+        </div>
+
         <button id="fetch-btn" class="btn-primary">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
             <path d="M8 5a3 3 0 100-6 3 3 0 000 6zm2-3a2 2 0 11-4 0 2 2 0 014 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 7.68 10.289 7 8 7c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
           </svg>
           Fetch Article
         </button>
+
+        <div id="loading-state" class="hidden">
+          <div class="loading-spinner"></div>
+          <p>Capturing article screenshot...</p>
+        </div>
       </div>
     </div>
 
@@ -147,6 +161,15 @@ const session = requireAuth(Astro.cookies);
                 class="readonly-input"
               />
             </div>
+
+            <div class="form-group full-width" id="screenshot-section">
+              <label>Article Screenshot</label>
+              <div id="screenshot-container" class="screenshot-container hidden">
+                <img id="screenshot-image" alt="LinkedIn article screenshot" />
+                <button type="button" id="remove-screenshot" class="btn-text-small">Remove Screenshot</button>
+              </div>
+              <p class="help-text">Screenshot will be shown in the preview post</p>
+            </div>
           </div>
 
           <!-- Live Preview -->
@@ -162,6 +185,9 @@ const session = requireAuth(Astro.cookies);
             <h3 style="margin-top: 32px;">Full Post Preview</h3>
             <div class="full-post-preview">
               <h1 id="full-title-display">Article Title</h1>
+              <div id="full-screenshot-display" class="screenshot-preview hidden">
+                <img id="full-screenshot-image" alt="Article preview" />
+              </div>
               <div id="full-excerpt-display" class="excerpt-content">
                 <p>Your preview content will appear here...</p>
               </div>
@@ -433,6 +459,75 @@ const session = requireAuth(Astro.cookies);
       margin-top: 6px;
     }
 
+    .form-group label input[type="checkbox"] {
+      width: auto;
+      margin-right: 8px;
+    }
+
+    /* Screenshot */
+    .screenshot-container {
+      position: relative;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 16px;
+      background: #f9fafb;
+    }
+
+    .screenshot-container img {
+      width: 100%;
+      height: auto;
+      border-radius: 4px;
+      margin-bottom: 12px;
+    }
+
+    .btn-text-small {
+      background: #dc2626;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-text-small:hover {
+      background: #b91c1c;
+    }
+
+    .screenshot-preview {
+      margin: 24px 0;
+    }
+
+    .screenshot-preview img {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+    }
+
+    /* Loading */
+    #loading-state {
+      text-align: center;
+      padding: 24px;
+      color: #6b7280;
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      margin: 0 auto 16px;
+      border: 4px solid #e5e7eb;
+      border-top-color: #0a5c5c;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
     .form-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -677,34 +772,89 @@ const session = requireAuth(Astro.cookies);
     // Fetch LinkedIn article
     const fetchBtn = document.getElementById('fetch-btn');
     const linkedinUrlInput = document.getElementById('linkedin-url') as HTMLInputElement;
+    const captureScreenshotCheckbox = document.getElementById('capture-screenshot') as HTMLInputElement;
+    const loadingState = document.getElementById('loading-state');
+
+    let screenshotDataUrl: string | null = null;
 
     fetchBtn?.addEventListener('click', async () => {
       const url = linkedinUrlInput?.value;
+      const captureScreenshot = captureScreenshotCheckbox?.checked;
 
       if (!url || !url.includes('linkedin.com')) {
         alert('Please enter a valid LinkedIn URL');
         return;
       }
 
-      // TODO: Call API to fetch LinkedIn article
-      // For now, simulate with mock data
-      const mockData = {
-        title: 'Dynamic offers for the IATA NDC era',
-        excerpt: 'The airline industry is undergoing a significant transformation with the adoption of IATA\'s New Distribution Capability (NDC) standard.\n\nThis shift is enabling airlines to create more dynamic and personalized offers for their customers, moving beyond the constraints of traditional distribution systems.',
-        url: url
-      };
+      try {
+        // Show loading
+        if (fetchBtn) fetchBtn.disabled = true;
+        loadingState?.classList.remove('hidden');
 
-      // Populate form
-      (document.getElementById('preview-title') as HTMLInputElement).value = mockData.title;
-      (document.getElementById('preview-excerpt') as HTMLTextAreaElement).value = mockData.excerpt;
-      (document.getElementById('linkedin-original-url') as HTMLInputElement).value = mockData.url;
+        // Capture screenshot if requested
+        if (captureScreenshot) {
+          const response = await fetch('/api/screenshot', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url })
+          });
 
-      // Update previews
-      updatePreviews();
+          if (response.ok) {
+            const data = await response.json();
+            screenshotDataUrl = data.screenshot;
+          } else {
+            console.error('Screenshot capture failed');
+          }
+        }
 
-      // Show step 2
-      document.getElementById('step-1')?.classList.add('hidden');
-      document.getElementById('step-2')?.classList.remove('hidden');
+        // TODO: Call API to fetch LinkedIn article metadata
+        // For now, simulate with mock data
+        const mockData = {
+          title: 'Dynamic offers for the IATA NDC era',
+          excerpt: 'The airline industry is undergoing a significant transformation with the adoption of IATA\'s New Distribution Capability (NDC) standard.\n\nThis shift is enabling airlines to create more dynamic and personalized offers for their customers, moving beyond the constraints of traditional distribution systems.',
+          url: url
+        };
+
+        // Populate form
+        (document.getElementById('preview-title') as HTMLInputElement).value = mockData.title;
+        (document.getElementById('preview-excerpt') as HTMLTextAreaElement).value = mockData.excerpt;
+        (document.getElementById('linkedin-original-url') as HTMLInputElement).value = mockData.url;
+
+        // Show screenshot if captured
+        if (screenshotDataUrl) {
+          const screenshotContainer = document.getElementById('screenshot-container');
+          const screenshotImage = document.getElementById('screenshot-image') as HTMLImageElement;
+          const fullScreenshotDisplay = document.getElementById('full-screenshot-display');
+          const fullScreenshotImage = document.getElementById('full-screenshot-image') as HTMLImageElement;
+
+          if (screenshotImage && screenshotContainer) {
+            screenshotImage.src = screenshotDataUrl;
+            screenshotContainer.classList.remove('hidden');
+          }
+
+          if (fullScreenshotImage && fullScreenshotDisplay) {
+            fullScreenshotImage.src = screenshotDataUrl;
+            fullScreenshotDisplay.classList.remove('hidden');
+          }
+        }
+
+        // Update previews
+        updatePreviews();
+
+        // Hide loading
+        loadingState?.classList.add('hidden');
+        if (fetchBtn) fetchBtn.disabled = false;
+
+        // Show step 2
+        document.getElementById('step-1')?.classList.add('hidden');
+        document.getElementById('step-2')?.classList.remove('hidden');
+
+      } catch (error) {
+        console.error('Error fetching article:', error);
+        alert('Failed to fetch article. Please try again.');
+        loadingState?.classList.add('hidden');
+        if (fetchBtn) fetchBtn.disabled = false;
+      }
     });
 
     // Update preview live
@@ -754,6 +904,13 @@ const session = requireAuth(Astro.cookies);
       document.getElementById('step-1')?.classList.remove('hidden');
     });
 
+    // Remove screenshot
+    document.getElementById('remove-screenshot')?.addEventListener('click', () => {
+      screenshotDataUrl = null;
+      document.getElementById('screenshot-container')?.classList.add('hidden');
+      document.getElementById('full-screenshot-display')?.classList.add('hidden');
+    });
+
     // Create preview post
     document.getElementById('create-preview-btn')?.addEventListener('click', async () => {
       const title = (document.getElementById('preview-title') as HTMLInputElement)?.value;
@@ -770,6 +927,7 @@ const session = requireAuth(Astro.cookies);
         title,
         excerpt,
         linkedinUrl,
+        screenshot: screenshotDataUrl,
         type: 'linkedin-republish'
       });
 
