@@ -791,34 +791,36 @@ const session = requireAuth(Astro.cookies);
         if (fetchBtn) fetchBtn.disabled = true;
         loadingState?.classList.remove('hidden');
 
-        // Capture screenshot if requested
-        if (captureScreenshot) {
-          const response = await fetch('/api/screenshot', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ url })
-          });
+        // Fetch article content and optionally screenshot
+        const response = await fetch('/api/screenshot', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url })
+        });
 
-          if (response.ok) {
-            const data = await response.json();
-            screenshotDataUrl = data.screenshot;
-          } else {
-            console.error('Screenshot capture failed');
-          }
+        if (!response.ok) {
+          throw new Error('Failed to fetch article');
         }
 
-        // TODO: Call API to fetch LinkedIn article metadata
-        // For now, simulate with mock data
-        const mockData = {
-          title: 'Dynamic offers for the IATA NDC era',
-          excerpt: 'The airline industry is undergoing a significant transformation with the adoption of IATA\'s New Distribution Capability (NDC) standard.\n\nThis shift is enabling airlines to create more dynamic and personalized offers for their customers, moving beyond the constraints of traditional distribution systems.',
-          url: url
-        };
+        const data = await response.json();
+
+        // Set screenshot if captured
+        if (captureScreenshot && data.screenshot) {
+          screenshotDataUrl = data.screenshot;
+        }
+
+        // Use extracted data, fallback to defaults
+        const title = data.title || 'LinkedIn Article';
+        const content = data.content || '';
+
+        // Create excerpt from first 2-3 paragraphs
+        const paragraphs = content.split('\n\n').filter(p => p.length > 50);
+        const excerpt = paragraphs.slice(0, 3).join('\n\n');
 
         // Populate form
-        (document.getElementById('preview-title') as HTMLInputElement).value = mockData.title;
-        (document.getElementById('preview-excerpt') as HTMLTextAreaElement).value = mockData.excerpt;
-        (document.getElementById('linkedin-original-url') as HTMLInputElement).value = mockData.url;
+        (document.getElementById('preview-title') as HTMLInputElement).value = title;
+        (document.getElementById('preview-excerpt') as HTMLTextAreaElement).value = excerpt || content.substring(0, 500);
+        (document.getElementById('linkedin-original-url') as HTMLInputElement).value = url;
 
         // Show screenshot if captured
         if (screenshotDataUrl) {

@@ -1,0 +1,42 @@
+{
+  "name": "retailaer-theme",
+  "displayName": "Retailaer Theme",
+  "description": "A professional VSCode theme based on Retailaer's brand colors - deep teal, bright yellow accents",
+  "version": "1.0.0",
+  "publisher": "retailaer",
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "categories": [
+    "Themes"
+  ],
+  "keywords": [
+    "theme",
+    "color-theme",
+    "dark theme",
+    "light theme",
+    "retailaer",
+    "teal",
+    "yellow",
+    "professional"
+  ],
+  "contributes": {
+    "themes": [
+      {
+        "label": "Retailaer Dark",
+        "uiTheme": "vs-dark",
+        "path": "./themes/retailaer-dark.json"
+      },
+      {
+        "label": "Retailaer Light",
+        "uiTheme": "vs",
+        "path": "./themes/retailaer-light.json"
+      }
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/retailaer/retailaer"
+  },
+  "license": "MIT"
+}
