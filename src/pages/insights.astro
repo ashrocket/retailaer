@@ -1,0 +1,565 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { readdir, readFile } from 'node:fs/promises';
+import { join } from 'node:path';
+
+// Read published blog posts
+let posts: any[] = [];
+
+try {
+  const contentDir = join(process.cwd(), 'src/content/blog');
+
+  let files: string[] = [];
+  try {
+    files = await readdir(contentDir);
+  } catch (err) {
+    files = [];
+  }
+
+  if (files.length > 0) {
+    const allPosts = await Promise.all(
+      files
+        .filter(file => file.endsWith('.json'))
+        .map(async file => {
+          try {
+            const content = await readFile(join(contentDir, file), 'utf-8');
+            return JSON.parse(content);
+          } catch (err) {
+            return null;
+          }
+        })
+    );
+
+    // Filter for published posts only
+    posts = allPosts
+      .filter(post => post !== null && post.status === 'published')
+      .sort((a, b) => new Date(b.publishedAt || b.updatedAt).getTime() - new Date(a.publishedAt || a.updatedAt).getTime());
+  }
+} catch (error) {
+  console.error('Error loading posts:', error);
+  posts = [];
+}
+---
+
+<BaseLayout
+  title="Insights - Retailaer"
+  description="Expert insights on airline retailing, travel technology, and the future of customer-first commerce."
+>
+  <!-- Hero Section -->
+  <section class="page-hero">
+    <div class="container">
+      <h1 class="page-title">Insights</h1>
+      <p class="page-subtitle">
+        Expert perspectives on airline retailing, travel technology,<br>
+        and the future of customer-first commerce.
+      </p>
+    </div>
+  </section>
+
+  <!-- Posts Grid -->
+  <section class="section">
+    <div class="container">
+      {posts.length === 0 ? (
+        <div class="empty-state">
+          <div class="empty-icon">📝</div>
+          <h2>More Insights Coming Soon</h2>
+          <p>
+            We're working on publishing valuable insights about airline retailing,
+            travel technology trends, and customer-first strategies.
+          </p>
+          <p class="empty-cta">
+            In the meantime, <a href="/contact">get in touch</a> to learn more about
+            how Retailaer can transform your airline retailing strategy.
+          </p>
+        </div>
+      ) : (
+        <div class="insights-grid">
+          {posts.map(post => (
+            <article class="insight-card">
+              {post.coverImage && (
+                <div class="insight-image">
+                  <img src={post.coverImage} alt={post.title} />
+                </div>
+              )}
+              <div class="insight-content">
+                <div class="insight-meta">
+                  <span class="insight-badge">{post.type || 'ARTICLE'}</span>
+                  <time datetime={post.publishedAt || post.updatedAt}>
+                    {new Date(post.publishedAt || post.updatedAt).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })}
+                  </time>
+                </div>
+
+                <h2 class="insight-title">
+                  <a href={`/blog/${post.slug}`}>{post.title}</a>
+                </h2>
+
+                {post.excerpt && (
+                  <p class="insight-excerpt">{post.excerpt}</p>
+                )}
+
+                <div class="insight-footer">
+                  <span class="insight-author">By {post.author}</span>
+                  <a href={`/blog/${post.slug}`} class="read-more">
+                    Read Article →
+                  </a>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- Newsletter Section -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="newsletter-box">
+        <div class="newsletter-content">
+          <h2>Stay Updated</h2>
+          <p>
+            Get the latest insights on airline retailing, travel technology,
+            and industry trends delivered to your inbox.
+          </p>
+        </div>
+        <div class="newsletter-form">
+          <form id="newsletter-form">
+            <input
+              type="email"
+              placeholder="Enter your email"
+              required
+              aria-label="Email address"
+            />
+            <button type="submit" class="btn btn-primary">Subscribe</button>
+          </form>
+          <p class="newsletter-note">
+            We respect your privacy. Unsubscribe at any time.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Topics Section -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Topics We Cover</h2>
+      </div>
+
+      <div class="topics-grid">
+        <div class="topic-card">
+          <div class="topic-icon">✈️</div>
+          <h3>Airline Retailing</h3>
+          <p>Modern strategies for maximizing revenue and customer satisfaction</p>
+        </div>
+
+        <div class="topic-card">
+          <div class="topic-icon">🎯</div>
+          <h3>Personalization</h3>
+          <p>Leveraging data and AI to deliver tailored experiences</p>
+        </div>
+
+        <div class="topic-card">
+          <div class="topic-icon">🔄</div>
+          <h3>NDC & Distribution</h3>
+          <p>Navigating the evolution of airline distribution channels</p>
+        </div>
+
+        <div class="topic-card">
+          <div class="topic-icon">💳</div>
+          <h3>Payments & Commerce</h3>
+          <p>Streamlining transactions and improving conversion</p>
+        </div>
+
+        <div class="topic-card">
+          <div class="topic-icon">📊</div>
+          <h3>Data & Analytics</h3>
+          <p>Making data-driven decisions to optimize performance</p>
+        </div>
+
+        <div class="topic-card">
+          <div class="topic-icon">🚀</div>
+          <h3>Innovation</h3>
+          <p>Emerging technologies shaping the future of travel</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .page-hero {
+      background: linear-gradient(135deg, #0a5c5c 0%, #084a4f 100%);
+      padding: 120px 0 80px;
+      text-align: center;
+      color: white;
+    }
+
+    .page-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      letter-spacing: -1px;
+    }
+
+    .page-subtitle {
+      font-size: 1.25rem;
+      opacity: 0.95;
+      line-height: 1.6;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .section {
+      padding: 80px 0;
+    }
+
+    .section-alt {
+      background: #f0f7f7;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-header h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #0a1f1f;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      max-width: 600px;
+      margin: 4rem auto;
+      padding: 3rem 2rem;
+    }
+
+    .empty-icon {
+      font-size: 4rem;
+      margin-bottom: 1.5rem;
+      opacity: 0.5;
+    }
+
+    .empty-state h2 {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #0a1f1f;
+      margin-bottom: 1rem;
+    }
+
+    .empty-state p {
+      font-size: 1.125rem;
+      color: #5a7a7a;
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+
+    .empty-cta {
+      margin-top: 1.5rem;
+    }
+
+    .empty-cta a {
+      color: #0a5c5c;
+      font-weight: 600;
+      text-decoration: none;
+      border-bottom: 2px solid #f5b800;
+    }
+
+    .empty-cta a:hover {
+      color: #084a4f;
+    }
+
+    /* Insights Grid */
+    .insights-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 2.5rem;
+    }
+
+    .insight-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .insight-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    .insight-image {
+      width: 100%;
+      height: 220px;
+      overflow: hidden;
+      background: #f0f7f7;
+    }
+
+    .insight-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+
+    .insight-card:hover .insight-image img {
+      transform: scale(1.05);
+    }
+
+    .insight-content {
+      padding: 2rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .insight-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      font-size: 0.875rem;
+    }
+
+    .insight-badge {
+      background: #f0f7f7;
+      color: #0a5c5c;
+      padding: 0.375rem 0.875rem;
+      border-radius: 20px;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
+    }
+
+    .insight-meta time {
+      color: #5a7a7a;
+    }
+
+    .insight-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      line-height: 1.3;
+      margin-bottom: 1rem;
+    }
+
+    .insight-title a {
+      color: #0a1f1f;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .insight-title a:hover {
+      color: #0a5c5c;
+    }
+
+    .insight-excerpt {
+      color: #5a7a7a;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+      flex: 1;
+    }
+
+    .insight-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 1rem;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .insight-author {
+      color: #5a7a7a;
+      font-size: 0.9375rem;
+    }
+
+    .read-more {
+      color: #0a5c5c;
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 0.9375rem;
+      transition: color 0.2s;
+    }
+
+    .read-more:hover {
+      color: #084a4f;
+    }
+
+    /* Newsletter */
+    .newsletter-box {
+      background: white;
+      padding: 3rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .newsletter-content h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #0a1f1f;
+      margin-bottom: 1rem;
+    }
+
+    .newsletter-content p {
+      color: #5a7a7a;
+      line-height: 1.7;
+      font-size: 1.0625rem;
+    }
+
+    .newsletter-form form {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .newsletter-form input {
+      flex: 1;
+      padding: 0.875rem 1.25rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.2s;
+    }
+
+    .newsletter-form input:focus {
+      outline: none;
+      border-color: #0a5c5c;
+    }
+
+    .newsletter-form button {
+      white-space: nowrap;
+    }
+
+    .newsletter-note {
+      font-size: 0.875rem;
+      color: #5a7a7a;
+    }
+
+    /* Topics */
+    .topics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .topic-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .topic-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .topic-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .topic-card h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #0a5c5c;
+      margin-bottom: 0.75rem;
+    }
+
+    .topic-card p {
+      color: #5a7a7a;
+      line-height: 1.6;
+      font-size: 0.9375rem;
+    }
+
+    @media (max-width: 968px) {
+      .newsletter-box {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .insights-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .page-title {
+        font-size: 2.5rem;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page-hero {
+        padding: 100px 0 60px;
+      }
+
+      .section {
+        padding: 60px 0;
+      }
+
+      .newsletter-box {
+        padding: 2rem;
+      }
+
+      .newsletter-form form {
+        flex-direction: column;
+      }
+
+      .newsletter-form button {
+        width: 100%;
+      }
+    }
+  </style>
+
+  <script>
+    // Newsletter form handler
+    const form = document.getElementById('newsletter-form');
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const input = form.querySelector('input[type="email"]') as HTMLInputElement;
+      const button = form.querySelector('button') as HTMLButtonElement;
+
+      if (!input || !button) return;
+
+      const email = input.value;
+
+      // Disable form
+      input.disabled = true;
+      button.disabled = true;
+      button.textContent = 'Subscribing...';
+
+      // TODO: Implement newsletter subscription
+      // For now, just show a success message
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      button.textContent = 'Subscribed!';
+      button.style.background = '#10b981';
+
+      setTimeout(() => {
+        input.value = '';
+        input.disabled = false;
+        button.disabled = false;
+        button.textContent = 'Subscribe';
+        button.style.background = '';
+      }, 3000);
+    });
+  </script>
+</BaseLayout>

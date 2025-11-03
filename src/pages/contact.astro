@@ -1,0 +1,551 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Contact - Retailaer"
+  description="Get in touch with Retailaer to learn how we can transform your airline retailing strategy."
+>
+  <!-- Hero Section -->
+  <section class="page-hero">
+    <div class="container">
+      <h1 class="page-title">Get In Touch</h1>
+      <p class="page-subtitle">
+        Ready to transform your airline retailing?<br>
+        Let's discuss how Retailaer can help you achieve your goals.
+      </p>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="section">
+    <div class="container">
+      <div class="contact-layout">
+        <!-- Contact Form -->
+        <div class="contact-form-container">
+          <h2>Send Us a Message</h2>
+          <p class="form-intro">
+            Fill out the form below and we'll get back to you within 24 hours.
+          </p>
+
+          <form id="contact-form" class="contact-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="firstName">First Name *</label>
+                <input
+                  type="text"
+                  id="firstName"
+                  name="firstName"
+                  required
+                  placeholder="John"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="lastName">Last Name *</label>
+                <input
+                  type="text"
+                  id="lastName"
+                  name="lastName"
+                  required
+                  placeholder="Smith"
+                />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="email">Email *</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  required
+                  placeholder="john.smith@airline.com"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="company">Company *</label>
+                <input
+                  type="text"
+                  id="company"
+                  name="company"
+                  required
+                  placeholder="Your Airline"
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="role">Your Role</label>
+              <select id="role" name="role">
+                <option value="">Select your role</option>
+                <option value="executive">Executive / C-Level</option>
+                <option value="product">Product Management</option>
+                <option value="technology">Technology / IT</option>
+                <option value="marketing">Marketing / Sales</option>
+                <option value="operations">Operations</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="interest">What are you interested in?</label>
+              <select id="interest" name="interest">
+                <option value="">Select an option</option>
+                <option value="demo">Book a Demo</option>
+                <option value="pricing">Pricing Information</option>
+                <option value="partnership">Partnership Opportunities</option>
+                <option value="technical">Technical Discussion</option>
+                <option value="general">General Inquiry</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="message">Message *</label>
+              <textarea
+                id="message"
+                name="message"
+                required
+                rows="6"
+                placeholder="Tell us about your needs and how we can help..."
+              ></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" name="consent" required />
+                <span>
+                  I agree to receive communications from Retailaer about products and services.
+                  You can unsubscribe at any time. View our <a href="/privacy">Privacy Policy</a>.
+                </span>
+              </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg btn-submit">
+              Send Message
+            </button>
+
+            <div id="form-status" class="form-status"></div>
+          </form>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="contact-info">
+          <div class="info-card">
+            <div class="info-icon">📧</div>
+            <h3>Email Us</h3>
+            <p>For general inquiries and support</p>
+            <a href="mailto:sales@retailaer.com" class="info-link">
+              sales@retailaer.com
+            </a>
+          </div>
+
+          <div class="info-card">
+            <div class="info-icon">⏱️</div>
+            <h3>Response Time</h3>
+            <p>We typically respond within</p>
+            <div class="info-highlight">24 hours</div>
+          </div>
+
+          <div class="info-card">
+            <div class="info-icon">🌍</div>
+            <h3>Global Reach</h3>
+            <p>
+              We work with airlines and travel brands worldwide,
+              supporting multiple regions and time zones.
+            </p>
+          </div>
+
+          <div class="info-card">
+            <div class="info-icon">🔒</div>
+            <h3>Your Privacy</h3>
+            <p>
+              Your information is secure and will never be shared
+              with third parties. See our <a href="/privacy">Privacy Policy</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <h2>Frequently Asked Questions</h2>
+      </div>
+
+      <div class="faq-grid">
+        <div class="faq-item">
+          <h4>How quickly can we get started?</h4>
+          <p>
+            We can typically schedule an initial demo within 2-3 business days.
+            Implementation timelines vary based on your specific needs and existing systems.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h4>Do you offer custom pricing?</h4>
+          <p>
+            Yes, we work with each client to create a pricing structure that aligns
+            with your business model, transaction volume, and specific requirements.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h4>What kind of support do you provide?</h4>
+          <p>
+            We offer comprehensive support including technical integration assistance,
+            ongoing platform updates, and dedicated account management.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h4>Is Retailaer NDC compliant?</h4>
+          <p>
+            Yes, our platform fully supports IATA NDC standards and enables modern
+            distribution capabilities for airlines and travel brands.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .page-hero {
+      background: linear-gradient(135deg, #0a5c5c 0%, #084a4f 100%);
+      padding: 120px 0 80px;
+      text-align: center;
+      color: white;
+    }
+
+    .page-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      letter-spacing: -1px;
+    }
+
+    .page-subtitle {
+      font-size: 1.25rem;
+      opacity: 0.95;
+      line-height: 1.6;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .section {
+      padding: 80px 0;
+    }
+
+    .section-alt {
+      background: #f0f7f7;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-header h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #0a1f1f;
+    }
+
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 4rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .contact-form-container h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #0a1f1f;
+      margin-bottom: 0.75rem;
+    }
+
+    .form-intro {
+      color: #5a7a7a;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    .contact-form {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 500;
+      color: #0a1f1f;
+      margin-bottom: 0.5rem;
+      font-size: 0.9375rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #0a5c5c;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: start;
+      gap: 0.75rem;
+      cursor: pointer;
+      font-weight: 400;
+    }
+
+    .checkbox-label input[type="checkbox"] {
+      width: auto;
+      margin-top: 0.25rem;
+      cursor: pointer;
+    }
+
+    .checkbox-label span {
+      font-size: 0.9375rem;
+      color: #5a7a7a;
+      line-height: 1.6;
+    }
+
+    .checkbox-label a {
+      color: #0a5c5c;
+      text-decoration: none;
+      border-bottom: 1px solid #0a5c5c;
+    }
+
+    .btn-submit {
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    .btn-lg {
+      padding: 1rem 2.5rem;
+      font-size: 1.125rem;
+    }
+
+    .form-status {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 8px;
+      display: none;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .form-status.success {
+      display: block;
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .form-status.error {
+      display: block;
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    /* Contact Info */
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .info-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .info-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .info-card h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #0a5c5c;
+      margin-bottom: 0.75rem;
+    }
+
+    .info-card p {
+      color: #5a7a7a;
+      line-height: 1.6;
+      margin-bottom: 0.75rem;
+    }
+
+    .info-link {
+      color: #0a5c5c;
+      font-weight: 600;
+      text-decoration: none;
+      border-bottom: 2px solid #f5b800;
+      display: inline-block;
+    }
+
+    .info-link:hover {
+      color: #084a4f;
+    }
+
+    .info-highlight {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #0a5c5c;
+    }
+
+    .info-card a {
+      color: #0a5c5c;
+      text-decoration: none;
+      border-bottom: 1px solid #0a5c5c;
+    }
+
+    /* FAQ */
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .faq-item {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .faq-item h4 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: #0a1f1f;
+      margin-bottom: 0.75rem;
+    }
+
+    .faq-item p {
+      color: #5a7a7a;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 968px) {
+      .contact-layout {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .page-title {
+        font-size: 2.5rem;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page-hero {
+        padding: 100px 0 60px;
+      }
+
+      .section {
+        padding: 60px 0;
+      }
+
+      .contact-form {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+
+  <script>
+    // Contact form handler
+    const form = document.getElementById('contact-form') as HTMLFormElement;
+    const statusDiv = document.getElementById('form-status') as HTMLDivElement;
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const submitButton = form.querySelector('.btn-submit') as HTMLButtonElement;
+      const originalText = submitButton.textContent;
+
+      // Get form data
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+
+      // Disable form
+      submitButton.disabled = true;
+      submitButton.textContent = 'Sending...';
+      statusDiv.className = 'form-status';
+      statusDiv.textContent = '';
+
+      try {
+        // TODO: Implement actual email sending
+        // For now, just simulate a successful submission
+        await new Promise(resolve => setTimeout(resolve, 1500));
+
+        // Show success message
+        statusDiv.className = 'form-status success';
+        statusDiv.textContent = 'Thank you! Your message has been sent. We\'ll get back to you within 24 hours.';
+
+        // Reset form
+        form.reset();
+
+        // Log to console for now (replace with actual API call)
+        console.log('Contact form submission:', data);
+
+      } catch (error) {
+        console.error('Error submitting form:', error);
+        statusDiv.className = 'form-status error';
+        statusDiv.textContent = 'Sorry, there was an error sending your message. Please try again or email us directly.';
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = originalText || 'Send Message';
+
+        // Hide status message after 5 seconds
+        setTimeout(() => {
+          statusDiv.className = 'form-status';
+        }, 5000);
+      }
+    });
+  </script>
+</BaseLayout>

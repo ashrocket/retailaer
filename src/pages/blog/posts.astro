@@ -14,21 +14,42 @@ let posts: any[] = [];
 
 try {
   const contentDir = join(process.cwd(), 'src/content/blog');
-  const files = await readdir(contentDir).catch(() => []);
 
-  posts = await Promise.all(
-    files
-      .filter(file => file.endsWith('.json'))
-      .map(async file => {
-        const content = await readFile(join(contentDir, file), 'utf-8');
-        return JSON.parse(content);
-      })
-  );
+  // Try to read directory, return empty array if it doesn't exist
+  let files: string[] = [];
+  try {
+    files = await readdir(contentDir);
+  } catch (err) {
+    console.log('Blog directory does not exist yet, will be created when first post is saved');
+    files = [];
+  }
 
-  // Sort by date, newest first
-  posts.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+  if (files.length > 0) {
+    posts = await Promise.all(
+      files
+        .filter(file => file.endsWith('.json'))
+        .map(async file => {
+          try {
+            const content = await readFile(join(contentDir, file), 'utf-8');
+            return JSON.parse(content);
+          } catch (err) {
+            console.error(`Error reading post ${file}:`, err);
+            return null;
+          }
+        })
+    );
+
+    // Filter out any null values from failed reads
+    posts = posts.filter(post => post !== null);
+
+    // Sort by date, newest first
+    if (posts.length > 0) {
+      posts.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+    }
+  }
 } catch (error) {
   console.error('Error loading posts:', error);
+  posts = [];
 }
 ---
 
