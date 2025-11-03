@@ -3,6 +3,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ExpandableFeatureCards from '../components/ExpandableFeatureCards.astro';
 import InsightsCarousel from '../components/InsightsCarousel.astro';
 
+// Enable editing for this page
+const filePath = 'src/pages/index.astro';
+
 // Sample insights data - TODO: Load from database
 const insights = [
   {
@@ -53,7 +56,7 @@ const insights = [
 ];
 ---
 
-<BaseLayout title="Retailaer – Modern Offer & Order. Real Revenue Lift.">
+<BaseLayout title="Retailaer – Modern Offer & Order. Real Revenue Lift." filePath={filePath}>
   <!-- Hero Section -->
   <section class="hero-section">
     <div class="container">

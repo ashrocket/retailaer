@@ -1,13 +1,15 @@
 ---
 import FeedbackWidget from '../components/FeedbackWidget.astro';
 import CookieConsent from '../components/CookieConsent.astro';
+import EditMode from '../components/EditMode.astro';
 
 interface Props {
   title: string;
   description?: string;
+  filePath?: string; // Path to source file for editing
 }
 
-const { title, description = "Customer-first airline retailing—dynamic offers, simplified orders, and payments that don't get in the way." } = Astro.props;
+const { title, description = "Customer-first airline retailing—dynamic offers, simplified orders, and payments that don't get in the way.", filePath } = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -29,6 +31,9 @@ const { title, description = "Customer-first airline retailing—dynamic offers,
   <link rel="stylesheet" href="/css/homepage.css">
 </head>
 <body>
+  <!-- Edit Mode Toolbar -->
+  {filePath && <EditMode filePath={filePath} />}
+
   <!-- Navigation -->
   <nav class="navbar">
     <div class="container">
