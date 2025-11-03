@@ -121,11 +121,15 @@ export const GET: APIRoute = async ({ request, redirect, cookies, url, locals })
       maxAge: 60 * 60 * 24 * 7, // 7 days
     });
 
-    // Clear OAuth state cookie
-    cookies.delete('linkedin_oauth_state', { path: '/' });
+    // Get returnTo destination from cookie
+    const returnTo = cookies.get('linkedin_return_to')?.value || '/blog/editor';
 
-    // Redirect to blog editor
-    return redirect('/blog/editor');
+    // Clear OAuth cookies
+    cookies.delete('linkedin_oauth_state', { path: '/' });
+    cookies.delete('linkedin_return_to', { path: '/' });
+
+    // Redirect to requested destination
+    return redirect(decodeURIComponent(returnTo));
 
   } catch (error) {
     console.error('OAuth callback error:', error);

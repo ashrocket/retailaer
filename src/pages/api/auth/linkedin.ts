@@ -20,6 +20,9 @@ export const GET: APIRoute = async ({ redirect, url, locals }) => {
   // Determine callback URL based on environment
   const callbackUrl = url.origin + '/api/auth/linkedin/callback';
 
+  // Get returnTo parameter for redirect after auth
+  const returnTo = url.searchParams.get('returnTo') || '/blog/editor';
+
   // Generate state for CSRF protection
   const state = crypto.randomUUID();
 
@@ -34,12 +37,14 @@ export const GET: APIRoute = async ({ redirect, url, locals }) => {
 
   const authUrl = `https://www.linkedin.com/oauth/v2/authorization?${params}`;
 
-  // Store state in cookie for verification in callback
+  // Store state and returnTo in cookies for verification in callback
   const response = redirect(authUrl, 302);
-  response.headers.set(
-    'Set-Cookie',
-    `linkedin_oauth_state=${state}; Path=/; HttpOnly; SameSite=Lax; Max-Age=600`
-  );
+  const cookies = [
+    `linkedin_oauth_state=${state}; Path=/; HttpOnly; SameSite=Lax; Max-Age=600`,
+    `linkedin_return_to=${encodeURIComponent(returnTo)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=600`
+  ];
+
+  response.headers.set('Set-Cookie', cookies.join(', '));
 
   return response;
 };
