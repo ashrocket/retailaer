@@ -453,8 +453,8 @@
     bottom: 0;
     background: rgba(0, 0, 0, 0.3);
     z-index: 999;
-    cursor: crosshair;
-    pointer-events: none; /* Allow clicks through overlay */
+    cursor: cell;
+    pointer-events: all; /* Capture all clicks for element selection */
   }
 
   .selection-overlay.hidden {
@@ -483,7 +483,7 @@
     pointer-events: none;
     border: 2px solid var(--color-accent, #f5b800);
     background: rgba(245, 184, 0, 0.1);
-    z-index: 998;
+    z-index: 1000;
     transition: all 0.1s ease;
   }
 
@@ -725,11 +725,13 @@
     if (mode === 'text') {
       selectionOverlay?.classList.remove('hidden');
       selectTextBtn?.classList.add('active');
-      document.body.style.cursor = 'crosshair';
 
-      // Add mouseover listener
-      document.addEventListener('mousemove', handleElementHover);
-      document.addEventListener('click', handleElementClick);
+      // Don't set cursor on body - overlay handles it
+      // document.body.style.cursor = 'cell';
+
+      // Add listeners to overlay
+      selectionOverlay?.addEventListener('mousemove', handleElementHover);
+      selectionOverlay?.addEventListener('click', handleElementClick);
     } else if (mode === 'screenshot') {
       takeScreenshot();
     }
@@ -740,24 +742,41 @@
     selectionMode = null;
     selectionOverlay?.classList.add('hidden');
     selectTextBtn?.classList.remove('active');
-    document.body.style.cursor = '';
     clearHighlight();
 
-    document.removeEventListener('mousemove', handleElementHover);
-    document.removeEventListener('click', handleElementClick);
+    // Remove listeners from overlay
+    selectionOverlay?.removeEventListener('mousemove', handleElementHover);
+    selectionOverlay?.removeEventListener('click', handleElementClick);
   }
 
   // Handle element hover
   function handleElementHover(e: MouseEvent) {
     if (!selectionMode || !elementHighlight) return;
 
-    const target = e.target as HTMLElement;
+    // Get element at cursor position (beneath overlay)
+    const x = e.clientX;
+    const y = e.clientY;
 
-    // Ignore feedback widget elements and overlay components
-    if (target.closest('#feedback-widget') ||
-        target.id === 'selection-overlay' ||
-        target.closest('.selection-instructions') ||
-        target.id === 'element-highlight') {
+    // Temporarily hide overlay and highlight to get element underneath
+    const overlayDisplay = selectionOverlay?.style.display;
+    const highlightDisplay = elementHighlight.style.display;
+    if (selectionOverlay) selectionOverlay.style.display = 'none';
+    elementHighlight.style.display = 'none';
+
+    const target = document.elementFromPoint(x, y) as HTMLElement;
+
+    // Restore overlay and highlight
+    if (selectionOverlay && overlayDisplay) selectionOverlay.style.display = overlayDisplay;
+    else if (selectionOverlay) selectionOverlay.style.display = '';
+    elementHighlight.style.display = highlightDisplay || '';
+
+    if (!target) {
+      clearHighlight();
+      return;
+    }
+
+    // Ignore feedback widget elements
+    if (target.closest('#feedback-widget') || target.closest('.selection-instructions')) {
       clearHighlight();
       return;
     }
@@ -776,15 +795,33 @@
   function handleElementClick(e: MouseEvent) {
     if (!selectionMode) return;
 
-    const target = e.target as HTMLElement;
-
-    // Ignore feedback widget and overlay (but allow clicks through overlay)
-    if (target.closest('#feedback-widget') || target.id === 'selection-overlay' || target.closest('.selection-instructions')) {
-      return;
-    }
-
     e.preventDefault();
     e.stopPropagation();
+
+    // Get element at cursor position (beneath overlay)
+    const x = e.clientX;
+    const y = e.clientY;
+
+    // Temporarily hide overlay and highlight to get element underneath
+    if (selectionOverlay) selectionOverlay.style.display = 'none';
+    if (elementHighlight) elementHighlight.style.display = 'none';
+
+    const target = document.elementFromPoint(x, y) as HTMLElement;
+
+    // Restore overlay and highlight
+    if (selectionOverlay) selectionOverlay.style.display = '';
+    if (elementHighlight) elementHighlight.style.display = '';
+
+    if (!target) return;
+
+    // Ignore feedback widget and instruction elements
+    if (target.closest('#feedback-widget') || target.closest('.selection-instructions')) {
+      // If clicking on instructions, exit selection mode
+      if (target.closest('.selection-instructions')) {
+        exitSelectionMode();
+      }
+      return;
+    }
 
     // Add selection
     const selector = getSelector(target);
