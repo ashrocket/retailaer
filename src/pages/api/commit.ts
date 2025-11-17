@@ -48,6 +48,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         headers: {
           'Authorization': `Bearer ${githubToken}`,
           'Accept': 'application/vnd.github.v3+json',
+          'User-Agent': 'Retailaer-Site-Editor',
         },
       }
     );
@@ -70,6 +71,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
           'Authorization': `Bearer ${githubToken}`,
           'Accept': 'application/vnd.github.v3+json',
           'Content-Type': 'application/json',
+          'User-Agent': 'Retailaer-Site-Editor',
         },
         body: JSON.stringify({
           message: commitMessage,

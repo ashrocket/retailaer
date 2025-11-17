@@ -71,6 +71,7 @@ export const GET: APIRoute = async ({ request, redirect, cookies, url, locals })
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Accept': 'application/vnd.github.v3+json',
+        'User-Agent': 'Retailaer-Site-Editor',
       },
     });
 
@@ -94,6 +95,7 @@ export const GET: APIRoute = async ({ request, redirect, cookies, url, locals })
         headers: {
           'Authorization': `Bearer ${accessToken}`,
           'Accept': 'application/vnd.github.v3+json',
+          'User-Agent': 'Retailaer-Site-Editor',
         },
       });
       if (emailsResponse.ok) {
