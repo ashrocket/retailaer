@@ -660,18 +660,19 @@ const isEditMode = editModeParam === 'true' && editorSession;
       checkCount++;
 
       try {
-        // Try fetching the homepage to see if deployment is complete
-        // We add a cache-busting query param to avoid cached responses
-        const checkUrl = `https://retailaer.us/?_deploy_check=${Date.now()}`;
+        // Check the health endpoint which returns the currently deployed git SHA
+        const checkUrl = `https://retailaer.us/api/health?t=${Date.now()}`;
         const response = await fetch(checkUrl, {
-          method: 'HEAD',
+          method: 'GET',
           cache: 'no-cache'
         });
 
-        // If we get a successful response, deployment is likely complete
         if (response.ok) {
-          // Wait a bit longer to ensure full propagation
-          setTimeout(() => {
+          const health = await response.json();
+          console.log(`Deployment check #${checkCount}: deployed SHA = ${health.commit}, target SHA = ${commitSha}`);
+
+          // Check if the deployed commit matches our target commit
+          if (health.commit && commitSha && health.commit.startsWith(commitSha.substring(0, 7))) {
             const elapsed = Math.floor((Date.now() - startTime) / 1000);
             clearInterval(elapsedInterval);
 
@@ -687,17 +688,17 @@ const isEditMode = editModeParam === 'true' && editorSession;
             if (elapsedElement) {
               elapsedElement.textContent = `Deployment completed in ${elapsed}s`;
             }
-          }, 3000);
-          return;
+            return;
+          }
         }
       } catch (err) {
-        console.log('Deployment check:', err.message);
+        console.log('Deployment check error:', err.message);
       }
 
       // Continue checking if we haven't exceeded max checks
       if (checkCount < maxChecks) {
         if (timerText) {
-          timerText.textContent = `Checking deployment status... (${checkCount}/${maxChecks})`;
+          timerText.textContent = `Waiting for deployment... (${checkCount}/${maxChecks})`;
         }
         setTimeout(checkStatus, 5000); // Check every 5 seconds
       } else {
@@ -711,7 +712,7 @@ const isEditMode = editModeParam === 'true' && editorSession;
       }
     };
 
-    // Start checking after initial delay
-    setTimeout(checkStatus, 10000); // Wait 10s before first check
+    // Start checking after initial delay (Cloudflare Pages usually takes 30-60s)
+    setTimeout(checkStatus, 15000); // Wait 15s before first check
   }
 </script>
