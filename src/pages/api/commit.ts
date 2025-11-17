@@ -77,22 +77,26 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     const failedChanges = [];
 
     for (const change of changes) {
-      const { original, current } = change;
+      // Handle both old format (original/current) and new format (originalText/currentText)
+      const originalText = change.originalText || change.original;
+      const currentText = change.currentText || change.current;
 
-      console.log('Attempting to replace:');
-      console.log('  Original:', JSON.stringify(original.substring(0, 100)));
-      console.log('  Current:', JSON.stringify(current.substring(0, 100)));
+      console.log('Attempting to replace text:');
+      console.log('  Original:', JSON.stringify(originalText));
+      console.log('  Current:', JSON.stringify(currentText));
 
-      // Only use exact match - normalized matching is too dangerous and corrupts HTML
-      if (fileContent.includes(original)) {
-        fileContent = fileContent.replace(original, current);
+      // Search for the original text in the .astro source file
+      // This works because we're looking for actual text content, not HTML
+      if (fileContent.includes(originalText)) {
+        // Replace the first occurrence
+        fileContent = fileContent.replace(originalText, currentText);
         changesApplied++;
-        console.log('  ✓ Applied exact match');
+        console.log('  ✓ Replaced text in source file');
       } else {
-        console.warn('  ✗ Could not find exact match');
+        console.warn('  ✗ Could not find text in source file');
         failedChanges.push({
-          original: original.substring(0, 100),
-          current: current.substring(0, 100)
+          originalText,
+          currentText
         });
       }
     }

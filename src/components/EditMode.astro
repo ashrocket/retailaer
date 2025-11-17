@@ -543,8 +543,8 @@ const isEditMode = editModeParam === 'true' && editorSession;
         el.classList.add('editable-content');
         el.setAttribute('contenteditable', 'true');
 
-        // Store original content
-        originalContent.set(el, el.innerHTML);
+        // Store original text content (not HTML)
+        originalContent.set(el, el.textContent.trim());
 
         // Track changes
         el.addEventListener('input', () => {
@@ -576,16 +576,16 @@ const isEditMode = editModeParam === 'true' && editorSession;
     deployMessage.textContent = 'Collecting changes...';
 
     try {
-      // Get all modified content
+      // Get all modified content (text only, not HTML)
       const changes = [];
       document.querySelectorAll('.editable-content').forEach(el => {
         const original = originalContent.get(el);
-        const current = el.innerHTML;
+        const current = el.textContent.trim();
         if (original !== current) {
           changes.push({
             selector: getElementSelector(el),
-            original,
-            current
+            originalText: original,
+            currentText: current
           });
         }
       });
