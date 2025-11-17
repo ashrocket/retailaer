@@ -88,10 +88,16 @@ export const POST: APIRoute = async ({ request, cookies }) => {
 
     if (!updateResponse.ok) {
       const errorText = await updateResponse.text();
-      console.error('GitHub commit failed:', errorText);
+      console.error('GitHub commit failed:', {
+        status: updateResponse.status,
+        statusText: updateResponse.statusText,
+        error: errorText,
+        filePath: filePath
+      });
       return new Response(JSON.stringify({
         error: 'Failed to commit changes',
-        details: errorText
+        status: updateResponse.status,
+        details: errorText.substring(0, 200)
       }), {
         status: 500,
         headers: { 'Content-Type': 'application/json' }
