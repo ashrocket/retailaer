@@ -1,10 +1,10 @@
 ---
-// Expandable Feature Cards Component
+// Expandable Feature Cards Component - 4 Core Features
 ---
 
-<div class="grid grid-cols-3 features-grid">
-  <!-- Feature 1: Revenue Growth -->
-  <div class="card expandable-card" data-card-id="revenue">
+<div class="grid grid-cols-2 features-grid">
+  <!-- Feature 1: Dynamic Offer Creation -->
+  <div class="card expandable-card" data-card-id="dynamic-offers">
     <div class="card-header">
       <div class="card-icon">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -13,8 +13,8 @@
           <path d="M2 12L12 17L22 12"/>
         </svg>
       </div>
-      <h3 class="card-title">Revenue Growth</h3>
-      <p class="card-text">Boost income with personalized offers</p>
+      <h3 class="card-title">Dynamic Offer Creation</h3>
+      <p class="card-text">Create personalized offers in real-time based on customer preferences and behavior</p>
       <button class="expand-btn" aria-label="Expand details">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M4 6l4 4 4-4"/>
@@ -22,30 +22,30 @@
       </button>
     </div>
     <div class="card-expanded-content">
-      <h4>How We Drive Revenue</h4>
+      <h4>How Dynamic Offers Work</h4>
       <ul>
-        <li><strong>Dynamic Pricing Engine:</strong> AI-powered personalization adjusts offers based on customer behavior, booking history, and real-time demand</li>
-        <li><strong>Upsell Optimization:</strong> Smart bundling increases ancillary revenue by 23% on average through contextual recommendations</li>
-        <li><strong>Conversion Lift:</strong> A/B testing shows 18-35% improvement in checkout completion rates vs. traditional PSS flows</li>
-        <li><strong>Revenue per Passenger:</strong> Airlines see 12-15% increase in total revenue per booking through targeted offers</li>
+        <li><strong>AI-Powered Personalization:</strong> Machine learning analyzes customer behavior, booking history, and preferences to create tailored offers</li>
+        <li><strong>Real-Time Pricing:</strong> Dynamic pricing engine adjusts offers based on demand, inventory, and customer segments</li>
+        <li><strong>Smart Bundling:</strong> Contextual recommendations increase ancillary revenue by suggesting relevant add-ons</li>
+        <li><strong>NDC-Native:</strong> Built on IATA NDC standards for modern airline retailing and distribution</li>
       </ul>
-      <p class="detail-note">Based on aggregated customer data across 5M+ orders processed</p>
+      <p class="detail-note">Enables airlines to compete with OTAs by offering personalized, differentiated products</p>
     </div>
   </div>
 
-  <!-- Feature 2: Lightning Fast -->
-  <div class="card expandable-card" data-card-id="performance">
+  <!-- Feature 2: Instant Order Processing -->
+  <div class="card expandable-card" data-card-id="order-processing">
     <div class="card-header">
       <div class="card-icon">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10"/>
-          <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
-          <line x1="9" y1="9" x2="9.01" y2="9"/>
-          <line x1="15" y1="9" x2="15.01" y2="9"/>
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
         </svg>
       </div>
-      <h3 class="card-title">Lightning Fast</h3>
-      <p class="card-text">Sub-100ms offer generation, 99.99% uptime SLA</p>
+      <h3 class="card-title">Instant Order Processing</h3>
+      <p class="card-text">Lightning-fast order management with seamless modifications and updates</p>
       <button class="expand-btn" aria-label="Expand details">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M4 6l4 4 4-4"/>
@@ -53,193 +53,19 @@
       </button>
     </div>
     <div class="card-expanded-content">
-      <h4>Performance Architecture</h4>
+      <h4>Order Management Excellence</h4>
       <ul>
-        <li><strong>Sub-100ms Response Time:</strong> Edge computing with 200+ global CDN nodes ensures offers generate in under 100 milliseconds</li>
-        <li><strong>99.99% Uptime SLA:</strong> Multi-region redundancy with automatic failover across AWS, GCP, and Azure</li>
-        <li><strong>10K Requests/Second:</strong> Handles peak loads equivalent to 3M daily visitors without performance degradation</li>
-        <li><strong>Real-Time Processing:</strong> In-memory caching and async architecture eliminates database bottlenecks</li>
+        <li><strong>Sub-100ms Processing:</strong> Edge computing with global CDN nodes ensures instant order confirmation</li>
+        <li><strong>ONE Order Standard:</strong> Single order record for all services—flights, seats, meals, baggage, and more</li>
+        <li><strong>Seamless Modifications:</strong> Change flights, add services, or cancel bookings without re-booking or complex workflows</li>
+        <li><strong>Real-Time Synchronization:</strong> Order updates instantly reflected across all channels—web, mobile, call center, airport</li>
       </ul>
-      <p class="detail-note">Monitored 24/7 with automated scaling and incident response</p>
+      <p class="detail-note">Process 10K+ orders per second with 99.99% uptime SLA</p>
     </div>
   </div>
 
-  <!-- Feature 3: Customer-First -->
-  <div class="card expandable-card" data-card-id="customer">
-    <div class="card-header">
-      <div class="card-icon">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-          <circle cx="12" cy="7" r="4"/>
-        </svg>
-      </div>
-      <h3 class="card-title">Customer-First</h3>
-      <p class="card-text">Designed around the customer and satisfaction</p>
-      <button class="expand-btn" aria-label="Expand details">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M4 6l4 4 4-4"/>
-        </svg>
-      </button>
-    </div>
-    <div class="card-expanded-content">
-      <h4>Customer Experience Design</h4>
-      <ul>
-        <li><strong>Unified Profile:</strong> Single customer view across all touchpoints—web, mobile, call center, airport</li>
-        <li><strong>Preference Memory:</strong> System remembers seat preferences, meal choices, and loyalty tier for personalized experiences</li>
-        <li><strong>Seamless Modifications:</strong> Change flights, add services, or cancel bookings without re-entering information</li>
-        <li><strong>Proactive Communication:</strong> Automated notifications for delays, gate changes, and relevant upsell opportunities</li>
-      </ul>
-      <p class="detail-note">Designed using IATA ONE Order principles for customer-centric retailing</p>
-    </div>
-  </div>
-
-  <!-- Feature 4: Global Scale -->
-  <div class="card expandable-card" data-card-id="scale">
-    <div class="card-header">
-      <div class="card-icon">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10"/>
-          <path d="M12 6v6l4 2"/>
-        </svg>
-      </div>
-      <h3 class="card-title">Global Scale</h3>
-      <p class="card-text">Handles 10K requests/sec (~3M daily visitors) across 5M+ orders</p>
-      <button class="expand-btn" aria-label="Expand details">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M4 6l4 4 4-4"/>
-        </svg>
-      </button>
-    </div>
-    <div class="card-expanded-content">
-      <h4>Enterprise-Grade Infrastructure</h4>
-      <ul>
-        <li>
-          <strong>Multi-Region Deployment<span class="tooltip-wrapper"><span class="tooltip-trigger" tabindex="0" aria-label="Information about Multi-Region Deployment">+</span><span class="tooltip-content" role="tooltip">Requires paid add-on</span></span>:</strong> Active-active data centers across North America, Europe, Asia-Pacific, and Middle East
-        </li>
-        <li><strong>Proven Track Record:</strong> 5M+ orders processed with zero data loss incidents over 12 years of operation</li>
-        <li><strong>Elastic Scaling:</strong> Auto-scales from 1K to 50K requests/second during flash sales or major disruptions</li>
-        <li><strong>Data Sovereignty:</strong> Regional data residency options meet local privacy laws (GDPR, CCPA, LGPD)</li>
-      </ul>
-      <p class="detail-note">Supporting airlines from 50K to 10M+ annual passengers</p>
-    </div>
-  </div>
-
-  <!-- Feature 5: Enterprise Security -->
-  <div class="card expandable-card" data-card-id="security">
-    <div class="card-header">
-      <div class="card-icon">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-        </svg>
-      </div>
-      <h3 class="card-title">Enterprise Security</h3>
-      <p class="card-text">Bank-level security with compliance certification</p>
-      <button class="expand-btn" aria-label="Expand details">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M4 6l4 4 4-4"/>
-        </svg>
-      </button>
-    </div>
-    <div class="card-expanded-content">
-      <h4>Security & Compliance</h4>
-      <ul>
-        <li><strong>PCI DSS Level 1:</strong> Highest tier payment card security certification for handling credit card data</li>
-        <li><strong>SOC 2 Type II:</strong> Annual audits verify security, availability, and confidentiality controls</li>
-        <li><strong>ISO 27001 Certified:</strong> Information security management system meets international standards</li>
-        <li><strong>Encryption Everywhere:</strong> TLS 1.3 in transit, AES-256 at rest, with hardware security modules for key management</li>
-      </ul>
-      <p class="detail-note">Pentested quarterly by independent security firms</p>
-    </div>
-  </div>
-
-  <!-- Feature 6: Data Insights -->
-  <div class="card expandable-card" data-card-id="analytics">
-    <div class="card-header">
-      <div class="card-icon">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-        </svg>
-      </div>
-      <h3 class="card-title">Data Insights</h3>
-      <p class="card-text">Real-time revenue analytics and conversion tracking</p>
-      <button class="expand-btn" aria-label="Expand details">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M4 6l4 4 4-4"/>
-        </svg>
-      </button>
-    </div>
-    <div class="card-expanded-content">
-      <h4>Analytics & Business Intelligence</h4>
-      <ul>
-        <li><strong>Real-Time Dashboards:</strong> Live revenue tracking, conversion funnels, and booking patterns updated every 60 seconds</li>
-        <li><strong>Predictive Analytics:</strong> Machine learning forecasts demand, optimal pricing, and inventory allocation</li>
-        <li><strong>Customer Segmentation:</strong> Behavioral analysis identifies high-value segments for targeted campaigns</li>
-        <li><strong>A/B Testing Framework:</strong> Built-in experimentation platform tests offers, messaging, and pricing strategies</li>
-      </ul>
-      <p class="detail-note">Export data to your BI tools via API or scheduled reports</p>
-    </div>
-  </div>
-
-  <!-- Feature 7: Modern Tech -->
-  <div class="card expandable-card" data-card-id="technology">
-    <div class="card-header">
-      <div class="card-icon">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 2L2 7L12 12L22 7L12 2Z"/>
-          <path d="M2 17L12 22L22 17"/>
-        </svg>
-      </div>
-      <h3 class="card-title">Modern Tech</h3>
-      <p class="card-text">Cloud-native architecture, API-first design</p>
-      <button class="expand-btn" aria-label="Expand details">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M4 6l4 4 4-4"/>
-        </svg>
-      </button>
-    </div>
-    <div class="card-expanded-content">
-      <h4>Technology Stack</h4>
-      <ul>
-        <li><strong>Cloud-Native:</strong> Kubernetes-orchestrated microservices running on AWS, GCP, and Azure for maximum reliability</li>
-        <li><strong>API-First Design:</strong> RESTful and GraphQL APIs with comprehensive SDKs for easy integration</li>
-        <li><strong>Event-Driven:</strong> Asynchronous message queues handle high-volume transactions without blocking</li>
-        <li><strong>Continuous Deployment:</strong> Zero-downtime updates ship new features weekly without service interruption</li>
-      </ul>
-      <p class="detail-note">Built with modern languages: Go, TypeScript, Python for performance and maintainability</p>
-    </div>
-  </div>
-
-  <!-- Feature 8: 24/7 Support -->
-  <div class="card expandable-card" data-card-id="support">
-    <div class="card-header">
-      <div class="card-icon">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-        </svg>
-      </div>
-      <h3 class="card-title">24/7 Support</h3>
-      <p class="card-text">Round-the-clock dedicated support for your team</p>
-      <button class="expand-btn" aria-label="Expand details">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M4 6l4 4 4-4"/>
-        </svg>
-      </button>
-    </div>
-    <div class="card-expanded-content">
-      <h4>Enterprise Support</h4>
-      <ul>
-        <li><strong>24/7/365 Availability:</strong> Follow-the-sun support teams across Americas, EMEA, and APAC time zones</li>
-        <li><strong>Dedicated Account Manager:</strong> Single point of contact who understands your business and technical requirements</li>
-        <li><strong>15-Minute Response SLA:</strong> Critical issues escalated immediately to senior engineers with platform expertise</li>
-        <li><strong>Proactive Monitoring:</strong> We detect and resolve 80% of issues before they impact your operations</li>
-      </ul>
-      <p class="detail-note">Average customer satisfaction score: 4.8/5.0 across all support channels</p>
-    </div>
-  </div>
-
-  <!-- Feature 9: Industry Leader -->
-  <div class="card expandable-card" data-card-id="leadership">
+  <!-- Feature 3: Real Revenue Uplift -->
+  <div class="card expandable-card" data-card-id="revenue-uplift">
     <div class="card-header">
       <div class="card-icon">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -247,8 +73,8 @@
           <polyline points="17 6 23 6 23 12"/>
         </svg>
       </div>
-      <h3 class="card-title">Industry Leader</h3>
-      <p class="card-text">Trusted by leading airlines across the globe</p>
+      <h3 class="card-title">Real Revenue Uplift</h3>
+      <p class="card-text">Proven results with measurable increases in conversion and ancillary revenue</p>
       <button class="expand-btn" aria-label="Expand details">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M4 6l4 4 4-4"/>
@@ -256,19 +82,52 @@
       </button>
     </div>
     <div class="card-expanded-content">
-      <h4>Industry Recognition</h4>
+      <h4>Measurable Business Impact</h4>
       <ul>
-        <li><strong>12 Years Experience:</strong> Founded in 2013, we pioneered customer-first offer management before NDC became mainstream</li>
-        <li><strong>IATA Strategic Partner:</strong> Contributing member to NDC and ONE Order working groups shaping industry standards</li>
-        <li><strong>5M+ Orders Processed:</strong> Proven at scale with airlines ranging from regional carriers to international networks</li>
-        <li><strong>First-Mover Advantage:</strong> Early adoption of modern retailing concepts gives our customers competitive edge</li>
+        <li><strong>12-15% Revenue Increase:</strong> Airlines see higher total revenue per booking through personalized offers and upsells</li>
+        <li><strong>23% Ancillary Boost:</strong> Smart bundling and contextual recommendations drive significant ancillary revenue growth</li>
+        <li><strong>18-35% Conversion Lift:</strong> A/B testing shows dramatic improvement in checkout completion rates vs. traditional systems</li>
+        <li><strong>Real-Time Analytics:</strong> Live dashboards track revenue, conversion funnels, and booking patterns for data-driven decisions</li>
       </ul>
-      <p class="detail-note">Featured in airline tech conferences and industry publications</p>
+      <p class="detail-note">Based on aggregated customer data across 5M+ orders processed over 12 years</p>
+    </div>
+  </div>
+
+  <!-- Feature 4: Customer-Centric Design -->
+  <div class="card expandable-card" data-card-id="customer-centric">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </div>
+      <h3 class="card-title">Customer-Centric Design</h3>
+      <p class="card-text">Built around customer needs and experiences, not legacy systems</p>
+      <button class="expand-btn" aria-label="Expand details">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 6l4 4 4-4"/>
+        </svg>
+      </button>
+    </div>
+    <div class="card-expanded-content">
+      <h4>Customer-First Philosophy</h4>
+      <ul>
+        <li><strong>Unified Customer Profile:</strong> Single view across all touchpoints—web, mobile, call center, airport, and partner channels</li>
+        <li><strong>Preference Memory:</strong> System remembers seat preferences, meal choices, loyalty tier, and special requirements</li>
+        <li><strong>Frictionless Experience:</strong> Simplified booking flows reduce abandonment and improve customer satisfaction</li>
+        <li><strong>Proactive Service:</strong> Automated notifications for delays, gate changes, and relevant upsell opportunities at the right moment</li>
+      </ul>
+      <p class="detail-note">Designed using IATA ONE Order principles for true customer-centric airline retailing</p>
     </div>
   </div>
 </div>
 
 <style>
+  .features-grid {
+    gap: 2rem;
+  }
+
   .expandable-card {
     cursor: pointer;
     transition: all 0.3s ease;
@@ -362,7 +221,13 @@
     font-style: italic;
   }
 
+  /* 2-column grid on desktop, 1 column on mobile */
   @media (max-width: 768px) {
+    .features-grid {
+      grid-template-columns: 1fr !important;
+      gap: 1.5rem;
+    }
+
     .expandable-card.expanded .card-expanded-content {
       max-height: 1500px;
     }
