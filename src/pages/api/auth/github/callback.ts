@@ -75,8 +75,13 @@ export const GET: APIRoute = async ({ request, redirect, cookies, url, locals })
     });
 
     if (!profileResponse.ok) {
-      console.error('Profile fetch failed:', await profileResponse.text());
-      return redirect('/?error=profile_fetch_failed');
+      const errorText = await profileResponse.text();
+      console.error('Profile fetch failed:', {
+        status: profileResponse.status,
+        statusText: profileResponse.statusText,
+        error: errorText
+      });
+      return redirect(`/?error=profile_fetch_failed&status=${profileResponse.status}&detail=${encodeURIComponent(errorText.substring(0, 100))}`);
     }
 
     const profile = await profileResponse.json();
