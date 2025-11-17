@@ -78,13 +78,54 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     for (const change of changes) {
       const { original, current } = change;
 
-      // Simple find and replace
-      // Note: This works for unique text. For duplicate text, would need more sophisticated matching
+      console.log('Attempting to replace:');
+      console.log('  Original:', JSON.stringify(original.substring(0, 100)));
+      console.log('  Current:', JSON.stringify(current.substring(0, 100)));
+
+      // Try exact match first
       if (fileContent.includes(original)) {
         fileContent = fileContent.replace(original, current);
         changesApplied++;
+        console.log('  ✓ Applied exact match');
       } else {
-        console.warn('Could not find text to replace:', original.substring(0, 50));
+        // Try normalized match (collapse whitespace, normalize line breaks)
+        const normalizeText = (text: string) => text.replace(/\s+/g, ' ').trim();
+        const normalizedOriginal = normalizeText(original);
+        const normalizedCurrent = normalizeText(current);
+
+        // Find the normalized text in the file
+        const normalizedFile = normalizeText(fileContent);
+        const index = normalizedFile.indexOf(normalizedOriginal);
+
+        if (index !== -1) {
+          // Find the actual position in the original file by counting characters
+          let actualIndex = 0;
+          let normalizedIndex = 0;
+          while (normalizedIndex < index && actualIndex < fileContent.length) {
+            if (!/\s/.test(fileContent[actualIndex]) || fileContent[actualIndex] === ' ') {
+              normalizedIndex++;
+            }
+            actualIndex++;
+          }
+
+          // Find the end position
+          let endIndex = actualIndex;
+          let matchedChars = 0;
+          while (matchedChars < normalizedOriginal.length && endIndex < fileContent.length) {
+            if (!/\s/.test(fileContent[endIndex]) || fileContent[endIndex] === ' ') {
+              matchedChars++;
+            }
+            endIndex++;
+          }
+
+          // Replace the text
+          fileContent = fileContent.substring(0, actualIndex) + current + fileContent.substring(endIndex);
+          changesApplied++;
+          console.log('  ✓ Applied normalized match');
+        } else {
+          console.warn('  ✗ Could not find text to replace (tried exact and normalized)');
+          console.warn('  First 200 chars of file:', fileContent.substring(0, 200));
+        }
       }
     }
 
