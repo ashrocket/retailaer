@@ -1,0 +1,301 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Helper to get editor session
+function getEditorSession(cookies: any) {
+  const sessionCookie = cookies.get('editor_session')?.value;
+  if (!sessionCookie) return null;
+
+  try {
+    const session = JSON.parse(atob(sessionCookie));
+    // Check if session is expired
+    if (session.exp < Date.now()) {
+      return null;
+    }
+    return session;
+  } catch {
+    return null;
+  }
+}
+
+// Check if user is logged in as an editor
+const editorSession = getEditorSession(Astro.cookies);
+
+if (!editorSession) {
+  // Redirect to GitHub login
+  return Astro.redirect('/api/auth/github?returnTo=/changes');
+}
+
+// Fetch recent commits from GitHub
+const owner = 'ashrocket';
+const repo = 'retailaer';
+const branch = 'main';
+
+let commits = [];
+let error = null;
+
+try {
+  const response = await fetch(
+    `https://api.github.com/repos/${owner}/${repo}/commits?sha=${branch}&per_page=50`,
+    {
+      headers: {
+        'Accept': 'application/vnd.github.v3+json',
+        'User-Agent': 'Retailaer-Site-Editor',
+      },
+    }
+  );
+
+  if (response.ok) {
+    commits = await response.json();
+  } else {
+    error = `Failed to fetch commits: ${response.status}`;
+  }
+} catch (err) {
+  error = err.message;
+}
+---
+
+<BaseLayout title="Recent Changes - Retailaer">
+  <section class="changes-page">
+    <div class="container">
+      <div class="changes-header">
+        <h1>Recent Changes</h1>
+        <p class="subtitle">View all changes made to the site</p>
+        <div class="editor-info">
+          Logged in as <strong>{editorSession.name}</strong>
+          <a href="/" class="btn-link">← Back to Site</a>
+        </div>
+      </div>
+
+      {error && (
+        <div class="error-message">
+          <p>Error loading changes: {error}</p>
+        </div>
+      )}
+
+      {!error && commits.length > 0 && (
+        <div class="commits-list">
+          {commits.map((commit) => {
+            const isInlineEdit = commit.commit.message.includes('via inline editor');
+            const date = new Date(commit.commit.author.date);
+            const timeAgo = getTimeAgo(date);
+
+            return (
+              <div class:list={['commit-item', { 'inline-edit': isInlineEdit }]}>
+                <div class="commit-header">
+                  <span class="commit-icon">
+                    {isInlineEdit ? '✏️' : '💾'}
+                  </span>
+                  <div class="commit-info">
+                    <h3 class="commit-message">{commit.commit.message.split('\n')[0]}</h3>
+                    <div class="commit-meta">
+                      <span class="author">
+                        {commit.commit.author.name}
+                      </span>
+                      <span class="separator">•</span>
+                      <span class="time" title={date.toLocaleString()}>
+                        {timeAgo}
+                      </span>
+                      <span class="separator">•</span>
+                      <a href={commit.html_url} target="_blank" class="commit-sha">
+                        {commit.sha.substring(0, 7)}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                {commit.commit.message.split('\n').slice(1).filter(line => line.trim()).length > 0 && (
+                  <div class="commit-body">
+                    {commit.commit.message.split('\n').slice(1).filter(line => line.trim()).map(line => (
+                      <p>{line}</p>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .changes-page {
+    padding: 60px 0;
+    min-height: calc(100vh - 200px);
+  }
+
+  .changes-header {
+    margin-bottom: 40px;
+    padding-bottom: 24px;
+    border-bottom: 2px solid #e5e7eb;
+  }
+
+  .changes-header h1 {
+    font-size: 36px;
+    font-weight: 700;
+    color: #0a1f1f;
+    margin-bottom: 8px;
+  }
+
+  .subtitle {
+    font-size: 18px;
+    color: #5a7a7a;
+    margin-bottom: 16px;
+  }
+
+  .editor-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 14px;
+    color: #5a7a7a;
+  }
+
+  .btn-link {
+    color: #0a5c5c;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .btn-link:hover {
+    text-decoration: underline;
+  }
+
+  .error-message {
+    padding: 16px;
+    background: #fee;
+    border: 1px solid #fcc;
+    border-radius: 8px;
+    color: #c00;
+  }
+
+  .commits-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .commit-item {
+    padding: 20px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+
+  .commit-item:hover {
+    border-color: #0a5c5c;
+    box-shadow: 0 2px 8px rgba(10, 92, 92, 0.1);
+  }
+
+  .commit-item.inline-edit {
+    background: #f0f9ff;
+    border-left: 4px solid #f5b800;
+  }
+
+  .commit-header {
+    display: flex;
+    gap: 12px;
+  }
+
+  .commit-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+
+  .commit-info {
+    flex: 1;
+  }
+
+  .commit-message {
+    font-size: 16px;
+    font-weight: 600;
+    color: #0a1f1f;
+    margin-bottom: 8px;
+  }
+
+  .commit-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #5a7a7a;
+  }
+
+  .separator {
+    color: #d1d5db;
+  }
+
+  .commit-sha {
+    font-family: monospace;
+    color: #0a5c5c;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .commit-sha:hover {
+    text-decoration: underline;
+  }
+
+  .commit-body {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #e5e7eb;
+    font-size: 14px;
+    color: #5a7a7a;
+  }
+
+  .commit-body p {
+    margin-bottom: 4px;
+  }
+
+  @media (max-width: 768px) {
+    .changes-header h1 {
+      font-size: 28px;
+    }
+
+    .editor-info {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .commit-header {
+      flex-direction: column;
+    }
+
+    .commit-icon {
+      font-size: 20px;
+    }
+  }
+</style>
+
+<script>
+  // Helper function to format time ago (passed via data attribute or inline)
+  function getTimeAgo(date) {
+    const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+
+    if (seconds < 60) return 'just now';
+    if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+    if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
+    if (seconds < 604800) return `${Math.floor(seconds / 86400)}d ago`;
+
+    return date.toLocaleDateString();
+  }
+</script>
+
+<script is:inline define:vars={{ commits }}>
+  // This runs client-side to handle the timeAgo calculation
+  function getTimeAgo(dateStr) {
+    const date = new Date(dateStr);
+    const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+
+    if (seconds < 60) return 'just now';
+    if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+    if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
+    if (seconds < 604800) return `${Math.floor(seconds / 86400)}d ago`;
+
+    return date.toLocaleDateString();
+  }
+</script>
