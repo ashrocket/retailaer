@@ -95,10 +95,14 @@ const isEditMode = editModeParam === 'true' && editorSession;
           <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
           <polyline points="22 4 12 14.01 9 11.01"/>
         </svg>
-        <h4>Successfully Deployed!</h4>
-        <p>Your changes have been committed and the site is deploying.</p>
-        <a id="deployment-link" href="#" target="_blank" class="btn btn-primary">View Deployment</a>
-        <p class="deploy-note">Deployment typically takes 1-2 minutes</p>
+        <h4>Successfully Committed!</h4>
+        <p id="deploy-status-text">Your changes have been committed. Checking deployment status...</p>
+        <div id="deploy-timer" class="deploy-timer">
+          <div class="timer-spinner"></div>
+          <span>Waiting for deployment...</span>
+        </div>
+        <a id="deployment-link" href="https://retailaer.us" target="_blank" class="btn btn-primary">View Site</a>
+        <p class="deploy-note" id="deploy-elapsed">Elapsed: 0s</p>
       </div>
       <div id="deploy-error" class="hidden error">
         <p>Failed to save changes. Please try again.</p>
@@ -358,6 +362,37 @@ const isEditMode = editModeParam === 'true' && editorSession;
     margin-top: 16px !important;
   }
 
+  .deploy-timer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 20px 0;
+    padding: 12px;
+    background: #f0f9ff;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #0369a1;
+  }
+
+  .deploy-timer.complete {
+    background: #f0fdf4;
+    color: #15803d;
+  }
+
+  .timer-spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid #bfdbfe;
+    border-top-color: #0369a1;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  .deploy-timer.complete .timer-spinner {
+    display: none;
+  }
+
   .btn {
     display: inline-block;
     padding: 12px 24px;
@@ -574,13 +609,16 @@ const isEditMode = editModeParam === 'true' && editorSession;
 
       deployMessage.textContent = 'Deployment starting...';
 
-      // Show success
+      // Show success and start deployment checker
       setTimeout(() => {
         document.querySelector('.deploy-status').classList.add('hidden');
         deploySuccess.classList.remove('hidden');
         if (result.deployment?.url) {
           deploymentLink.href = result.deployment.url;
         }
+
+        // Start checking deployment status
+        checkDeploymentStatus(result.commit?.sha);
       }, 1000);
 
     } catch (error) {
@@ -614,5 +652,83 @@ const isEditMode = editModeParam === 'true' && editorSession;
       if (path.length > 3) break;
     }
     return path.join(' > ');
+  }
+
+  // Check deployment status
+  async function checkDeploymentStatus(commitSha) {
+    const statusText = document.getElementById('deploy-status-text');
+    const timerElement = document.getElementById('deploy-timer');
+    const timerText = timerElement?.querySelector('span');
+    const elapsedElement = document.getElementById('deploy-elapsed');
+
+    const startTime = Date.now();
+    let checkCount = 0;
+    const maxChecks = 60; // Check for up to 5 minutes (60 checks * 5s = 300s)
+
+    // Update elapsed time every second
+    const elapsedInterval = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - startTime) / 1000);
+      if (elapsedElement) {
+        elapsedElement.textContent = `Elapsed: ${elapsed}s`;
+      }
+    }, 1000);
+
+    const checkStatus = async () => {
+      checkCount++;
+
+      try {
+        // Try fetching the homepage to see if deployment is complete
+        // We add a cache-busting query param to avoid cached responses
+        const checkUrl = `https://retailaer.us/?_deploy_check=${Date.now()}`;
+        const response = await fetch(checkUrl, {
+          method: 'HEAD',
+          cache: 'no-cache'
+        });
+
+        // If we get a successful response, deployment is likely complete
+        if (response.ok) {
+          // Wait a bit longer to ensure full propagation
+          setTimeout(() => {
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            clearInterval(elapsedInterval);
+
+            if (statusText) {
+              statusText.textContent = '✅ Your changes are live!';
+            }
+            if (timerElement) {
+              timerElement.classList.add('complete');
+            }
+            if (timerText) {
+              timerText.textContent = `Deployed in ${elapsed}s`;
+            }
+            if (elapsedElement) {
+              elapsedElement.textContent = `Deployment completed in ${elapsed}s`;
+            }
+          }, 3000);
+          return;
+        }
+      } catch (err) {
+        console.log('Deployment check:', err.message);
+      }
+
+      // Continue checking if we haven't exceeded max checks
+      if (checkCount < maxChecks) {
+        if (timerText) {
+          timerText.textContent = `Checking deployment status... (${checkCount}/${maxChecks})`;
+        }
+        setTimeout(checkStatus, 5000); // Check every 5 seconds
+      } else {
+        clearInterval(elapsedInterval);
+        if (statusText) {
+          statusText.textContent = 'Deployment is taking longer than expected. Your changes should be live soon.';
+        }
+        if (timerElement) {
+          timerElement.style.display = 'none';
+        }
+      }
+    };
+
+    // Start checking after initial delay
+    setTimeout(checkStatus, 10000); // Wait 10s before first check
   }
 </script>
