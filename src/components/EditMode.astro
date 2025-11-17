@@ -477,9 +477,22 @@ const isEditMode = editModeParam === 'true' && editorSession;
 
   // Make content editable in edit mode
   if (isEditMode) {
-    document.querySelectorAll('h1, h2, h3, p, a, li, span').forEach(el => {
-      // Skip toolbar and script content
-      if (el.closest('#edit-mode-toolbar') || el.closest('script') || el.closest('style')) {
+    // Target text elements in main content area
+    const selectors = 'main h1, main h2, main h3, main h4, main h5, main h6, main p, main li, section h1, section h2, section h3, section h4, section h5, section h6, section p, section li, article h1, article h2, article h3, article h4, article h5, article h6, article p, article li, .container h1, .container h2, .container h3, .container h4, .container h5, .container h6, .container p, .container li';
+
+    document.querySelectorAll(selectors).forEach(el => {
+      // Skip toolbar, navigation, footer, script, and style content
+      if (el.closest('#edit-mode-toolbar') ||
+          el.closest('nav') ||
+          el.closest('footer') ||
+          el.closest('script') ||
+          el.closest('style') ||
+          el.closest('svg')) {
+        return;
+      }
+
+      // Skip if it's just whitespace or empty
+      if (!el.textContent?.trim()) {
         return;
       }
 
@@ -495,6 +508,8 @@ const isEditMode = editModeParam === 'true' && editorSession;
         if (saveBtn) saveBtn.disabled = false;
       });
     });
+
+    console.log(`Edit mode activated: ${originalContent.size} elements are now editable`);
   }
 
   // Save changes
