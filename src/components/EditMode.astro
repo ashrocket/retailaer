@@ -550,17 +550,17 @@ const isEditMode = editModeParam === 'true' && editorSession;
         }
       });
 
+      console.log(`Saving ${changes.length} changes to ${filePath}`);
       deployMessage.textContent = 'Committing to GitHub...';
 
-      // For now, we'll commit a simple JSON file with changes
-      // In production, you'd want to parse the .astro file and update it properly
+      // Send changes to be applied directly to the .astro file
       const response = await fetch('/api/commit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          filePath: `edits/${Date.now()}.json`,
-          content: JSON.stringify({ file: filePath, changes }, null, 2),
-          message: `Edit ${filePath} via web interface`
+          filePath: filePath,
+          changes: changes,
+          message: `Update ${filePath} via inline editor\n\nEdited ${changes.length} elements`
         })
       });
 
