@@ -82,9 +82,27 @@ export const GET: APIRoute = async ({ request, redirect, cookies, url, locals })
     const profile = await profileResponse.json();
     console.log('GitHub profile received:', { login: profile.login, name: profile.name, email: profile.email });
 
+    // If email is not in profile, fetch from /user/emails endpoint
+    let email = profile.email;
+    if (!email) {
+      const emailsResponse = await fetch('https://api.github.com/user/emails', {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Accept': 'application/vnd.github.v3+json',
+        },
+      });
+      if (emailsResponse.ok) {
+        const emails = await emailsResponse.json();
+        // Find primary verified email
+        const primaryEmail = emails.find((e: any) => e.primary && e.verified);
+        email = primaryEmail?.email || emails[0]?.email;
+        console.log('Fetched email from /user/emails:', email);
+      }
+    }
+
     // Check if user is an authorized author (by email)
-    const email = profile.email?.toLowerCase();
-    const author = ALLOWED_AUTHORS.find(a => a.email?.toLowerCase() === email);
+    const emailLower = email?.toLowerCase();
+    const author = ALLOWED_AUTHORS.find(a => a.email?.toLowerCase() === emailLower);
 
     if (!author) {
       console.log('Unauthorized user attempted edit access:', email);

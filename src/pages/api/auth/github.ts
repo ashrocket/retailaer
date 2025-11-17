@@ -29,7 +29,7 @@ export const GET: APIRoute = async ({ redirect, url, locals }) => {
     client_id: clientId,
     redirect_uri: callbackUrl,
     state: state,
-    scope: 'repo', // Need repo access to commit
+    scope: 'repo user:email', // Need repo access to commit and user:email to verify authorization
   });
 
   const authUrl = `https://github.com/login/oauth/authorize?${params}`;
