@@ -519,51 +519,28 @@ const isEditMode = editModeParam === 'true' && editorSession;
   if (isEditMode) {
     // Wait for DOM to be fully loaded
     setTimeout(() => {
-      // Select all text elements
-      const elements = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, li, a.btn');
-      console.log(`🔍 Found ${elements.length} total elements to check`);
+      // Select only elements with data-editable attribute
+      const elements = document.querySelectorAll('[data-editable]');
+      console.log(`✏️ Found ${elements.length} editable regions`);
 
-      let editableCount = 0;
-      let skippedCount = 0;
       elements.forEach(el => {
-        // Skip toolbar, navigation, footer, modals, etc.
-        const skipReasons = [];
-        if (el.closest('#edit-mode-toolbar')) skipReasons.push('toolbar');
-        if (el.closest('.navbar')) skipReasons.push('navbar');
-        if (el.closest('.footer')) skipReasons.push('footer');
-        if (el.closest('#deployment-modal')) skipReasons.push('modal');
-        if (el.closest('.edit-hint')) skipReasons.push('hint');
-        if (!el.textContent?.trim()) skipReasons.push('empty');
-
-        if (skipReasons.length > 0) {
-          skippedCount++;
-          return;
-        }
+        const editableId = el.getAttribute('data-editable');
 
         el.classList.add('editable-content');
         el.setAttribute('contenteditable', 'true');
 
-        // Store original text content (not HTML)
-        originalContent.set(el, el.textContent.trim());
+        // Store original data including the editable ID
+        originalContent.set(el, {
+          id: editableId,
+          html: el.innerHTML.trim()
+        });
 
         // Track changes
         el.addEventListener('input', () => {
           hasChanges = true;
           if (saveBtn) saveBtn.disabled = false;
         });
-
-        editableCount++;
       });
-
-      console.log(`✏️ Edit mode: ${editableCount} editable, ${skippedCount} skipped out of ${elements.length} total`);
-      if (editableCount === 0 && elements.length > 0) {
-        console.warn('⚠️ All elements were skipped!');
-        console.log('First element:', elements[0]);
-        console.log('  Tag:', elements[0].tagName);
-        console.log('  Text:', elements[0].textContent?.substring(0, 50));
-        console.log('  In navbar?', !!elements[0].closest('.navbar'));
-        console.log('  In footer?', !!elements[0].closest('.footer'));
-      }
     }, 100);
   }
 
@@ -576,16 +553,17 @@ const isEditMode = editModeParam === 'true' && editorSession;
     deployMessage.textContent = 'Collecting changes...';
 
     try {
-      // Get all modified content (text only, not HTML)
+      // Get all modified content using data-editable IDs
       const changes = [];
       document.querySelectorAll('.editable-content').forEach(el => {
         const original = originalContent.get(el);
-        const current = el.textContent.trim();
-        if (original !== current) {
+        const currentHtml = el.innerHTML.trim();
+
+        if (original && original.html !== currentHtml) {
           changes.push({
-            selector: getElementSelector(el),
-            originalText: original,
-            currentText: current
+            editableId: original.id,
+            originalHtml: original.html,
+            currentHtml: currentHtml
           });
         }
       });

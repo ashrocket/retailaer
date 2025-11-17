@@ -61,19 +61,19 @@ const insights = [
   <section class="hero-section">
     <div class="container">
       <div class="hero-content">
-        <h1 class="hero-title">
+        <h1 class="hero-title" data-editable="hero-title">
           Modern Offer<br>
           & Order.<br>
           Real Revenue Lift.
         </h1>
-        <p class="hero-subtitle">
+        <p class="hero-subtitle" data-editable="hero-subtitle">
           Passenger‑first airline retailing—dynamic<br>
           offers, simplified orders, and payments that<br>
           don't get in the way.
         </p>
         <div class="hero-cta">
-          <a href="mailto:sales@retailair.com" class="btn btn-primary">Book a Demo</a>
-          <a href="/solutions" class="btn btn-secondary">See Solutions</a>
+          <a href="mailto:sales@retailair.com" class="btn btn-primary" data-editable="hero-cta-demo">Book a Demo</a>
+          <a href="/solutions" class="btn btn-secondary" data-editable="hero-cta-solutions">See Solutions</a>
         </div>
       </div>
       <div class="hero-visual">
@@ -192,16 +192,16 @@ const insights = [
     <div class="container">
       <div class="stats-grid">
         <div class="stat-item">
-          <div class="stat-number">12 years</div>
-          <div class="stat-label">Industry experience</div>
+          <div class="stat-number" data-editable="stat-1-number">12 years</div>
+          <div class="stat-label" data-editable="stat-1-label">Industry experience</div>
         </div>
         <div class="stat-item">
-          <div class="stat-number">5M+</div>
-          <div class="stat-label">Orders processed</div>
+          <div class="stat-number" data-editable="stat-2-number">5M+</div>
+          <div class="stat-label" data-editable="stat-2-label">Orders processed</div>
         </div>
         <div class="stat-item">
-          <div class="stat-number">300+</div>
-          <div class="stat-label">NDC-ready capabilities</div>
+          <div class="stat-number" data-editable="stat-3-number">300+</div>
+          <div class="stat-label" data-editable="stat-3-label">NDC-ready capabilities</div>
         </div>
       </div>
     </div>
@@ -211,8 +211,8 @@ const insights = [
   <section class="section bg-white">
     <div class="container">
       <div class="section-header text-center">
-        <h2>Why Retailaer?</h2>
-        <p>Built for IATA NDC and ONE Order standards</p>
+        <h2 data-editable="why-retailaer-title">Why Retailaer?</h2>
+        <p data-editable="why-retailaer-subtitle">Built for IATA NDC and ONE Order standards</p>
       </div>
 
       <ExpandableFeatureCards />
@@ -223,7 +223,7 @@ const insights = [
   <section class="section bg-teal how-it-works">
     <div class="container">
       <div class="section-header text-center">
-        <h2 class="text-white">How it works</h2>
+        <h2 class="text-white" data-editable="how-it-works-title">How it works</h2>
       </div>
 
       <div class="grid grid-cols-3">
@@ -234,8 +234,8 @@ const insights = [
               <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
             </svg>
           </div>
-          <h3 class="card-title">Dynamic Offers</h3>
-          <p class="card-text">Tailor offers to passengers in real-time for improved conversion rates</p>
+          <h3 class="card-title" data-editable="how-it-works-1-title">Dynamic Offers</h3>
+          <p class="card-text" data-editable="how-it-works-1-text">Tailor offers to passengers in real-time for improved conversion rates</p>
         </div>
 
         <!-- Step 2 -->
@@ -248,8 +248,8 @@ const insights = [
               <line x1="16" y1="17" x2="8" y2="17"/>
             </svg>
           </div>
-          <h3 class="card-title">Order Simplification</h3>
-          <p class="card-text">Simplify complex ancillary sales through a Recording process</p>
+          <h3 class="card-title" data-editable="how-it-works-2-title">Order Simplification</h3>
+          <p class="card-text" data-editable="how-it-works-2-text">Simplify complex ancillary sales through a Recording process</p>
         </div>
 
         <!-- Step 3 -->
@@ -260,13 +260,13 @@ const insights = [
               <line x1="1" y1="10" x2="23" y2="10"/>
             </svg>
           </div>
-          <h3 class="card-title">Payments</h3>
-          <p class="card-text">Whether simple or complex, we handle your payment needs end-to-end</p>
+          <h3 class="card-title" data-editable="how-it-works-3-title">Payments</h3>
+          <p class="card-text" data-editable="how-it-works-3-text">Whether simple or complex, we handle your payment needs end-to-end</p>
         </div>
       </div>
 
       <div class="text-center" style="margin-top: 3rem;">
-        <a href="/insights" class="view-all-link">View all Insights →</a>
+        <a href="/insights" class="view-all-link" data-editable="how-it-works-view-all-link">View all Insights →</a>
       </div>
     </div>
   </section>
@@ -276,8 +276,8 @@ const insights = [
     <div class="container">
       <div class="section-header">
         <div style="display: flex; justify-content: space-between; align-items: center;">
-          <h2>Latest Insights</h2>
-          <a href="/blog/manage" class="view-all-link">Manage Insights →</a>
+          <h2 data-editable="latest-insights-title">Latest Insights</h2>
+          <a href="/blog/manage" class="view-all-link" data-editable="latest-insights-manage-link">Manage Insights →</a>
         </div>
       </div>
 
@@ -293,11 +293,11 @@ const insights = [
   <section class="cta-section">
     <div class="container">
       <div class="cta-content">
-        <h2 class="text-white">Ready to transform your airline retail?</h2>
-        <p class="text-white">Join leading airlines worldwide using Retailaer to modernize their offer and order management.</p>
+        <h2 class="text-white" data-editable="cta-title">Ready to transform your airline retail?</h2>
+        <p class="text-white" data-editable="cta-text">Join leading airlines worldwide using Retailaer to modernize their offer and order management.</p>
         <div class="cta-buttons">
-          <a href="mailto:sales@retailair.com" class="btn btn-primary">Book a Demo</a>
-          <a href="/contact" class="btn btn-secondary">Get In Touch</a>
+          <a href="mailto:sales@retailair.com" class="btn btn-primary" data-editable="cta-button-demo">Book a Demo</a>
+          <a href="/contact" class="btn btn-secondary" data-editable="cta-button-contact">Get In Touch</a>
         </div>
       </div>
     </div>

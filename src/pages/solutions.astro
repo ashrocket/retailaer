@@ -9,8 +9,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <!-- Hero Section -->
   <section class="page-hero">
     <div class="container">
-      <h1 class="page-title">Solutions</h1>
-      <p class="page-subtitle">
+      <h1 class="page-title" data-editable="hero-title">Solutions</h1>
+      <p class="page-subtitle" data-editable="hero-subtitle">
         The world's only customer-first Offer and Order Management platform,<br>
         built for modern airline retailing.
       </p>
@@ -21,8 +21,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <section class="section">
     <div class="container">
       <div class="section-header">
-        <h2>Platform Overview</h2>
-        <p class="section-description">
+        <h2 data-editable="platform-overview-title">Platform Overview</h2>
+        <p class="section-description" data-editable="platform-overview-subtitle">
           Retailaer transforms airline retailing with three integrated pillars that work together
           to maximize revenue while enhancing the customer experience.
         </p>
@@ -31,46 +31,46 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <div class="pillars-grid">
         <div class="pillar-card">
           <div class="pillar-icon">✈️</div>
-          <h3>Dynamic Offers</h3>
-          <p>
+          <h3 data-editable="pillar-1-title">Dynamic Offers</h3>
+          <p data-editable="pillar-1-text">
             Create personalized offers in real-time based on customer context, preferences, and behavior.
             Maximize conversion and revenue with intelligent offer optimization.
           </p>
           <ul class="feature-list">
-            <li>Real-time offer generation</li>
-            <li>Context-aware pricing</li>
-            <li>Personalization engine</li>
-            <li>A/B testing & optimization</li>
+            <li data-editable="pillar-1-feature-1">Real-time offer generation</li>
+            <li data-editable="pillar-1-feature-2">Context-aware pricing</li>
+            <li data-editable="pillar-1-feature-3">Personalization engine</li>
+            <li data-editable="pillar-1-feature-4">A/B testing & optimization</li>
           </ul>
         </div>
 
         <div class="pillar-card">
           <div class="pillar-icon">📋</div>
-          <h3>Order Simplification</h3>
-          <p>
+          <h3 data-editable="pillar-2-title">Order Simplification</h3>
+          <p data-editable="pillar-2-text">
             Streamline order management with a modern, customer-centric approach that replaces
             legacy PNR systems with flexible, scalable order handling.
           </p>
           <ul class="feature-list">
-            <li>Beyond the PNR</li>
-            <li>Flexible order modification</li>
-            <li>Multi-channel consistency</li>
-            <li>Real-time synchronization</li>
+            <li data-editable="pillar-2-feature-1">Beyond the PNR</li>
+            <li data-editable="pillar-2-feature-2">Flexible order modification</li>
+            <li data-editable="pillar-2-feature-3">Multi-channel consistency</li>
+            <li data-editable="pillar-2-feature-4">Real-time synchronization</li>
           </ul>
         </div>
 
         <div class="pillar-card">
           <div class="pillar-icon">💳</div>
-          <h3>Frictionless Payments</h3>
-          <p>
+          <h3 data-editable="pillar-3-title">Frictionless Payments</h3>
+          <p data-editable="pillar-3-text">
             Handle payments to payouts with ease. Secure, reliable, and fully compliant
             payment processing that your CFO will love.
           </p>
           <ul class="feature-list">
-            <li>Multiple payment methods</li>
-            <li>PCI DSS compliant</li>
-            <li>Instant settlement</li>
-            <li>Fraud prevention</li>
+            <li data-editable="pillar-3-feature-1">Multiple payment methods</li>
+            <li data-editable="pillar-3-feature-2">PCI DSS compliant</li>
+            <li data-editable="pillar-3-feature-3">Instant settlement</li>
+            <li data-editable="pillar-3-feature-4">Fraud prevention</li>
           </ul>
         </div>
       </div>
@@ -82,8 +82,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <div class="container">
       <div class="two-col-layout">
         <div class="content-col">
-          <h2>For Airlines</h2>
-          <p class="lead">
+          <h2 data-editable="for-airlines-title">For Airlines</h2>
+          <p class="lead" data-editable="for-airlines-lead">
             Empower your airline with modern retailing capabilities that drive revenue
             and delight customers at every touchpoint.
           </p>
@@ -92,54 +92,54 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <div class="benefit-item">
               <div class="benefit-icon">📈</div>
               <div>
-                <h4>Boost Ancillary Revenue</h4>
-                <p>Increase ancillary sales with personalized upsells and cross-sells at optimal moments.</p>
+                <h4 data-editable="airline-benefit-1-title">Boost Ancillary Revenue</h4>
+                <p data-editable="airline-benefit-1-text">Increase ancillary sales with personalized upsells and cross-sells at optimal moments.</p>
               </div>
             </div>
 
             <div class="benefit-item">
               <div class="benefit-icon">🎯</div>
               <div>
-                <h4>Higher Conversion Rates</h4>
-                <p>Convert more browsers to buyers with dynamic offers tailored to each customer.</p>
+                <h4 data-editable="airline-benefit-2-title">Higher Conversion Rates</h4>
+                <p data-editable="airline-benefit-2-text">Convert more browsers to buyers with dynamic offers tailored to each customer.</p>
               </div>
             </div>
 
             <div class="benefit-item">
               <div class="benefit-icon">💰</div>
               <div>
-                <h4>Reduce Operational Costs</h4>
-                <p>Streamline operations and reduce dependency on legacy systems.</p>
+                <h4 data-editable="airline-benefit-3-title">Reduce Operational Costs</h4>
+                <p data-editable="airline-benefit-3-text">Streamline operations and reduce dependency on legacy systems.</p>
               </div>
             </div>
 
             <div class="benefit-item">
               <div class="benefit-icon">🚀</div>
               <div>
-                <h4>Fast Time to Market</h4>
-                <p>Launch new products and services quickly without complex IT projects.</p>
+                <h4 data-editable="airline-benefit-4-title">Fast Time to Market</h4>
+                <p data-editable="airline-benefit-4-text">Launch new products and services quickly without complex IT projects.</p>
               </div>
             </div>
           </div>
 
           <div class="cta-group">
-            <a href="mailto:sales@retailaer.com" class="btn btn-primary">Book a Demo</a>
-            <a href="/contact" class="btn btn-secondary">Get In Touch</a>
+            <a href="mailto:sales@retailaer.com" class="btn btn-primary" data-editable="for-airlines-cta-demo">Book a Demo</a>
+            <a href="/contact" class="btn btn-secondary" data-editable="for-airlines-cta-contact">Get In Touch</a>
           </div>
         </div>
 
         <div class="stats-col">
           <div class="stat-card">
-            <div class="stat-number">12</div>
-            <div class="stat-label">Years in Business</div>
+            <div class="stat-number" data-editable="airline-stat-1-number">12</div>
+            <div class="stat-label" data-editable="airline-stat-1-label">Years in Business</div>
           </div>
           <div class="stat-card">
-            <div class="stat-number">5M+</div>
-            <div class="stat-label">Orders Processed</div>
+            <div class="stat-number" data-editable="airline-stat-2-number">5M+</div>
+            <div class="stat-label" data-editable="airline-stat-2-label">Orders Processed</div>
           </div>
           <div class="stat-card">
-            <div class="stat-number">300+</div>
-            <div class="stat-label">Platform Capabilities</div>
+            <div class="stat-number" data-editable="airline-stat-3-number">300+</div>
+            <div class="stat-label" data-editable="airline-stat-3-label">Platform Capabilities</div>
           </div>
         </div>
       </div>
@@ -150,8 +150,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <section class="section" id="travel-brands">
     <div class="container">
       <div class="section-header">
-        <h2>For Travel Brands & Partners</h2>
-        <p class="section-description">
+        <h2 data-editable="for-travel-brands-title">For Travel Brands & Partners</h2>
+        <p class="section-description" data-editable="for-travel-brands-subtitle">
           Extend your travel business with powerful airline retailing capabilities
           through our flexible API-first platform.
         </p>
@@ -160,8 +160,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <div class="features-grid">
         <div class="feature-card">
           <div class="feature-icon">🔌</div>
-          <h4>API-First Architecture</h4>
-          <p>
+          <h4 data-editable="travel-feature-1-title">API-First Architecture</h4>
+          <p data-editable="travel-feature-1-text">
             Modern REST APIs with comprehensive documentation make integration
             straightforward and reliable.
           </p>
@@ -169,8 +169,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
         <div class="feature-card">
           <div class="feature-icon">🔄</div>
-          <h4>NDC Ready</h4>
-          <p>
+          <h4 data-editable="travel-feature-2-title">NDC Ready</h4>
+          <p data-editable="travel-feature-2-text">
             Full support for IATA NDC standards, enabling modern distribution
             and rich content delivery.
           </p>
@@ -178,8 +178,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
         <div class="feature-card">
           <div class="feature-icon">🛡️</div>
-          <h4>Enterprise Security</h4>
-          <p>
+          <h4 data-editable="travel-feature-3-title">Enterprise Security</h4>
+          <p data-editable="travel-feature-3-text">
             Bank-grade security, compliance certifications, and 99.9% uptime SLA
             ensure reliability.
           </p>
@@ -187,8 +187,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
         <div class="feature-card">
           <div class="feature-icon">📊</div>
-          <h4>Real-Time Analytics</h4>
-          <p>
+          <h4 data-editable="travel-feature-4-title">Real-Time Analytics</h4>
+          <p data-editable="travel-feature-4-text">
             Track performance, conversion, and revenue with comprehensive
             analytics and reporting tools.
           </p>
@@ -196,8 +196,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
         <div class="feature-card">
           <div class="feature-icon">🌍</div>
-          <h4>Global Scale</h4>
-          <p>
+          <h4 data-editable="travel-feature-5-title">Global Scale</h4>
+          <p data-editable="travel-feature-5-text">
             Multi-currency, multi-language, and multi-region support for
             worldwide operations.
           </p>
@@ -205,8 +205,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
         <div class="feature-card">
           <div class="feature-icon">🤝</div>
-          <h4>Partner Support</h4>
-          <p>
+          <h4 data-editable="travel-feature-6-title">Partner Support</h4>
+          <p data-editable="travel-feature-6-text">
             Dedicated integration support and ongoing partnership to ensure
             your success.
           </p>
@@ -219,33 +219,33 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <section class="section section-alt">
     <div class="container">
       <div class="section-header">
-        <h2>Seamless Integration</h2>
-        <p class="section-description">
+        <h2 data-editable="integration-title">Seamless Integration</h2>
+        <p class="section-description" data-editable="integration-subtitle">
           Connect Retailaer to your existing ecosystem with minimal effort
         </p>
       </div>
 
       <div class="integration-content">
         <div class="integration-list">
-          <h3>We Integrate With:</h3>
+          <h3 data-editable="integration-list-title">We Integrate With:</h3>
           <ul>
-            <li>Passenger Service Systems (PSS)</li>
-            <li>Global Distribution Systems (GDS)</li>
-            <li>NDC aggregators and channels</li>
-            <li>Payment gateways and processors</li>
-            <li>CRM and marketing platforms</li>
-            <li>Revenue management systems</li>
-            <li>Ancillary management platforms</li>
+            <li data-editable="integration-item-1">Passenger Service Systems (PSS)</li>
+            <li data-editable="integration-item-2">Global Distribution Systems (GDS)</li>
+            <li data-editable="integration-item-3">NDC aggregators and channels</li>
+            <li data-editable="integration-item-4">Payment gateways and processors</li>
+            <li data-editable="integration-item-5">CRM and marketing platforms</li>
+            <li data-editable="integration-item-6">Revenue management systems</li>
+            <li data-editable="integration-item-7">Ancillary management platforms</li>
           </ul>
         </div>
 
         <div class="integration-cta">
-          <h3>Ready to Get Started?</h3>
-          <p>
+          <h3 data-editable="integration-cta-title">Ready to Get Started?</h3>
+          <p data-editable="integration-cta-text">
             Our team is ready to discuss how Retailaer can transform
             your airline retailing strategy.
           </p>
-          <a href="mailto:sales@retailaer.com" class="btn btn-primary btn-lg">Book a Demo</a>
+          <a href="mailto:sales@retailaer.com" class="btn btn-primary btn-lg" data-editable="integration-cta-button">Book a Demo</a>
         </div>
       </div>
     </div>

@@ -77,53 +77,45 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     const failedChanges = [];
 
     for (const change of changes) {
-      // Handle both old format (original/current) and new format (originalText/currentText)
-      const originalText = change.originalText || change.original;
-      const currentText = change.currentText || change.current;
+      const { editableId, originalHtml, currentHtml } = change;
 
-      console.log('Attempting to replace text:');
-      console.log('  Original:', JSON.stringify(originalText));
-      console.log('  Current:', JSON.stringify(currentText));
-
-      // Find what changed by splitting into words and finding differences
-      const originalWords = originalText.split(/\s+/);
-      const currentWords = currentText.split(/\s+/);
-
-      // Find the words that changed
-      let wordToReplace = null;
-      let replacementWord = null;
-
-      for (let i = 0; i < Math.max(originalWords.length, currentWords.length); i++) {
-        if (originalWords[i] !== currentWords[i]) {
-          wordToReplace = originalWords[i];
-          replacementWord = currentWords[i];
-          break;
-        }
+      if (!editableId) {
+        console.warn('  ✗ No editable ID provided');
+        failedChanges.push(change);
+        continue;
       }
 
-      if (wordToReplace && replacementWord) {
-        console.log(`  Looking for word: "${wordToReplace}" → "${replacementWord}"`);
+      console.log(`Attempting to replace [data-editable="${editableId}"]:`);
+      console.log('  Original:', originalHtml.substring(0, 100));
+      console.log('  Current:', currentHtml.substring(0, 100));
 
-        // Replace just that word in the source file
-        if (fileContent.includes(wordToReplace)) {
-          fileContent = fileContent.replace(wordToReplace, replacementWord);
+      // Find the data-editable attribute and its content in the file
+      const dataEditablePattern = new RegExp(
+        `data-editable="${editableId}"[^>]*>\\s*([\\s\\S]*?)\\s*</(h[1-6]|p|li|a)>`,
+        'm'
+      );
+
+      const match = fileContent.match(dataEditablePattern);
+
+      if (match) {
+        const fullMatch = match[0];
+        const tagMatch = fullMatch.match(/^(.*data-editable="[^"]*"[^>]*>)([\s\S]*?)(<\/[^>]+>)$/);
+
+        if (tagMatch) {
+          const openingTag = tagMatch[1];
+          const closingTag = tagMatch[3];
+          const newContent = openingTag + '\n          ' + currentHtml + '\n        ' + closingTag;
+
+          fileContent = fileContent.replace(fullMatch, newContent);
           changesApplied++;
-          console.log('  ✓ Replaced word in source file');
+          console.log(`  ✓ Replaced content for ${editableId}`);
         } else {
-          console.warn('  ✗ Could not find word in source file');
-          failedChanges.push({
-            originalText,
-            currentText,
-            wordToReplace,
-            replacementWord
-          });
+          console.warn(`  ✗ Could not parse tags for ${editableId}`);
+          failedChanges.push(change);
         }
       } else {
-        console.warn('  ✗ Could not determine what changed');
-        failedChanges.push({
-          originalText,
-          currentText
-        });
+        console.warn(`  ✗ Could not find data-editable="${editableId}" in file`);
+        failedChanges.push(change);
       }
     }
 

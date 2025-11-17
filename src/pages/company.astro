@@ -9,8 +9,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <!-- Hero Section -->
   <section class="page-hero">
     <div class="container">
-      <h1 class="page-title">About Retailaer</h1>
-      <p class="page-subtitle">
+      <h1 class="page-title" data-editable="hero-title">About Retailaer</h1>
+      <p class="page-subtitle" data-editable="hero-subtitle">
         We're transforming airline retailing with the world's only<br>
         customer-first Offer and Order Management platform.
       </p>
@@ -22,18 +22,18 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <div class="container">
       <div class="mission-layout">
         <div class="mission-content">
-          <h2>Our Mission</h2>
-          <p class="lead">
+          <h2 data-editable="mission-title">Our Mission</h2>
+          <p class="lead" data-editable="mission-lead">
             To empower airlines with modern retailing technology that puts customers first,
             drives revenue, and unlocks new opportunities in the evolving travel landscape.
           </p>
-          <p>
+          <p data-editable="mission-paragraph-1">
             Founded with a vision to modernize airline retailing, Retailaer has spent over a decade
             building the most advanced Offer and Order Management platform in the industry. We believe
             that the future of airline retailing is customer-centric, data-driven, and built on
             modern technology foundations.
           </p>
-          <p>
+          <p data-editable="mission-paragraph-2">
             Our platform replaces legacy PNR-based systems with flexible, scalable order management
             that adapts to how customers actually want to shop, book, and manage their travel.
           </p>
@@ -41,16 +41,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
         <div class="mission-stats">
           <div class="stat-large">
-            <div class="stat-number">12</div>
-            <div class="stat-label">Years of Innovation</div>
+            <div class="stat-number" data-editable="mission-stat-1-number">12</div>
+            <div class="stat-label" data-editable="mission-stat-1-label">Years of Innovation</div>
           </div>
           <div class="stat-large">
-            <div class="stat-number">5M+</div>
-            <div class="stat-label">Orders Processed</div>
+            <div class="stat-number" data-editable="mission-stat-2-number">5M+</div>
+            <div class="stat-label" data-editable="mission-stat-2-label">Orders Processed</div>
           </div>
           <div class="stat-large">
-            <div class="stat-number">300+</div>
-            <div class="stat-label">Platform Capabilities</div>
+            <div class="stat-number" data-editable="mission-stat-3-number">300+</div>
+            <div class="stat-label" data-editable="mission-stat-3-label">Platform Capabilities</div>
           </div>
         </div>
       </div>
@@ -61,8 +61,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <section class="section section-alt">
     <div class="container">
       <div class="section-header">
-        <h2>Our Values</h2>
-        <p class="section-description">
+        <h2 data-editable="values-title">Our Values</h2>
+        <p class="section-description" data-editable="values-subtitle">
           The principles that guide everything we do
         </p>
       </div>
@@ -70,8 +70,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <div class="values-grid">
         <div class="value-card">
           <div class="value-icon">🎯</div>
-          <h3>Customer First</h3>
-          <p>
+          <h3 data-editable="value-1-title">Customer First</h3>
+          <p data-editable="value-1-text">
             We design every feature with the end customer in mind, believing that better
             customer experiences lead to better business outcomes.
           </p>
@@ -79,8 +79,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
         <div class="value-card">
           <div class="value-icon">🚀</div>
-          <h3>Innovation</h3>
-          <p>
+          <h3 data-editable="value-2-title">Innovation</h3>
+          <p data-editable="value-2-text">
             We continuously push boundaries, exploring new technologies and approaches
             to solve complex challenges in airline retailing.
           </p>
@@ -88,8 +88,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
         <div class="value-card">
           <div class="value-icon">🤝</div>
-          <h3>Partnership</h3>
-          <p>
+          <h3 data-editable="value-3-title">Partnership</h3>
+          <p data-editable="value-3-text">
             We work alongside our clients as true partners, investing in their success
             and growing together over the long term.
           </p>
@@ -97,8 +97,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
         <div class="value-card">
           <div class="value-icon">🔒</div>
-          <h3>Trust & Security</h3>
-          <p>
+          <h3 data-editable="value-4-title">Trust & Security</h3>
+          <p data-editable="value-4-text">
             We maintain the highest standards of security, compliance, and reliability
             to protect our clients and their customers.
           </p>
@@ -106,8 +106,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
         <div class="value-card">
           <div class="value-icon">📊</div>
-          <h3>Data-Driven</h3>
-          <p>
+          <h3 data-editable="value-5-title">Data-Driven</h3>
+          <p data-editable="value-5-text">
             We leverage data and analytics to drive insights, optimize performance,
             and deliver measurable results.
           </p>
@@ -115,8 +115,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
         <div class="value-card">
           <div class="value-icon">🌍</div>
-          <h3>Global Perspective</h3>
-          <p>
+          <h3 data-editable="value-6-title">Global Perspective</h3>
+          <p data-editable="value-6-text">
             We think globally, supporting airlines and travel brands across regions,
             languages, and cultures.
           </p>
@@ -129,15 +129,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <section class="section">
     <div class="container">
       <div class="section-header">
-        <h2>What Sets Us Apart</h2>
+        <h2 data-editable="differentiators-title">What Sets Us Apart</h2>
       </div>
 
       <div class="differentiators">
         <div class="diff-item">
           <div class="diff-number">01</div>
           <div class="diff-content">
-            <h3>True Customer-First Architecture</h3>
-            <p>
+            <h3 data-editable="diff-1-title">True Customer-First Architecture</h3>
+            <p data-editable="diff-1-text">
               Unlike legacy PNR systems that organize data around bookings, our platform
               organizes everything around the customer. This fundamental difference enables
               personalization, continuity, and experiences that legacy systems simply can't deliver.
@@ -148,8 +148,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <div class="diff-item">
           <div class="diff-number">02</div>
           <div class="diff-content">
-            <h3>Modern Technology Stack</h3>
-            <p>
+            <h3 data-editable="diff-2-title">Modern Technology Stack</h3>
+            <p data-editable="diff-2-text">
               Built from the ground up with cloud-native architecture, microservices, and
               modern APIs. We're not retrofitting old technology—we're purpose-built for
               the future of airline retailing.
@@ -160,8 +160,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <div class="diff-item">
           <div class="diff-number">03</div>
           <div class="diff-content">
-            <h3>Deep Travel Tech Expertise</h3>
-            <p>
+            <h3 data-editable="diff-3-title">Deep Travel Tech Expertise</h3>
+            <p data-editable="diff-3-text">
               With over 12 years focused exclusively on airline retailing, we understand
               the unique challenges, requirements, and opportunities in this space like no one else.
             </p>
@@ -171,8 +171,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <div class="diff-item">
           <div class="diff-number">04</div>
           <div class="diff-content">
-            <h3>Proven at Scale</h3>
-            <p>
+            <h3 data-editable="diff-4-title">Proven at Scale</h3>
+            <p data-editable="diff-4-text">
               With 5 million+ orders processed and counting, we've proven our platform
               can handle enterprise-scale operations with reliability and performance.
             </p>
@@ -186,35 +186,35 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <section class="section section-alt">
     <div class="container">
       <div class="commitment-content">
-        <h2>Our Commitment</h2>
+        <h2 data-editable="commitment-title">Our Commitment</h2>
         <div class="commitment-grid">
           <div class="commitment-item">
-            <h4>To Airlines</h4>
-            <p>
+            <h4 data-editable="commitment-1-title">To Airlines</h4>
+            <p data-editable="commitment-1-text">
               We're committed to helping you maximize revenue, reduce costs, and deliver
               exceptional customer experiences that build loyalty and drive repeat business.
             </p>
           </div>
 
           <div class="commitment-item">
-            <h4>To Passengers</h4>
-            <p>
+            <h4 data-editable="commitment-2-title">To Passengers</h4>
+            <p data-editable="commitment-2-text">
               We're committed to making travel shopping and booking simpler, more transparent,
               and more personalized—putting you in control of your journey.
             </p>
           </div>
 
           <div class="commitment-item">
-            <h4>To Partners</h4>
-            <p>
+            <h4 data-editable="commitment-3-title">To Partners</h4>
+            <p data-editable="commitment-3-text">
               We're committed to building lasting partnerships based on mutual success,
               transparency, and continuous innovation.
             </p>
           </div>
 
           <div class="commitment-item">
-            <h4>To Innovation</h4>
-            <p>
+            <h4 data-editable="commitment-4-title">To Innovation</h4>
+            <p data-editable="commitment-4-text">
               We're committed to staying at the forefront of travel technology, continuously
               evolving our platform to meet emerging needs and opportunities.
             </p>
@@ -228,14 +228,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <section class="section">
     <div class="container">
       <div class="cta-box">
-        <h2>Ready to Transform Your Airline Retailing?</h2>
-        <p>
+        <h2 data-editable="cta-title">Ready to Transform Your Airline Retailing?</h2>
+        <p data-editable="cta-text">
           Let's discuss how Retailaer can help you drive revenue, enhance customer experiences,
           and stay ahead of the competition.
         </p>
         <div class="cta-buttons">
-          <a href="mailto:sales@retailaer.com" class="btn btn-primary btn-lg">Book a Demo</a>
-          <a href="/contact" class="btn btn-secondary btn-lg">Get In Touch</a>
+          <a href="mailto:sales@retailaer.com" class="btn btn-primary btn-lg" data-editable="cta-button-demo">Book a Demo</a>
+          <a href="/contact" class="btn btn-secondary btn-lg" data-editable="cta-button-contact">Get In Touch</a>
         </div>
       </div>
     </div>
