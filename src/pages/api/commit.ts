@@ -68,8 +68,8 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     const fileData = await fileResponse.json();
     const sha = fileData.sha;
 
-    // Decode the file content from base64
-    let fileContent = atob(fileData.content);
+    // Decode the file content from base64 (handle UTF-8 properly)
+    let fileContent = decodeURIComponent(escape(atob(fileData.content)));
 
     // Apply all changes to the file content
     console.log(`Applying ${changes.length} changes to ${filePath}`);
@@ -106,7 +106,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         },
         body: JSON.stringify({
           message: commitMessage,
-          content: btoa(fileContent), // Base64 encode updated content
+          content: btoa(unescape(encodeURIComponent(fileContent))), // Base64 encode UTF-8 content
           sha: sha,
           branch: branch,
           committer: {
