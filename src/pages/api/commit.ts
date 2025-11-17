@@ -90,29 +90,33 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       console.log('  Current:', currentHtml.substring(0, 100));
 
       // Find the data-editable attribute and its content in the file
+      // Match pattern: <tag data-editable="id" ...>CONTENT</tag>
+      // We need to handle multi-line content with <br> tags, so use [\s\S]*? (non-greedy)
       const dataEditablePattern = new RegExp(
-        `data-editable="${editableId}"[^>]*>\\s*([\\s\\S]*?)\\s*</(h[1-6]|p|li|a)>`,
-        'm'
+        `(<(?:h[1-6]|p|li|a|div|span)[^>]*data-editable="${editableId}"[^>]*>)([\\s\\S]*?)(<\\/(?:h[1-6]|p|li|a|div|span)>)`,
+        'i'
       );
 
       const match = fileContent.match(dataEditablePattern);
 
       if (match) {
-        const fullMatch = match[0];
-        const tagMatch = fullMatch.match(/^(.*data-editable="[^"]*"[^>]*>)([\s\S]*?)(<\/[^>]+>)$/);
+        const [fullMatch, openingTag, oldContent, closingTag] = match;
 
-        if (tagMatch) {
-          const openingTag = tagMatch[1];
-          const closingTag = tagMatch[3];
-          const newContent = openingTag + '\n          ' + currentHtml + '\n        ' + closingTag;
+        console.log(`  ✓ Found match for ${editableId}`);
+        console.log(`  Old content: ${oldContent.substring(0, 80)}...`);
+        console.log(`  New content: ${currentHtml.substring(0, 80)}...`);
 
-          fileContent = fileContent.replace(fullMatch, newContent);
-          changesApplied++;
-          console.log(`  ✓ Replaced content for ${editableId}`);
-        } else {
-          console.warn(`  ✗ Could not parse tags for ${editableId}`);
-          failedChanges.push(change);
-        }
+        // Preserve indentation from the original content
+        const indentMatch = oldContent.match(/^(\s*)/);
+        const indent = indentMatch ? indentMatch[1] : '\n          ';
+        const endIndent = oldContent.match(/(\s*)$/);
+        const endPadding = endIndent ? endIndent[1] : '\n        ';
+
+        const newContent = openingTag + indent + currentHtml + endPadding + closingTag;
+
+        fileContent = fileContent.replace(fullMatch, newContent);
+        changesApplied++;
+        console.log(`  ✓ Replaced content for ${editableId}`);
       } else {
         console.warn(`  ✗ Could not find data-editable="${editableId}" in file`);
         failedChanges.push(change);
