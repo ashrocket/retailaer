@@ -10,7 +10,11 @@ document.addEventListener('keydown', (e) => {
 
     const url = new URL(window.location.href);
     const isEditMode = url.searchParams.get('editMode') === 'true';
-    const hasEditorSession = document.querySelector('#edit-mode-toolbar');
+
+    // Check if user has editor session cookie
+    const hasEditorSession = document.cookie.split(';').some(cookie =>
+      cookie.trim().startsWith('editor_session=')
+    );
 
     // If edit mode is active, toggle it off
     if (isEditMode) {

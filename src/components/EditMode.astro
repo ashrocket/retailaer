@@ -30,7 +30,7 @@ const editModeParam = Astro.url.searchParams.get('editMode');
 const isEditMode = editModeParam === 'true' && editorSession;
 ---
 
-{editorSession && (
+{isEditMode && (
   <div id="edit-mode-toolbar" class:list={['edit-toolbar', { 'edit-mode-active': isEditMode }]}>
     <div class="toolbar-content">
       <div class="toolbar-left">
@@ -485,7 +485,7 @@ const isEditMode = editModeParam === 'true' && editorSession;
   }
 </style>
 
-<script define:vars={{ filePath, isEditMode }}>
+<script define:vars={{ filePath, isEditMode, hasEditorSession: !!editorSession }}>
   // Edit mode functionality
   const toggleBtn = document.getElementById('toggle-edit-mode');
   const saveBtn = document.getElementById('save-changes');
