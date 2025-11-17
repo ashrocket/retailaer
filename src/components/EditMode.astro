@@ -477,17 +477,20 @@ const isEditMode = editModeParam === 'true' && editorSession;
 
   // Make content editable in edit mode
   if (isEditMode) {
-    // Target text elements in main content area
-    const selectors = 'main h1, main h2, main h3, main h4, main h5, main h6, main p, main li, section h1, section h2, section h3, section h4, section h5, section h6, section p, section li, article h1, article h2, article h3, article h4, article h5, article h6, article p, article li, .container h1, .container h2, .container h3, .container h4, .container h5, .container h6, .container p, .container li';
+    // Select all text elements
+    const elements = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, li, a.btn');
 
-    document.querySelectorAll(selectors).forEach(el => {
-      // Skip toolbar, navigation, footer, script, and style content
+    let editableCount = 0;
+    elements.forEach(el => {
+      // Skip toolbar, navigation, footer, modals, etc.
       if (el.closest('#edit-mode-toolbar') ||
-          el.closest('nav') ||
-          el.closest('footer') ||
+          el.closest('.navbar') ||
+          el.closest('.footer') ||
           el.closest('script') ||
           el.closest('style') ||
-          el.closest('svg')) {
+          el.closest('svg') ||
+          el.closest('#deployment-modal') ||
+          el.closest('.edit-hint')) {
         return;
       }
 
@@ -507,9 +510,14 @@ const isEditMode = editModeParam === 'true' && editorSession;
         hasChanges = true;
         if (saveBtn) saveBtn.disabled = false;
       });
+
+      editableCount++;
     });
 
-    console.log(`Edit mode activated: ${originalContent.size} elements are now editable`);
+    console.log(`✏️ Edit mode activated: ${editableCount} elements are now editable`);
+    if (editableCount === 0) {
+      console.warn('⚠️ No editable elements found! Check page structure.');
+    }
   }
 
   // Save changes
