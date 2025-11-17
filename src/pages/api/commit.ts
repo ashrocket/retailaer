@@ -85,15 +85,41 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       console.log('  Original:', JSON.stringify(originalText));
       console.log('  Current:', JSON.stringify(currentText));
 
-      // Search for the original text in the .astro source file
-      // This works because we're looking for actual text content, not HTML
-      if (fileContent.includes(originalText)) {
-        // Replace the first occurrence
-        fileContent = fileContent.replace(originalText, currentText);
-        changesApplied++;
-        console.log('  ✓ Replaced text in source file');
+      // Find what changed by splitting into words and finding differences
+      const originalWords = originalText.split(/\s+/);
+      const currentWords = currentText.split(/\s+/);
+
+      // Find the words that changed
+      let wordToReplace = null;
+      let replacementWord = null;
+
+      for (let i = 0; i < Math.max(originalWords.length, currentWords.length); i++) {
+        if (originalWords[i] !== currentWords[i]) {
+          wordToReplace = originalWords[i];
+          replacementWord = currentWords[i];
+          break;
+        }
+      }
+
+      if (wordToReplace && replacementWord) {
+        console.log(`  Looking for word: "${wordToReplace}" → "${replacementWord}"`);
+
+        // Replace just that word in the source file
+        if (fileContent.includes(wordToReplace)) {
+          fileContent = fileContent.replace(wordToReplace, replacementWord);
+          changesApplied++;
+          console.log('  ✓ Replaced word in source file');
+        } else {
+          console.warn('  ✗ Could not find word in source file');
+          failedChanges.push({
+            originalText,
+            currentText,
+            wordToReplace,
+            replacementWord
+          });
+        }
       } else {
-        console.warn('  ✗ Could not find text in source file');
+        console.warn('  ✗ Could not determine what changed');
         failedChanges.push({
           originalText,
           currentText
