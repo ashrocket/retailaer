@@ -74,6 +74,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     // Apply all changes to the file content
     console.log(`Applying ${changes.length} changes to ${filePath}`);
     let changesApplied = 0;
+    const failedChanges = [];
 
     for (const change of changes) {
       const { original, current } = change;
@@ -82,54 +83,37 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       console.log('  Original:', JSON.stringify(original.substring(0, 100)));
       console.log('  Current:', JSON.stringify(current.substring(0, 100)));
 
-      // Try exact match first
+      // Only use exact match - normalized matching is too dangerous and corrupts HTML
       if (fileContent.includes(original)) {
         fileContent = fileContent.replace(original, current);
         changesApplied++;
         console.log('  ✓ Applied exact match');
       } else {
-        // Try normalized match (collapse whitespace, normalize line breaks)
-        const normalizeText = (text: string) => text.replace(/\s+/g, ' ').trim();
-        const normalizedOriginal = normalizeText(original);
-        const normalizedCurrent = normalizeText(current);
-
-        // Find the normalized text in the file
-        const normalizedFile = normalizeText(fileContent);
-        const index = normalizedFile.indexOf(normalizedOriginal);
-
-        if (index !== -1) {
-          // Find the actual position in the original file by counting characters
-          let actualIndex = 0;
-          let normalizedIndex = 0;
-          while (normalizedIndex < index && actualIndex < fileContent.length) {
-            if (!/\s/.test(fileContent[actualIndex]) || fileContent[actualIndex] === ' ') {
-              normalizedIndex++;
-            }
-            actualIndex++;
-          }
-
-          // Find the end position
-          let endIndex = actualIndex;
-          let matchedChars = 0;
-          while (matchedChars < normalizedOriginal.length && endIndex < fileContent.length) {
-            if (!/\s/.test(fileContent[endIndex]) || fileContent[endIndex] === ' ') {
-              matchedChars++;
-            }
-            endIndex++;
-          }
-
-          // Replace the text
-          fileContent = fileContent.substring(0, actualIndex) + current + fileContent.substring(endIndex);
-          changesApplied++;
-          console.log('  ✓ Applied normalized match');
-        } else {
-          console.warn('  ✗ Could not find text to replace (tried exact and normalized)');
-          console.warn('  First 200 chars of file:', fileContent.substring(0, 200));
-        }
+        console.warn('  ✗ Could not find exact match');
+        failedChanges.push({
+          original: original.substring(0, 100),
+          current: current.substring(0, 100)
+        });
       }
     }
 
     console.log(`Applied ${changesApplied} out of ${changes.length} changes`);
+
+    if (failedChanges.length > 0) {
+      console.warn('Failed changes:', JSON.stringify(failedChanges, null, 2));
+    }
+
+    // If no changes were applied, return error
+    if (changesApplied === 0) {
+      return new Response(JSON.stringify({
+        error: 'No changes could be applied',
+        details: 'The text you edited could not be found in the file. This might be because the browser modified the HTML formatting.',
+        failedChanges
+      }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
 
     // Create commit message
     const commitMessage = message || `Update ${filePath} via inline editor\n\nApplied ${changesApplied} edits by ${session.name}`;
