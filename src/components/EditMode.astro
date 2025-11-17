@@ -477,47 +477,54 @@ const isEditMode = editModeParam === 'true' && editorSession;
 
   // Make content editable in edit mode
   if (isEditMode) {
-    // Select all text elements
-    const elements = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, li, a.btn');
+    // Wait for DOM to be fully loaded
+    setTimeout(() => {
+      // Select all text elements
+      const elements = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, li, a.btn');
+      console.log(`🔍 Found ${elements.length} total elements to check`);
 
-    let editableCount = 0;
-    elements.forEach(el => {
-      // Skip toolbar, navigation, footer, modals, etc.
-      if (el.closest('#edit-mode-toolbar') ||
-          el.closest('.navbar') ||
-          el.closest('.footer') ||
-          el.closest('script') ||
-          el.closest('style') ||
-          el.closest('svg') ||
-          el.closest('#deployment-modal') ||
-          el.closest('.edit-hint')) {
-        return;
-      }
+      let editableCount = 0;
+      let skippedCount = 0;
+      elements.forEach(el => {
+        // Skip toolbar, navigation, footer, modals, etc.
+        const skipReasons = [];
+        if (el.closest('#edit-mode-toolbar')) skipReasons.push('toolbar');
+        if (el.closest('.navbar')) skipReasons.push('navbar');
+        if (el.closest('.footer')) skipReasons.push('footer');
+        if (el.closest('#deployment-modal')) skipReasons.push('modal');
+        if (el.closest('.edit-hint')) skipReasons.push('hint');
+        if (!el.textContent?.trim()) skipReasons.push('empty');
 
-      // Skip if it's just whitespace or empty
-      if (!el.textContent?.trim()) {
-        return;
-      }
+        if (skipReasons.length > 0) {
+          skippedCount++;
+          return;
+        }
 
-      el.classList.add('editable-content');
-      el.setAttribute('contenteditable', 'true');
+        el.classList.add('editable-content');
+        el.setAttribute('contenteditable', 'true');
 
-      // Store original content
-      originalContent.set(el, el.innerHTML);
+        // Store original content
+        originalContent.set(el, el.innerHTML);
 
-      // Track changes
-      el.addEventListener('input', () => {
-        hasChanges = true;
-        if (saveBtn) saveBtn.disabled = false;
+        // Track changes
+        el.addEventListener('input', () => {
+          hasChanges = true;
+          if (saveBtn) saveBtn.disabled = false;
+        });
+
+        editableCount++;
       });
 
-      editableCount++;
-    });
-
-    console.log(`✏️ Edit mode activated: ${editableCount} elements are now editable`);
-    if (editableCount === 0) {
-      console.warn('⚠️ No editable elements found! Check page structure.');
-    }
+      console.log(`✏️ Edit mode: ${editableCount} editable, ${skippedCount} skipped out of ${elements.length} total`);
+      if (editableCount === 0 && elements.length > 0) {
+        console.warn('⚠️ All elements were skipped!');
+        console.log('First element:', elements[0]);
+        console.log('  Tag:', elements[0].tagName);
+        console.log('  Text:', elements[0].textContent?.substring(0, 50));
+        console.log('  In navbar?', !!elements[0].closest('.navbar'));
+        console.log('  In footer?', !!elements[0].closest('.footer'));
+      }
+    }, 100);
   }
 
   // Save changes
