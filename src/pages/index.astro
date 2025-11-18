@@ -6,7 +6,7 @@ import InsightsCarousel from '../components/InsightsCarousel.astro';
 // Enable editing for this page
 const filePath = 'src/pages/index.astro';
 
-// Sample insights data - TODO: Load from database
+// Sample insights data
 const insights = [
   {
     id: '1',
@@ -75,7 +75,12 @@ const insights = [
         </p>
         <div class="hero-cta">
           <a href="/contact" class="btn btn-primary" data-editable="hero-cta-demo">Get in Touch</a>
-          <a href="#why-retailaer" class="btn btn-secondary scroll-link" data-editable="hero-cta-learn">Need Convincing?</a>
+          <a href="#why-retailaer" class="hero-nav-link scroll-link" data-editable="hero-cta-learn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M9 18l6-6-6-6"/>
+            </svg>
+            <span>Why Leading Airlines Choose Us</span>
+          </a>
         </div>
       </div>
       <div class="hero-visual">
@@ -160,6 +165,13 @@ const insights = [
                 }
                 100% {
                   transform: rotate(0deg) rotateX(0deg) rotateY(0deg);
+                }
+              }
+
+              @media (prefers-reduced-motion: reduce) {
+                .airplane-container,
+                .airplane-icon-inner {
+                  animation: none;
                 }
               }
 
@@ -314,6 +326,43 @@ const insights = [
   </button>
 
   <style>
+    /* Hero Nav Link */
+    .hero-nav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--color-primary);
+      font-weight: 500;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      background: transparent;
+    }
+
+    .hero-nav-link:hover {
+      background: rgba(10, 92, 92, 0.05);
+      gap: 0.75rem;
+    }
+
+    .hero-nav-link svg {
+      transition: transform 0.3s ease;
+    }
+
+    .hero-nav-link:hover svg {
+      transform: translateX(4px);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-nav-link,
+      .hero-nav-link svg {
+        transition: none;
+      }
+
+      .hero-nav-link:hover svg {
+        transform: none;
+      }
+    }
+
     /* Section Navigation */
     .section-nav {
       display: flex;
@@ -378,6 +427,16 @@ const insights = [
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
     }
 
+    @media (prefers-reduced-motion: reduce) {
+      .scroll-to-top {
+        transition: none;
+      }
+
+      .scroll-to-top:hover {
+        transform: none;
+      }
+    }
+
     @media (max-width: 768px) {
       .section-nav {
         flex-direction: column;
@@ -400,6 +459,9 @@ const insights = [
   <script>
     // Smooth scroll for anchor links
     document.addEventListener('DOMContentLoaded', () => {
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const scrollBehavior = prefersReducedMotion ? 'auto' : 'smooth';
+
       // Handle scroll links
       document.querySelectorAll('.scroll-link').forEach(link => {
         link.addEventListener('click', (e) => {
@@ -410,11 +472,11 @@ const insights = [
           if (targetElement) {
             const headerOffset = 80; // Account for fixed header
             const elementPosition = targetElement.getBoundingClientRect().top;
-            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+            const offsetPosition = elementPosition + window.scrollY - headerOffset;
 
             window.scrollTo({
               top: offsetPosition,
-              behavior: 'smooth'
+              behavior: scrollBehavior
             });
           }
         });
@@ -424,7 +486,7 @@ const insights = [
       const scrollToTopBtn = document.getElementById('scroll-to-top');
 
       window.addEventListener('scroll', () => {
-        if (window.pageYOffset > 300) {
+        if (window.scrollY > 300) {
           scrollToTopBtn?.classList.add('visible');
         } else {
           scrollToTopBtn?.classList.remove('visible');
@@ -434,7 +496,7 @@ const insights = [
       scrollToTopBtn?.addEventListener('click', () => {
         window.scrollTo({
           top: 0,
-          behavior: 'smooth'
+          behavior: scrollBehavior
         });
       });
     });
