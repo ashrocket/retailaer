@@ -23,7 +23,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <div class="section-header">
         <h2 data-editable="platform-overview-title">Platform Overview</h2>
         <p class="section-description" data-editable="platform-overview-subtitle">
-          Retailaer transforms airline retailing with three integrated pillars that work together
+          Retailaer transforms airline retailing with four integrated pillars that work together
           to maximize revenue while enhancing the customer experience.
         </p>
       </div>
@@ -73,74 +73,89 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <li data-editable="pillar-3-feature-4">Fraud prevention</li>
           </ul>
         </div>
+
+        <div class="pillar-card">
+          <div class="pillar-icon">🎯</div>
+          <h3 data-editable="pillar-4-title">Customer-First</h3>
+          <p data-editable="pillar-4-text">
+            Put customers at the center with unified profiles, personalized experiences, and
+            seamless interactions across all touchpoints.
+          </p>
+          <ul class="feature-list">
+            <li data-editable="pillar-4-feature-1">Unified customer profiles</li>
+            <li data-editable="pillar-4-feature-2">Cross-channel continuity</li>
+            <li data-editable="pillar-4-feature-3">Preference management</li>
+            <li data-editable="pillar-4-feature-4">Proactive engagement</li>
+          </ul>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- For Airlines -->
-  <section class="section section-alt" id="airlines">
+  <!-- Connect Retail Distribution -->
+  <section class="section section-alt" id="distribution">
     <div class="container">
-      <div class="two-col-layout">
-        <div class="content-col">
-          <h2 data-editable="for-airlines-title">For Airlines</h2>
-          <p class="lead" data-editable="for-airlines-lead">
-            Empower your airline with modern retailing capabilities that drive revenue
-            and delight customers at every touchpoint.
-          </p>
+      <div class="section-header">
+        <h2 data-editable="distribution-title">Connect Retail Distribution</h2>
+        <p class="section-description" data-editable="distribution-subtitle">
+          Distribute your airline's offers through multiple channels while maintaining full control
+          over pricing, inventory, and customer experience.
+        </p>
+      </div>
 
-          <div class="benefits-list">
-            <div class="benefit-item">
-              <div class="benefit-icon">📈</div>
-              <div>
-                <h4 data-editable="airline-benefit-1-title">Boost Ancillary Revenue</h4>
-                <p data-editable="airline-benefit-1-text">Increase ancillary sales with personalized upsells and cross-sells at optimal moments.</p>
-              </div>
-            </div>
-
-            <div class="benefit-item">
-              <div class="benefit-icon">🎯</div>
-              <div>
-                <h4 data-editable="airline-benefit-2-title">Higher Conversion Rates</h4>
-                <p data-editable="airline-benefit-2-text">Convert more browsers to buyers with dynamic offers tailored to each customer.</p>
-              </div>
-            </div>
-
-            <div class="benefit-item">
-              <div class="benefit-icon">💰</div>
-              <div>
-                <h4 data-editable="airline-benefit-3-title">Reduce Operational Costs</h4>
-                <p data-editable="airline-benefit-3-text">Streamline operations and reduce dependency on legacy systems.</p>
-              </div>
-            </div>
-
-            <div class="benefit-item">
-              <div class="benefit-icon">🚀</div>
-              <div>
-                <h4 data-editable="airline-benefit-4-title">Fast Time to Market</h4>
-                <p data-editable="airline-benefit-4-text">Launch new products and services quickly without complex IT projects.</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="cta-group">
-            <a href="mailto:sales@retailaer.com" class="btn btn-primary" data-editable="for-airlines-cta-demo">Book a Demo</a>
-            <a href="/contact" class="btn btn-secondary" data-editable="for-airlines-cta-contact">Get In Touch</a>
-          </div>
+      <div class="distribution-grid">
+        <div class="distribution-card">
+          <div class="distribution-icon">🌐</div>
+          <h4 data-editable="distribution-1-title">Airline Website</h4>
+          <p data-editable="distribution-1-text">Direct-to-consumer bookings with personalized offers and seamless checkout.</p>
         </div>
 
-        <div class="stats-col">
-          <div class="stat-card">
-            <div class="stat-number" data-editable="airline-stat-1-number">12</div>
-            <div class="stat-label" data-editable="airline-stat-1-label">Years in Business</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number" data-editable="airline-stat-2-number">5M+</div>
-            <div class="stat-label" data-editable="airline-stat-2-label">Orders Processed</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number" data-editable="airline-stat-3-number">300+</div>
-            <div class="stat-label" data-editable="airline-stat-3-label">Platform Capabilities</div>
-          </div>
+        <div class="distribution-card">
+          <div class="distribution-icon">📱</div>
+          <h4 data-editable="distribution-2-title">Mobile Apps</h4>
+          <p data-editable="distribution-2-text">Native iOS and Android integration for on-the-go booking and servicing.</p>
+        </div>
+
+        <div class="distribution-card">
+          <div class="distribution-icon">🏢</div>
+          <h4 data-editable="distribution-3-title">NDC Channels</h4>
+          <p data-editable="distribution-3-text">IATA NDC-compliant distribution to travel agencies and aggregators.</p>
+        </div>
+
+        <div class="distribution-card">
+          <div class="distribution-icon">💼</div>
+          <h4 data-editable="distribution-4-title">Corporate Portals</h4>
+          <p data-editable="distribution-4-text">B2B booking tools for corporate travel managers and TMCs.</p>
+        </div>
+
+        <div class="distribution-card">
+          <div class="distribution-icon">📞</div>
+          <h4 data-editable="distribution-5-title">Call Centers</h4>
+          <p data-editable="distribution-5-text">Agent-assisted booking with full access to offers and order management.</p>
+        </div>
+
+        <div class="distribution-card">
+          <div class="distribution-icon">🏪</div>
+          <h4 data-editable="distribution-6-title">Airport Kiosks</h4>
+          <p data-editable="distribution-6-text">Self-service booking and ancillary sales at airport touchpoints.</p>
+        </div>
+
+        <div class="distribution-card">
+          <div class="distribution-icon">🤝</div>
+          <h4 data-editable="distribution-7-title">Travel Partners</h4>
+          <p data-editable="distribution-7-text">API access for OTAs, meta-search, and travel technology partners.</p>
+        </div>
+
+        <div class="distribution-card">
+          <div class="distribution-icon">🔗</div>
+          <h4 data-editable="distribution-8-title">GDS Networks</h4>
+          <p data-editable="distribution-8-text">Traditional GDS connectivity with enhanced content and pricing.</p>
+        </div>
+
+        <div class="distribution-card">
+          <div class="distribution-icon">🚀</div>
+          <h4 data-editable="distribution-9-title">API Direct</h4>
+          <p data-editable="distribution-9-text">Custom integrations for enterprise partners and white-label solutions.</p>
         </div>
       </div>
     </div>
@@ -245,7 +260,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             Our team is ready to discuss how Retailaer can transform
             your airline retailing strategy.
           </p>
-          <a href="mailto:sales@retailaer.com" class="btn btn-primary btn-lg" data-editable="integration-cta-button">Book a Demo</a>
+          <a href="/contact" class="btn btn-primary btn-lg" data-editable="integration-cta-button">Get in Touch</a>
         </div>
       </div>
     </div>
@@ -357,6 +372,45 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       left: 0;
       color: #f5b800;
       font-weight: 700;
+    }
+
+    .distribution-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .distribution-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-align: center;
+    }
+
+    .distribution-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .distribution-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .distribution-card h4 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: #0a5c5c;
+      margin-bottom: 0.75rem;
+    }
+
+    .distribution-card p {
+      color: #5a7a7a;
+      line-height: 1.6;
+      font-size: 0.9375rem;
     }
 
     .two-col-layout {
