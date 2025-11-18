@@ -75,6 +75,7 @@ const insights = [
         </p>
         <div class="hero-cta">
           <a href="/contact" class="btn btn-primary" data-editable="hero-cta-demo">Get in Touch</a>
+          <a href="#why-retailaer" class="btn btn-secondary scroll-link" data-editable="hero-cta-learn">Need Convincing?</a>
         </div>
       </div>
       <div class="hero-visual">
@@ -189,7 +190,7 @@ const insights = [
   </section>
 
   <!-- Why Retailaer Section -->
-  <section class="section bg-white">
+  <section id="why-retailaer" class="section bg-white">
     <div class="container">
       <div class="section-header text-center">
         <h2 data-editable="why-retailaer-title">Why Retailaer?</h2>
@@ -197,11 +198,17 @@ const insights = [
       </div>
 
       <ExpandableFeatureCards />
+
+      <!-- Section Navigation -->
+      <div class="section-nav">
+        <a href="#how-it-works" class="btn btn-secondary scroll-link">See How It Works →</a>
+        <a href="/contact" class="btn btn-outline">Get in Touch</a>
+      </div>
     </div>
   </section>
 
   <!-- How It Works Section -->
-  <section class="section bg-teal how-it-works">
+  <section id="how-it-works" class="section bg-teal how-it-works">
     <div class="container">
       <div class="section-header text-center">
         <h2 class="text-white" data-editable="how-it-works-title">How it works</h2>
@@ -258,14 +265,17 @@ const insights = [
         </div>
       </div>
 
-      <div class="text-center" style="margin-top: 3rem;">
-        <a href="/insights" class="view-all-link" data-editable="how-it-works-view-all-link">View all Insights →</a>
+      <!-- Section Navigation -->
+      <div class="section-nav" style="margin-top: 3rem;">
+        <a href="#latest-insights" class="btn btn-secondary scroll-link">See Our Insights →</a>
+        <a href="#why-retailaer" class="btn btn-outline scroll-link">← Back to Benefits</a>
+        <a href="/contact" class="btn btn-outline">Get in Touch</a>
       </div>
     </div>
   </section>
 
   <!-- Latest Insights Section -->
-  <section class="section bg-gray">
+  <section id="latest-insights" class="section bg-gray">
     <div class="container">
       <div class="section-header">
         <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -295,4 +305,138 @@ const insights = [
       </div>
     </div>
   </section>
+
+  <!-- Scroll to Top Button -->
+  <button id="scroll-to-top" class="scroll-to-top" aria-label="Scroll to top">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M12 19V5M5 12l7-7 7 7"/>
+    </svg>
+  </button>
+
+  <style>
+    /* Section Navigation */
+    .section-nav {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 3rem;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--color-primary);
+      color: var(--color-primary);
+    }
+
+    .btn-outline:hover {
+      background: var(--color-primary);
+      color: white;
+    }
+
+    .how-it-works .btn-outline {
+      border-color: white;
+      color: white;
+    }
+
+    .how-it-works .btn-outline:hover {
+      background: white;
+      color: var(--color-primary);
+    }
+
+    /* Scroll to Top Button */
+    .scroll-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      color: white;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+
+    .scroll-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .scroll-to-top:hover {
+      background: var(--color-accent);
+      transform: translateY(-4px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    @media (max-width: 768px) {
+      .section-nav {
+        flex-direction: column;
+      }
+
+      .section-nav .btn {
+        width: 100%;
+        text-align: center;
+      }
+
+      .scroll-to-top {
+        bottom: 1rem;
+        right: 1rem;
+        width: 44px;
+        height: 44px;
+      }
+    }
+  </style>
+
+  <script>
+    // Smooth scroll for anchor links
+    document.addEventListener('DOMContentLoaded', () => {
+      // Handle scroll links
+      document.querySelectorAll('.scroll-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const targetId = link.getAttribute('href');
+          const targetElement = document.querySelector(targetId);
+
+          if (targetElement) {
+            const headerOffset = 80; // Account for fixed header
+            const elementPosition = targetElement.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+
+      // Scroll to top button
+      const scrollToTopBtn = document.getElementById('scroll-to-top');
+
+      window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 300) {
+          scrollToTopBtn?.classList.add('visible');
+        } else {
+          scrollToTopBtn?.classList.remove('visible');
+        }
+      });
+
+      scrollToTopBtn?.addEventListener('click', () => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+    });
+  </script>
 </BaseLayout>
