@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { Icon } from 'astro-icon/components';
 import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -159,13 +160,17 @@ try {
         </div>
 
         <div class="topic-card">
-          <div class="topic-icon">🎯</div>
+          <div class="topic-icon">
+            <Icon name="lucide:target" />
+          </div>
           <h3>Personalization</h3>
           <p>Leveraging data and AI to deliver tailored experiences</p>
         </div>
 
         <div class="topic-card">
-          <div class="topic-icon">🔄</div>
+          <div class="topic-icon">
+            <Icon name="lucide:repeat" />
+          </div>
           <h3>NDC & Distribution</h3>
           <p>Navigating the evolution of airline distribution channels</p>
         </div>
@@ -177,13 +182,17 @@ try {
         </div>
 
         <div class="topic-card">
-          <div class="topic-icon">📊</div>
+          <div class="topic-icon">
+            <Icon name="lucide:bar-chart-3" />
+          </div>
           <h3>Data & Analytics</h3>
           <p>Making data-driven decisions to optimize performance</p>
         </div>
 
         <div class="topic-card">
-          <div class="topic-icon">🚀</div>
+          <div class="topic-icon">
+            <Icon name="lucide:rocket" />
+          </div>
           <h3>Innovation</h3>
           <p>Emerging technologies shaping the future of travel</p>
         </div>

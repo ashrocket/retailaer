@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { Icon } from 'astro-icon/components';
 ---
 
 <BaseLayout
@@ -69,7 +70,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       <div class="values-grid">
         <div class="value-card">
-          <div class="value-icon">🎯</div>
+          <div class="value-icon">
+            <Icon name="lucide:target" />
+          </div>
           <h3 data-editable="value-1-title">Customer First</h3>
           <p data-editable="value-1-text">
             We design every feature with the end customer in mind, believing that better
@@ -78,7 +81,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
 
         <div class="value-card">
-          <div class="value-icon">🚀</div>
+          <div class="value-icon">
+            <Icon name="lucide:rocket" />
+          </div>
           <h3 data-editable="value-2-title">Innovation</h3>
           <p data-editable="value-2-text">
             We continuously push boundaries, exploring new technologies and approaches
@@ -87,7 +92,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
 
         <div class="value-card">
-          <div class="value-icon">🤝</div>
+          <div class="value-icon">
+            <Icon name="lucide:handshake" />
+          </div>
           <h3 data-editable="value-3-title">Partnership</h3>
           <p data-editable="value-3-text">
             We work alongside our clients as true partners, investing in their success

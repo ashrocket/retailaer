@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { Icon } from 'astro-icon/components';
 ---
 
 <BaseLayout
@@ -150,7 +151,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </div>
 
           <div class="info-card">
-            <div class="info-icon">🌍</div>
+            <div class="info-icon">
+              <Icon name="lucide:globe" />
+            </div>
             <h3 data-editable="info-global-title">Global Reach</h3>
             <p data-editable="info-global-text">
               We work with airlines and travel brands worldwide,
@@ -159,7 +162,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </div>
 
           <div class="info-card">
-            <div class="info-icon">🔒</div>
+            <div class="info-icon">
+              <Icon name="lucide:shield-check" />
+            </div>
             <h3 data-editable="info-privacy-title">Your Privacy</h3>
             <p data-editable="info-privacy-text">
               Your information is secure and will never be shared
