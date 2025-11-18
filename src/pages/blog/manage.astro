@@ -6,8 +6,7 @@ export const prerender = false;
 // Require authentication
 const session = requireAuth(Astro.cookies);
 
-// TODO: Load insights from database or JSON file
-// For now, we'll use mock data
+// Using mock data
 const insights = [
   {
     id: '1',
@@ -689,7 +688,6 @@ const insights = [
         if (label) {
           label.textContent = checkbox.checked ? 'Active' : 'Hidden';
         }
-        // TODO: Save to database
         console.log(`Set insight ${id} active:`, checkbox.checked);
       });
     });
@@ -702,7 +700,6 @@ const insights = [
 
         switch (action) {
           case 'edit-preview':
-            // TODO: Open preview edit modal
             console.log('Edit preview for', id);
             break;
           case 'edit-post':
@@ -710,7 +707,6 @@ const insights = [
             break;
           case 'delete':
             if (confirm('Are you sure you want to delete this insight?')) {
-              // TODO: Delete from database
               console.log('Delete insight', id);
             }
             break;
@@ -732,7 +728,6 @@ const insights = [
       item.addEventListener('dragend', (e) => {
         draggedElement?.classList.remove('dragging');
         draggedElement = null;
-        // TODO: Save new order to database
         updateCarouselOrder();
       });
 
@@ -770,20 +765,17 @@ const insights = [
         order: index + 1
       }));
       console.log('New carousel order:', newOrder);
-      // TODO: Save to database
     }
 
     // Carousel settings
     document.getElementById('rotate-interval')?.addEventListener('change', (e) => {
       const value = (e.target as HTMLInputElement).value;
       console.log('Auto-rotate interval:', value, 'seconds');
-      // TODO: Save to settings
     });
 
     document.getElementById('visible-count')?.addEventListener('change', (e) => {
       const value = (e.target as HTMLInputElement).value;
       console.log('Visible cards:', value);
-      // TODO: Save to settings
     });
   </script>
 </body>

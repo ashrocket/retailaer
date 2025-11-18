@@ -67,6 +67,15 @@ const iconMap: Record<string, string> = {
         ></button>
       ))}
     </div>
+    <button class="carousel-btn pause" aria-label="Pause auto-rotation" title="Pause">
+      <svg class="pause-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="6" y="4" width="4" height="16"/>
+        <rect x="14" y="4" width="4" height="16"/>
+      </svg>
+      <svg class="play-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+        <polygon points="5 3 19 12 5 21 5 3"/>
+      </svg>
+    </button>
     <button class="carousel-btn next" aria-label="Next">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M9 18l6-6-6-6"/>
@@ -280,11 +289,13 @@ const iconMap: Record<string, string> = {
     private cards: NodeListOf<HTMLElement>;
     private prevBtn: HTMLButtonElement;
     private nextBtn: HTMLButtonElement;
+    private pauseBtn: HTMLButtonElement;
     private indicators: NodeListOf<HTMLButtonElement>;
     private currentIndex: number = 0;
     private visibleCount: number;
     private autoRotateInterval: number;
     private autoRotateTimer: number | null = null;
+    private isPaused: boolean = false;
     private isDragging: boolean = false;
     private startX: number = 0;
     private currentTranslate: number = 0;
@@ -298,6 +309,7 @@ const iconMap: Record<string, string> = {
       const wrapper = this.carousel.closest('.insights-carousel-wrapper') as HTMLElement;
       this.prevBtn = wrapper.querySelector('.carousel-btn.prev') as HTMLButtonElement;
       this.nextBtn = wrapper.querySelector('.carousel-btn.next') as HTMLButtonElement;
+      this.pauseBtn = wrapper.querySelector('.carousel-btn.pause') as HTMLButtonElement;
       this.indicators = wrapper.querySelectorAll('.indicator');
 
       this.visibleCount = parseInt(this.carousel.dataset.visible || '3');
@@ -310,6 +322,7 @@ const iconMap: Record<string, string> = {
       // Button controls
       this.prevBtn?.addEventListener('click', () => this.prev());
       this.nextBtn?.addEventListener('click', () => this.next());
+      this.pauseBtn?.addEventListener('click', () => this.togglePause());
 
       // Indicator controls
       this.indicators.forEach((indicator, index) => {
@@ -333,9 +346,13 @@ const iconMap: Record<string, string> = {
       // Start auto-rotate
       this.startAutoRotate();
 
-      // Pause on hover
-      this.carousel.addEventListener('mouseenter', () => this.stopAutoRotate());
-      this.carousel.addEventListener('mouseleave', () => this.startAutoRotate());
+      // Pause on hover (only if not manually paused)
+      this.carousel.addEventListener('mouseenter', () => {
+        if (!this.isPaused) this.stopAutoRotate();
+      });
+      this.carousel.addEventListener('mouseleave', () => {
+        if (!this.isPaused) this.startAutoRotate();
+      });
 
       // Update on resize
       window.addEventListener('resize', () => this.updatePosition());
@@ -374,7 +391,28 @@ const iconMap: Record<string, string> = {
         this.updatePosition();
       }
 
-      this.startAutoRotate();
+      if (!this.isPaused) this.startAutoRotate();
+    }
+
+    togglePause() {
+      this.isPaused = !this.isPaused;
+
+      const pauseIcon = this.pauseBtn.querySelector('.pause-icon') as SVGElement;
+      const playIcon = this.pauseBtn.querySelector('.play-icon') as SVGElement;
+
+      if (this.isPaused) {
+        this.stopAutoRotate();
+        pauseIcon.style.display = 'none';
+        playIcon.style.display = 'block';
+        this.pauseBtn.setAttribute('aria-label', 'Play auto-rotation');
+        this.pauseBtn.setAttribute('title', 'Play');
+      } else {
+        this.startAutoRotate();
+        pauseIcon.style.display = 'block';
+        playIcon.style.display = 'none';
+        this.pauseBtn.setAttribute('aria-label', 'Pause auto-rotation');
+        this.pauseBtn.setAttribute('title', 'Pause');
+      }
     }
 
     getPositionX(e: MouseEvent | TouchEvent): number {
