@@ -1,0 +1,63 @@
+{
+  "title": "Retailaer - November Requirements Desktop Review",
+  "date": "2025-11-18",
+  "viewport": "1920x1080",
+  "screenshots": [
+    {
+      "filename": "desktop-company-full.png",
+      "label": "company full"
+    },
+    {
+      "filename": "desktop-company-values.png",
+      "label": "company values"
+    },
+    {
+      "filename": "desktop-contact-full.png",
+      "label": "contact full"
+    },
+    {
+      "filename": "desktop-footer.png",
+      "label": "footer"
+    },
+    {
+      "filename": "desktop-homepage-features.png",
+      "label": "homepage features"
+    },
+    {
+      "filename": "desktop-homepage-full.png",
+      "label": "homepage full"
+    },
+    {
+      "filename": "desktop-homepage-hero.png",
+      "label": "homepage hero"
+    },
+    {
+      "filename": "desktop-homepage-how-it-works.png",
+      "label": "homepage how it works"
+    },
+    {
+      "filename": "desktop-homepage-insights.png",
+      "label": "homepage insights"
+    },
+    {
+      "filename": "desktop-insights-full.png",
+      "label": "insights full"
+    },
+    {
+      "filename": "desktop-navigation.png",
+      "label": "navigation"
+    },
+    {
+      "filename": "desktop-solutions-distribution.png",
+      "label": "solutions distribution"
+    },
+    {
+      "filename": "desktop-solutions-full.png",
+      "label": "solutions full"
+    },
+    {
+      "filename": "desktop-solutions-pillars.png",
+      "label": "solutions pillars"
+    }
+  ]
+}
