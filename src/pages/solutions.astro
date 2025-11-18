@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { Icon } from 'astro-icon/components';
 ---
 
 <BaseLayout
@@ -30,7 +31,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       <div class="pillars-grid">
         <div class="pillar-card">
-          <div class="pillar-icon">✈️</div>
+          <div class="pillar-icon">
+            <Icon name="lucide:sparkles" />
+          </div>
           <h3 data-editable="pillar-1-title">Dynamic Offers</h3>
           <p data-editable="pillar-1-text">
             Create personalized offers in real-time based on customer context, preferences, and behavior.
@@ -45,7 +48,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
 
         <div class="pillar-card">
-          <div class="pillar-icon">📋</div>
+          <div class="pillar-icon">
+            <Icon name="lucide:clipboard-list" />
+          </div>
           <h3 data-editable="pillar-2-title">Order Simplification</h3>
           <p data-editable="pillar-2-text">
             Streamline order management with a modern, customer-centric approach that replaces
@@ -60,7 +65,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
 
         <div class="pillar-card">
-          <div class="pillar-icon">💳</div>
+          <div class="pillar-icon">
+            <Icon name="lucide:credit-card" />
+          </div>
           <h3 data-editable="pillar-3-title">Frictionless Payments</h3>
           <p data-editable="pillar-3-text">
             Handle payments to payouts with ease. Secure, reliable, and fully compliant
@@ -75,7 +82,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
 
         <div class="pillar-card">
-          <div class="pillar-icon">🎯</div>
+          <div class="pillar-icon">
+            <Icon name="lucide:users-round" />
+          </div>
           <h3 data-editable="pillar-4-title">Customer-First</h3>
           <p data-editable="pillar-4-text">
             Put customers at the center with unified profiles, personalized experiences, and
@@ -105,55 +114,73 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       <div class="distribution-grid">
         <div class="distribution-card">
-          <div class="distribution-icon">🌐</div>
+          <div class="distribution-icon">
+            <Icon name="lucide:globe" />
+          </div>
           <h4 data-editable="distribution-1-title">Airline Website</h4>
           <p data-editable="distribution-1-text">Direct-to-consumer bookings with personalized offers and seamless checkout.</p>
         </div>
 
         <div class="distribution-card">
-          <div class="distribution-icon">📱</div>
+          <div class="distribution-icon">
+            <Icon name="lucide:smartphone" />
+          </div>
           <h4 data-editable="distribution-2-title">Mobile Apps</h4>
           <p data-editable="distribution-2-text">Native iOS and Android integration for on-the-go booking and servicing.</p>
         </div>
 
         <div class="distribution-card">
-          <div class="distribution-icon">🏢</div>
+          <div class="distribution-icon">
+            <Icon name="lucide:plane" />
+          </div>
           <h4 data-editable="distribution-3-title">NDC Channels</h4>
           <p data-editable="distribution-3-text">IATA NDC-compliant distribution to travel agencies and aggregators.</p>
         </div>
 
         <div class="distribution-card">
-          <div class="distribution-icon">💼</div>
+          <div class="distribution-icon">
+            <Icon name="lucide:briefcase" />
+          </div>
           <h4 data-editable="distribution-4-title">Corporate Portals</h4>
           <p data-editable="distribution-4-text">B2B booking tools for corporate travel managers and TMCs.</p>
         </div>
 
         <div class="distribution-card">
-          <div class="distribution-icon">📞</div>
+          <div class="distribution-icon">
+            <Icon name="lucide:phone" />
+          </div>
           <h4 data-editable="distribution-5-title">Call Centers</h4>
           <p data-editable="distribution-5-text">Agent-assisted booking with full access to offers and order management.</p>
         </div>
 
         <div class="distribution-card">
-          <div class="distribution-icon">🏪</div>
+          <div class="distribution-icon">
+            <Icon name="lucide:monitor" />
+          </div>
           <h4 data-editable="distribution-6-title">Airport Kiosks</h4>
           <p data-editable="distribution-6-text">Self-service booking and ancillary sales at airport touchpoints.</p>
         </div>
 
         <div class="distribution-card">
-          <div class="distribution-icon">🤝</div>
+          <div class="distribution-icon">
+            <Icon name="lucide:handshake" />
+          </div>
           <h4 data-editable="distribution-7-title">Travel Partners</h4>
           <p data-editable="distribution-7-text">API access for OTAs, meta-search, and travel technology partners.</p>
         </div>
 
         <div class="distribution-card">
-          <div class="distribution-icon">🔗</div>
+          <div class="distribution-icon">
+            <Icon name="lucide:network" />
+          </div>
           <h4 data-editable="distribution-8-title">GDS Networks</h4>
           <p data-editable="distribution-8-text">Traditional GDS connectivity with enhanced content and pricing.</p>
         </div>
 
         <div class="distribution-card">
-          <div class="distribution-icon">🚀</div>
+          <div class="distribution-icon">
+            <Icon name="lucide:rocket" />
+          </div>
           <h4 data-editable="distribution-9-title">API Direct</h4>
           <p data-editable="distribution-9-text">Custom integrations for enterprise partners and white-label solutions.</p>
         </div>
@@ -174,7 +201,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       <div class="features-grid">
         <div class="feature-card">
-          <div class="feature-icon">🔌</div>
+          <div class="feature-icon">
+            <Icon name="lucide:plug" />
+          </div>
           <h4 data-editable="travel-feature-1-title">API-First Architecture</h4>
           <p data-editable="travel-feature-1-text">
             Modern REST APIs with comprehensive documentation make integration
@@ -183,7 +212,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
 
         <div class="feature-card">
-          <div class="feature-icon">🔄</div>
+          <div class="feature-icon">
+            <Icon name="lucide:refresh-cw" />
+          </div>
           <h4 data-editable="travel-feature-2-title">NDC Ready</h4>
           <p data-editable="travel-feature-2-text">
             Full support for IATA NDC standards, enabling modern distribution
@@ -192,7 +223,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
 
         <div class="feature-card">
-          <div class="feature-icon">🛡️</div>
+          <div class="feature-icon">
+            <Icon name="lucide:shield-check" />
+          </div>
           <h4 data-editable="travel-feature-3-title">Enterprise Security</h4>
           <p data-editable="travel-feature-3-text">
             Bank-grade security, compliance certifications, and 99.9% uptime SLA

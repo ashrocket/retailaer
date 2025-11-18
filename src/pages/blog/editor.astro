@@ -144,11 +144,11 @@ const session = requireAuth(Astro.cookies);
           <div class="form-group">
             <label for="preview-icon">Icon</label>
             <select id="preview-icon">
-              <option value="plane">✈️ Plane</option>
-              <option value="document">📄 Document</option>
-              <option value="chart">📊 Chart</option>
-              <option value="globe">🌐 Globe</option>
-              <option value="rocket">🚀 Rocket</option>
+              <option value="plane">Plane</option>
+              <option value="document">Document</option>
+              <option value="chart">Chart</option>
+              <option value="globe">Globe</option>
+              <option value="rocket">Rocket</option>
             </select>
           </div>
 
@@ -169,7 +169,11 @@ const session = requireAuth(Astro.cookies);
         <div class="live-preview-section">
           <label>Live Preview</label>
           <div class="carousel-card-preview" id="carousel-card-preview">
-            <div class="preview-icon" id="preview-icon-display">✈️</div>
+            <div class="preview-icon" id="preview-icon-display">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>
+              </svg>
+            </div>
             <div class="preview-badge" id="preview-badge-display">ARTICLE</div>
             <h3 id="preview-title-display">Your article title</h3>
             <p id="preview-excerpt-display">Your preview excerpt will appear here...</p>
@@ -578,8 +582,15 @@ const session = requireAuth(Astro.cookies);
     }
 
     .preview-icon {
-      font-size: 32px;
+      width: 48px;
+      height: 48px;
       margin-bottom: 12px;
+      color: rgba(255, 255, 255, 0.95);
+    }
+
+    .preview-icon svg {
+      width: 100%;
+      height: 100%;
     }
 
     .preview-badge {
@@ -1067,11 +1078,11 @@ const session = requireAuth(Astro.cookies);
 
     // Icon mapping
     const iconMap: Record<string, string> = {
-      'plane': '✈️',
-      'document': '📄',
-      'chart': '📊',
-      'globe': '🌐',
-      'rocket': '🚀'
+      'plane': `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>`,
+      'document': `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>`,
+      'chart': `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>`,
+      'globe': `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
+      'rocket': `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>`
     };
 
     // Update carousel preview live
@@ -1108,7 +1119,7 @@ const session = requireAuth(Astro.cookies);
 
       // Update icon
       if (previewIconDisplay && previewIconSelect) {
-        previewIconDisplay.textContent = iconMap[previewIconSelect.value] || '✈️';
+        previewIconDisplay.innerHTML = iconMap[previewIconSelect.value] || iconMap['plane'];
       }
 
       // Update gradient

@@ -1,4 +1,6 @@
 ---
+import { Icon } from 'astro-icon/components';
+
 export interface InsightCard {
   id: string;
   slug: string;
@@ -21,13 +23,13 @@ const {
   visibleCount = 3
 } = Astro.props;
 
-// Icon mapping
+// Icon mapping - maps database icon names to Lucide icon names
 const iconMap: Record<string, string> = {
-  'plane': '✈️',
-  'document': '📄',
-  'chart': '📊',
-  'globe': '🌐',
-  'rocket': '🚀'
+  'plane': 'lucide:plane',
+  'document': 'lucide:file-text',
+  'chart': 'lucide:bar-chart-3',
+  'globe': 'lucide:globe',
+  'rocket': 'lucide:rocket'
 };
 ---
 
@@ -41,7 +43,9 @@ const iconMap: Record<string, string> = {
           style={`background: ${insight.backgroundGradient}`}
         >
           <div class="insight-image">
-            <span class="insight-icon">{iconMap[insight.icon] || '✈️'}</span>
+            <span class="insight-icon">
+              <Icon name={iconMap[insight.icon] || 'lucide:plane'} />
+            </span>
           </div>
           <div class="insight-meta">{insight.meta}</div>
           <h3 class="insight-title">{insight.title}</h3>
@@ -132,9 +136,15 @@ const iconMap: Record<string, string> = {
   }
 
   .insight-icon {
-    font-size: 48px;
-    line-height: 1;
     display: block;
+    width: 48px;
+    height: 48px;
+    color: rgba(255, 255, 255, 0.95);
+  }
+
+  .insight-icon :global(svg) {
+    width: 100%;
+    height: 100%;
   }
 
   .insight-meta {
