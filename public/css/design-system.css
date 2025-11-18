@@ -282,6 +282,13 @@ a:hover {
   font-weight: var(--font-bold);
   color: var(--color-white);
   text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-logo {
+  height: 32px;
+  width: auto;
 }
 
 .navbar-nav {

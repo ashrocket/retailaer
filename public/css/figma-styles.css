@@ -856,9 +856,8 @@ ul {
 }
 
 .footer-logo {
-    font-size: var(--font-size-2xl);
-    font-weight: 400;
-    color: var(--color-bg-white);
+    height: 40px;
+    width: auto;
     margin-bottom: var(--spacing-md);
 }
 
