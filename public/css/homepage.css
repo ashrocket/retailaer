@@ -57,9 +57,9 @@
 }
 
 .airplane-icon {
-  width: 300px;
-  height: 300px;
-  opacity: 0.25;
+  width: 220px;
+  height: 220px;
+  opacity: 0.3;
   filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.2));
   animation: float 6s ease-in-out infinite;
 }
