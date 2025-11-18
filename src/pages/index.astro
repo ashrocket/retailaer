@@ -75,12 +75,12 @@ const insights = [
         </p>
         <div class="hero-cta">
           <a href="/contact" class="btn btn-primary" data-editable="hero-cta-demo">Get in Touch</a>
-          <a href="#why-retailaer" class="hero-nav-link scroll-link" data-editable="hero-cta-learn">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path d="M9 18l6-6-6-6"/>
+          <button class="hero-trail-link" data-editable="hero-cta-learn">
+            <span class="trail-text">Why Leading Airlines Choose Us</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="trail-arrow" aria-hidden="true">
+              <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-            <span>Why Leading Airlines Choose Us</span>
-          </a>
+          </button>
         </div>
       </div>
       <div class="hero-visual">
@@ -326,39 +326,89 @@ const insights = [
   </button>
 
   <style>
-    /* Hero Nav Link */
-    .hero-nav-link {
+    /* Hero Trail Link - Slide Animation */
+    .hero-trail-link {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      color: var(--color-primary);
-      font-weight: 500;
-      padding: 0.75rem 1rem;
-      border-radius: 8px;
-      transition: all 0.3s ease;
-      background: transparent;
+      color: #0a1f1f;
+      font-weight: 600;
+      font-size: 1.05rem;
+      padding: 0.5rem 0;
+      position: relative;
+      text-decoration: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
     }
 
-    .hero-nav-link:hover {
-      background: rgba(10, 92, 92, 0.05);
+    .hero-trail-link .trail-text {
+      transition: all 0.3s ease;
+    }
+
+    .hero-trail-link .trail-arrow {
+      color: #0a5c5c;
+    }
+
+    .hero-trail-link:hover {
       gap: 0.75rem;
     }
 
-    .hero-nav-link svg {
-      transition: transform 0.3s ease;
+    .hero-trail-link:hover .trail-text {
+      text-decoration: underline;
+      text-decoration-color: #0a5c5c;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 4px;
     }
 
-    .hero-nav-link:hover svg {
+    .hero-trail-link:hover .trail-arrow {
       transform: translateX(4px);
     }
 
+    /* Slide animation that auto-reverses */
+    @keyframes slideOut {
+      0% {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      50% {
+        transform: translateX(80px);
+        opacity: 0.5;
+      }
+      100% {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideOutArrow {
+      0% {
+        transform: translateX(0);
+      }
+      50% {
+        transform: translateX(120px);
+      }
+      100% {
+        transform: translateX(0);
+      }
+    }
+
+    .hero-trail-link.animating {
+      animation: slideOut 2.1s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .hero-trail-link.animating .trail-arrow {
+      animation: slideOutArrow 2.1s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
     @media (prefers-reduced-motion: reduce) {
-      .hero-nav-link,
-      .hero-nav-link svg {
-        transition: none;
+      .hero-trail-link.animating,
+      .hero-trail-link.animating .trail-arrow {
+        animation: none;
       }
 
-      .hero-nav-link:hover svg {
+      .hero-trail-link:hover .trail-arrow {
         transform: none;
       }
     }
@@ -462,6 +512,56 @@ const insights = [
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const scrollBehavior = prefersReducedMotion ? 'auto' : 'smooth';
 
+      // Hero trail link animation
+      const heroTrailLink = document.querySelector('.hero-trail-link');
+      if (heroTrailLink) {
+        heroTrailLink.addEventListener('click', () => {
+          heroTrailLink.classList.add('animating');
+
+          // Start scrolling at 50% (1.05s) when animation begins sliding back
+          setTimeout(() => {
+            const targetElement = document.querySelector('#why-retailaer');
+            if (targetElement && !prefersReducedMotion) {
+              const headerOffset = 80;
+              const elementPosition = targetElement.getBoundingClientRect().top;
+              const offsetPosition = elementPosition + window.scrollY - headerOffset;
+
+              // Custom smooth scroll with linear speed to match slide-back duration
+              const startPosition = window.scrollY;
+              const distance = offsetPosition - startPosition;
+              const duration = 1050; // Match the slide-back duration (50% of 2.1s)
+              let startTime = null;
+
+              function animateScroll(currentTime) {
+                if (startTime === null) startTime = currentTime;
+                const timeElapsed = currentTime - startTime;
+                const progress = Math.min(timeElapsed / duration, 1);
+
+                // Gentle ease-out to avoid jarring stop in Chrome/Opera
+                const easeOutQuad = 1 - Math.pow(1 - progress, 2);
+                window.scrollTo(0, startPosition + (distance * easeOutQuad));
+
+                if (timeElapsed < duration) {
+                  requestAnimationFrame(animateScroll);
+                }
+              }
+
+              requestAnimationFrame(animateScroll);
+            } else if (targetElement) {
+              // Fallback for reduced motion
+              const headerOffset = 80;
+              const elementPosition = targetElement.getBoundingClientRect().top;
+              const offsetPosition = elementPosition + window.scrollY - headerOffset;
+              window.scrollTo(0, offsetPosition);
+            }
+          }, 1050); // 50% of 2100ms animation
+
+          setTimeout(() => {
+            heroTrailLink.classList.remove('animating');
+          }, 2100); // Match animation duration
+        });
+      }
+
       // Handle scroll links
       document.querySelectorAll('.scroll-link').forEach(link => {
         link.addEventListener('click', (e) => {
@@ -474,10 +574,15 @@ const insights = [
             const elementPosition = targetElement.getBoundingClientRect().top;
             const offsetPosition = elementPosition + window.scrollY - headerOffset;
 
-            window.scrollTo({
-              top: offsetPosition,
-              behavior: scrollBehavior
-            });
+            // Special handling for hero trail link - delay scroll until animation completes
+            const delay = link.classList.contains('hero-trail-link') ? 10000 : 0;
+
+            setTimeout(() => {
+              window.scrollTo({
+                top: offsetPosition,
+                behavior: scrollBehavior
+              });
+            }, delay);
           }
         });
       });
