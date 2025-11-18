@@ -48,3 +48,9 @@ temp/
 .wrangler/
 wrangler.toml.local
 .dev.vars
+
+# Playwright
+playwright-report/
+test-results/
+screenshots/
+design-review-output/
