@@ -232,6 +232,35 @@
   margin-bottom: var(--space-xl);
 }
 
+.cta-benefits {
+  list-style: none;
+  padding: 0;
+  margin: var(--space-xl) 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-md);
+  text-align: left;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cta-benefits li {
+  color: var(--color-white);
+  font-size: var(--text-base);
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.cta-benefits li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--color-yellow-primary);
+  font-weight: var(--font-bold);
+  font-size: 1.2rem;
+}
+
 .cta-buttons {
   display: flex;
   gap: var(--space-sm);
@@ -433,6 +462,11 @@
 
   .cta-content p {
     font-size: var(--text-base);
+  }
+
+  .cta-benefits {
+    grid-template-columns: 1fr;
+    gap: var(--space-sm);
   }
 
   .cta-buttons {
