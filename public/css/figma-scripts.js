@@ -10,7 +10,7 @@
      */
     function initMobileMenu() {
         const menuToggle = document.querySelector('.mobile-menu-toggle');
-        const navMenu = document.querySelector('.nav-menu');
+        const navMenu = document.querySelector('.navbar-nav');
 
         if (!menuToggle || !navMenu) return;
 
@@ -24,7 +24,7 @@
         });
 
         // Close menu when clicking on a link
-        const navLinks = navMenu.querySelectorAll('.nav-link');
+        const navLinks = navMenu.querySelectorAll('a');
         navLinks.forEach(link => {
             link.addEventListener('click', function() {
                 menuToggle.classList.remove('active');
