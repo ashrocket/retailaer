@@ -2,6 +2,7 @@
 import FeedbackWidget from '../components/FeedbackWidget.astro';
 import CookieConsent from '../components/CookieConsent.astro';
 import EditMode from '../components/EditMode.astro';
+import ThemeSwitcher from '../components/ThemeSwitcher.astro';
 
 interface Props {
   title: string;
@@ -10,10 +11,38 @@ interface Props {
 }
 
 const { title, description = "Customer-first airline retailing—dynamic offers, simplified orders, and payments that don't get in the way.", filePath } = Astro.props;
+
+// Theme mapping
+const themeMap: Record<string, string> = {
+  '0': 'current',
+  '1': 'design-1',
+  '2': 'design-2',
+};
+
+// Get theme from middleware locals first, fallback to URL parsing
+let theme = Astro.locals.theme || '';
+let themePrefix = Astro.locals.themePrefix || '';
+
+// Fallback: Parse theme from original request URL if locals not set
+if (!theme || theme === 'current') {
+  // Try to get theme from the original URL (before any rewrites)
+  const originalUrl = Astro.request.headers.get('x-original-url') || Astro.url.pathname;
+  const pathParts = originalUrl.split('/').filter(Boolean);
+
+  if (pathParts.length > 0 && themeMap[pathParts[0]]) {
+    themePrefix = pathParts[0];
+    theme = themeMap[themePrefix];
+  } else {
+    theme = 'current';
+    themePrefix = '';
+  }
+}
+
+const basePath = themePrefix ? `/${themePrefix}` : '';
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme={theme}>
 <head>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-206SDTT0S9"></script>
@@ -35,18 +64,22 @@ const { title, description = "Customer-first airline retailing—dynamic offers,
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Styles -->
+  <link rel="stylesheet" href="/css/themes.css">
   <link rel="stylesheet" href="/css/design-system.css">
   <link rel="stylesheet" href="/css/figma-styles.css">
   <link rel="stylesheet" href="/css/homepage.css">
 </head>
 <body>
+  <!-- Theme Switcher -->
+  <ThemeSwitcher />
+
   <!-- Edit Mode Toolbar -->
   {filePath && <EditMode filePath={filePath} />}
 
   <!-- Navigation -->
   <nav class="navbar">
     <div class="container">
-      <a href="/" class="navbar-brand">
+      <a href={`${basePath}/`} class="navbar-brand">
         <img src="/retailaer-logo-white.svg" alt="Retailaer" class="navbar-logo" />
       </a>
 
@@ -58,11 +91,11 @@ const { title, description = "Customer-first airline retailing—dynamic offers,
       </button>
 
       <ul class="navbar-nav">
-        <li><a href="/solutions">Solutions</a></li>
-        <li><a href="/company">Company</a></li>
-        <li><a href="/insights">Insights</a></li>
-        <li><a href="/contact">Contact</a></li>
-        <li><a href="/contact" class="btn btn-primary">Get in Touch</a></li>
+        <li><a href={`${basePath}/solutions`}>Solutions</a></li>
+        <li><a href={`${basePath}/company`}>Company</a></li>
+        <li><a href={`${basePath}/insights`}>Insights</a></li>
+        <li><a href={`${basePath}/contact`}>Contact</a></li>
+        <li><a href={`${basePath}/contact`} class="btn btn-primary">Get in Touch</a></li>
       </ul>
     </div>
   </nav>
@@ -80,25 +113,25 @@ const { title, description = "Customer-first airline retailing—dynamic offers,
         <div class="footer-col">
           <h5>Connect Retail Distribution</h5>
           <ul>
-            <li><a href="/solutions">Platform Overview</a></li>
-            <li><a href="/solutions#distribution">Connect Retail Distribution</a></li>
-            <li><a href="/solutions#travel-brands">For Travel Brands</a></li>
+            <li><a href={`${basePath}/solutions`}>Platform Overview</a></li>
+            <li><a href={`${basePath}/solutions#distribution`}>Connect Retail Distribution</a></li>
+            <li><a href={`${basePath}/solutions#travel-brands`}>For Travel Brands</a></li>
           </ul>
         </div>
         <div class="footer-col">
           <h5>Company</h5>
           <ul>
-            <li><a href="/company">About Us</a></li>
-            <li><a href="/insights">Insights</a></li>
-            <li><a href="/contact">Contact</a></li>
+            <li><a href={`${basePath}/company`}>About Us</a></li>
+            <li><a href={`${basePath}/insights`}>Insights</a></li>
+            <li><a href={`${basePath}/contact`}>Contact</a></li>
           </ul>
         </div>
         <div class="footer-col">
           <h5>Legal</h5>
           <ul>
-            <li><a href="/privacy">Privacy Policy</a></li>
-            <li><a href="/terms">Terms of Service</a></li>
-            <li><a href="/cookies">Cookie Policy</a></li>
+            <li><a href={`${basePath}/privacy`}>Privacy Policy</a></li>
+            <li><a href={`${basePath}/terms`}>Terms of Service</a></li>
+            <li><a href={`${basePath}/cookies`}>Cookie Policy</a></li>
           </ul>
         </div>
         <div class="footer-col">

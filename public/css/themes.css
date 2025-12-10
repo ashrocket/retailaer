@@ -1,0 +1,326 @@
+/**
+ * RetailAer Theme System
+ * Semantic theme variables with multiple brand design options
+ */
+
+/* ============================================
+   THEME: CURRENT (Default - Teal/Yellow)
+   The original RetailAer brand colors
+   ============================================ */
+
+:root,
+[data-theme="current"] {
+  /* Primary Colors */
+  --theme-primary: #0D5C63;
+  --theme-primary-dark: #0A4D52;
+  --theme-primary-light: #5DA9A9;
+
+  /* Accent Colors */
+  --theme-accent: #FDB913;
+  --theme-accent-hover: #E5A610;
+
+  /* Backgrounds */
+  --theme-background: #FFFFFF;
+  --theme-surface: #F8F9FA;
+  --theme-surface-alt: #E9ECEF;
+
+  /* Text */
+  --theme-text-primary: #1a202c;
+  --theme-text-secondary: #374151;
+  --theme-text-on-primary: #FFFFFF;
+  --theme-text-on-accent: #0A4D52;
+
+  /* Gradients */
+  --theme-gradient-hero: linear-gradient(135deg, #0A4D52 0%, #5DA9A9 100%);
+  --theme-gradient-primary: linear-gradient(180deg, #0D5C63 0%, #0A4D52 100%);
+  --theme-gradient-accent: linear-gradient(135deg, #FDB913 0%, #E5A610 100%);
+  --theme-gradient-accent-hover: linear-gradient(135deg, #FFD54F 0%, #FDB913 100%);
+
+  /* Borders & Shadows */
+  --theme-border: rgba(13, 92, 99, 0.1);
+  --theme-shadow-color: rgba(0, 0, 0, 0.1);
+  --theme-accent-shadow: rgba(253, 185, 19, 0.3);
+}
+
+/* ============================================
+   THEME: BRAND DESIGN 1 (Corporate Blue/Orange)
+   A professional corporate palette
+   ============================================ */
+
+[data-theme="design-1"] {
+  /* Primary Colors */
+  --theme-primary: #1E3A5F;
+  --theme-primary-dark: #152C4A;
+  --theme-primary-light: #4A7BA7;
+
+  /* Accent Colors */
+  --theme-accent: #FF6B35;
+  --theme-accent-hover: #E55A2B;
+
+  /* Backgrounds */
+  --theme-background: #FAFBFC;
+  --theme-surface: #F0F4F8;
+  --theme-surface-alt: #E2E8F0;
+
+  /* Text */
+  --theme-text-primary: #1A202C;
+  --theme-text-secondary: #4A5568;
+  --theme-text-on-primary: #FFFFFF;
+  --theme-text-on-accent: #FFFFFF;
+
+  /* Gradients */
+  --theme-gradient-hero: linear-gradient(135deg, #152C4A 0%, #4A7BA7 100%);
+  --theme-gradient-primary: linear-gradient(180deg, #1E3A5F 0%, #152C4A 100%);
+  --theme-gradient-accent: linear-gradient(135deg, #FF6B35 0%, #E55A2B 100%);
+  --theme-gradient-accent-hover: linear-gradient(135deg, #FF8559 0%, #FF6B35 100%);
+
+  /* Borders & Shadows */
+  --theme-border: rgba(30, 58, 95, 0.1);
+  --theme-shadow-color: rgba(30, 58, 95, 0.12);
+  --theme-accent-shadow: rgba(255, 107, 53, 0.3);
+}
+
+/* ============================================
+   THEME: BRAND DESIGN 2 (Modern Purple/Emerald)
+   A fresh, modern tech palette
+   ============================================ */
+
+[data-theme="design-2"] {
+  /* Primary Colors */
+  --theme-primary: #5B21B6;
+  --theme-primary-dark: #4C1D95;
+  --theme-primary-light: #8B5CF6;
+
+  /* Accent Colors */
+  --theme-accent: #10B981;
+  --theme-accent-hover: #059669;
+
+  /* Backgrounds */
+  --theme-background: #FDFCFF;
+  --theme-surface: #F5F3FF;
+  --theme-surface-alt: #EDE9FE;
+
+  /* Text */
+  --theme-text-primary: #1F2937;
+  --theme-text-secondary: #6B7280;
+  --theme-text-on-primary: #FFFFFF;
+  --theme-text-on-accent: #FFFFFF;
+
+  /* Gradients */
+  --theme-gradient-hero: linear-gradient(135deg, #4C1D95 0%, #8B5CF6 100%);
+  --theme-gradient-primary: linear-gradient(180deg, #5B21B6 0%, #4C1D95 100%);
+  --theme-gradient-accent: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  --theme-gradient-accent-hover: linear-gradient(135deg, #34D399 0%, #10B981 100%);
+
+  /* Borders & Shadows */
+  --theme-border: rgba(91, 33, 182, 0.1);
+  --theme-shadow-color: rgba(91, 33, 182, 0.12);
+  --theme-accent-shadow: rgba(16, 185, 129, 0.3);
+}
+
+/* ============================================
+   THEME SWITCHER STYLES
+   ============================================ */
+
+.theme-switcher {
+  position: fixed;
+  top: 80px;
+  left: 16px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--theme-background);
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px var(--theme-shadow-color), 0 0 0 1px var(--theme-border);
+  font-family: var(--font-primary, 'Inter', sans-serif);
+  font-size: 11px;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.theme-switcher:hover {
+  box-shadow: 0 6px 20px var(--theme-shadow-color), 0 0 0 1px var(--theme-border);
+}
+
+.theme-switcher-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--theme-text-secondary);
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.theme-switcher-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--theme-text-primary);
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.theme-switcher-btn:hover {
+  background: var(--theme-surface);
+}
+
+.theme-switcher-btn.active {
+  background: var(--theme-primary);
+  color: var(--theme-text-on-primary);
+}
+
+.theme-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Swatch colors for each theme */
+.theme-swatch-current {
+  background: linear-gradient(135deg, #0D5C63 50%, #FDB913 50%);
+}
+
+.theme-swatch-design-1 {
+  background: linear-gradient(135deg, #1E3A5F 50%, #FF6B35 50%);
+}
+
+.theme-swatch-design-2 {
+  background: linear-gradient(135deg, #5B21B6 50%, #10B981 50%);
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .theme-switcher {
+    top: 70px;
+    left: 8px;
+    padding: 8px;
+    font-size: 10px;
+  }
+
+  .theme-switcher-btn {
+    padding: 5px 8px;
+    font-size: 10px;
+  }
+
+  .theme-swatch {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+/* Collapse on small screens - show just swatches */
+@media (max-width: 480px) {
+  .theme-switcher {
+    flex-direction: row;
+    gap: 4px;
+    padding: 6px;
+  }
+
+  .theme-switcher-label {
+    display: none;
+  }
+
+  .theme-switcher-btn {
+    padding: 4px;
+  }
+
+  .theme-switcher-btn span:not(.theme-swatch) {
+    display: none;
+  }
+}
+
+/* ============================================
+   VISITED LINK FIXES
+   Prevent browser default purple visited links
+   ============================================ */
+
+/* Global reset - prevent purple visited links everywhere */
+a:visited {
+  color: inherit;
+}
+
+/* Navigation links - keep white */
+.navbar a,
+.navbar a:visited,
+.navbar-nav a,
+.navbar-nav a:visited,
+.nav-link,
+.nav-link:visited,
+.nav-menu a,
+.nav-menu a:visited {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.navbar a:hover,
+.navbar-nav a:hover,
+.nav-link:hover,
+.nav-menu a:hover {
+  color: var(--theme-accent) !important;
+}
+
+/* Primary button - keep accent color text */
+.btn-primary,
+.btn-primary:visited {
+  color: var(--theme-text-on-accent) !important;
+}
+
+/* Secondary/outline buttons */
+.btn-secondary,
+.btn-secondary:visited {
+  color: var(--theme-text-on-primary) !important;
+}
+
+/* Footer links - keep white/light */
+.footer a,
+.footer a:visited,
+.footer-links a,
+.footer-links a:visited,
+.footer-col a,
+.footer-col a:visited {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.footer a:hover,
+.footer-links a:hover,
+.footer-col a:hover {
+  color: var(--theme-accent) !important;
+}
+
+/* Hero section links */
+.hero a,
+.hero a:visited,
+.hero-content a,
+.hero-content a:visited,
+.hero-section a,
+.hero-section a:visited {
+  color: inherit !important;
+}
+
+/* CTA section links */
+.cta-section a,
+.cta-section a:visited {
+  color: inherit !important;
+}
+
+/* General content links - use primary color */
+main a:not(.btn),
+main a:not(.btn):visited,
+.section a:not(.btn),
+.section a:not(.btn):visited {
+  color: var(--theme-primary);
+}
+
+main a:not(.btn):hover,
+.section a:not(.btn):hover {
+  color: var(--theme-primary-light);
+}

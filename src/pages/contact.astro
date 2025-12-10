@@ -221,7 +221,7 @@ import { Icon } from 'astro-icon/components';
 
   <style>
     .page-hero {
-      background: linear-gradient(135deg, #0a5c5c 0%, #084a4f 100%);
+      background: var(--theme-gradient-hero);
       padding: 120px 0 80px;
       text-align: center;
       color: white;
@@ -232,6 +232,7 @@ import { Icon } from 'astro-icon/components';
       font-weight: 700;
       margin-bottom: 1rem;
       letter-spacing: -1px;
+      color: white;
     }
 
     .page-subtitle {
@@ -240,6 +241,7 @@ import { Icon } from 'astro-icon/components';
       line-height: 1.6;
       max-width: 700px;
       margin: 0 auto;
+      color: rgba(255, 255, 255, 0.9);
     }
 
     .section {
@@ -247,7 +249,7 @@ import { Icon } from 'astro-icon/components';
     }
 
     .section-alt {
-      background: #f0f7f7;
+      background: var(--theme-surface);
     }
 
     .section-header {
@@ -258,7 +260,7 @@ import { Icon } from 'astro-icon/components';
     .section-header h2 {
       font-size: 2.5rem;
       font-weight: 700;
-      color: #0a1f1f;
+      color: var(--theme-text-primary);
     }
 
     .contact-layout {
@@ -272,12 +274,12 @@ import { Icon } from 'astro-icon/components';
     .contact-form-container h2 {
       font-size: 2rem;
       font-weight: 700;
-      color: #0a1f1f;
+      color: var(--theme-text-primary);
       margin-bottom: 0.75rem;
     }
 
     .form-intro {
-      color: #5a7a7a;
+      color: var(--theme-text-secondary);
       margin-bottom: 2rem;
       line-height: 1.6;
     }
@@ -302,7 +304,7 @@ import { Icon } from 'astro-icon/components';
     .form-group label {
       display: block;
       font-weight: 500;
-      color: #0a1f1f;
+      color: var(--theme-text-primary);
       margin-bottom: 0.5rem;
       font-size: 0.9375rem;
     }
@@ -323,7 +325,7 @@ import { Icon } from 'astro-icon/components';
     .form-group select:focus,
     .form-group textarea:focus {
       outline: none;
-      border-color: #0a5c5c;
+      border-color: var(--theme-primary);
     }
 
     .form-group textarea {
@@ -347,14 +349,14 @@ import { Icon } from 'astro-icon/components';
 
     .checkbox-label span {
       font-size: 0.9375rem;
-      color: #5a7a7a;
+      color: var(--theme-text-secondary);
       line-height: 1.6;
     }
 
     .checkbox-label a {
-      color: #0a5c5c;
+      color: var(--theme-primary);
       text-decoration: none;
-      border-bottom: 1px solid #0a5c5c;
+      border-bottom: 1px solid var(--theme-primary);
     }
 
     .btn-submit {
@@ -410,38 +412,38 @@ import { Icon } from 'astro-icon/components';
     .info-card h3 {
       font-size: 1.25rem;
       font-weight: 600;
-      color: #0a5c5c;
+      color: var(--theme-primary);
       margin-bottom: 0.75rem;
     }
 
     .info-card p {
-      color: #5a7a7a;
+      color: var(--theme-text-secondary);
       line-height: 1.6;
       margin-bottom: 0.75rem;
     }
 
     .info-link {
-      color: #0a5c5c;
+      color: var(--theme-primary);
       font-weight: 600;
       text-decoration: none;
-      border-bottom: 2px solid #f5b800;
+      border-bottom: 2px solid var(--theme-accent);
       display: inline-block;
     }
 
     .info-link:hover {
-      color: #084a4f;
+      color: var(--theme-primary-dark);
     }
 
     .info-highlight {
       font-size: 2rem;
       font-weight: 700;
-      color: #0a5c5c;
+      color: var(--theme-primary);
     }
 
     .info-card a {
-      color: #0a5c5c;
+      color: var(--theme-primary);
       text-decoration: none;
-      border-bottom: 1px solid #0a5c5c;
+      border-bottom: 1px solid var(--theme-primary);
     }
 
     /* FAQ */
@@ -463,12 +465,12 @@ import { Icon } from 'astro-icon/components';
     .faq-item h4 {
       font-size: 1.125rem;
       font-weight: 600;
-      color: #0a1f1f;
+      color: var(--theme-text-primary);
       margin-bottom: 0.75rem;
     }
 
     .faq-item p {
-      color: #5a7a7a;
+      color: var(--theme-text-secondary);
       line-height: 1.7;
     }
 

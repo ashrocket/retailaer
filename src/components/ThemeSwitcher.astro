@@ -1,0 +1,80 @@
+---
+/**
+ * ThemeSwitcher Component
+ * Allows switching between brand design themes
+ */
+---
+
+<div class="theme-switcher" id="theme-switcher">
+  <span class="theme-switcher-label">Theme</span>
+  <button class="theme-switcher-btn active" data-theme="current" title="Current Brand (Teal/Yellow)">
+    <span class="theme-swatch theme-swatch-current"></span>
+    <span>Current</span>
+  </button>
+  <button class="theme-switcher-btn" data-theme="design-1" title="Design 1 (Blue/Orange)">
+    <span class="theme-swatch theme-swatch-design-1"></span>
+    <span>Design 1</span>
+  </button>
+  <button class="theme-switcher-btn" data-theme="design-2" title="Design 2 (Purple/Emerald)">
+    <span class="theme-swatch theme-swatch-design-2"></span>
+    <span>Design 2</span>
+  </button>
+</div>
+
+<script is:inline>
+(function() {
+  // Theme mapping from URL prefix to theme name
+  const themeMap = { '0': 'current', '1': 'design-1', '2': 'design-2' };
+
+  // Check for URL-based theme first (takes precedence)
+  const pathParts = window.location.pathname.split('/').filter(Boolean);
+  const urlTheme = pathParts.length > 0 && themeMap[pathParts[0]] ? themeMap[pathParts[0]] : null;
+
+  // Use URL theme if present, otherwise fall back to localStorage
+  const activeTheme = urlTheme || localStorage.getItem('retailaer-theme') || 'current';
+
+  // Only apply theme from localStorage if NO URL theme is present
+  // (server already set the correct theme for URL-based theming)
+  if (!urlTheme) {
+    document.documentElement.setAttribute('data-theme', activeTheme);
+  }
+
+  // Wait for DOM to be ready
+  document.addEventListener('DOMContentLoaded', function() {
+    const switcher = document.getElementById('theme-switcher');
+    if (!switcher) return;
+
+    const buttons = switcher.querySelectorAll('.theme-switcher-btn');
+
+    // Set initial active state based on current theme
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'current';
+    buttons.forEach(btn => {
+      if (btn.dataset.theme === currentTheme) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+
+    // Add click handlers
+    buttons.forEach(btn => {
+      btn.addEventListener('click', function() {
+        const theme = this.dataset.theme;
+
+        // Update document theme
+        document.documentElement.setAttribute('data-theme', theme);
+
+        // Save to localStorage
+        localStorage.setItem('retailaer-theme', theme);
+
+        // Update active states
+        buttons.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+
+        // Dispatch custom event for any listeners
+        window.dispatchEvent(new CustomEvent('themechange', { detail: { theme } }));
+      });
+    });
+  });
+})();
+</script>

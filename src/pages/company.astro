@@ -8,11 +8,11 @@ import { Icon } from 'astro-icon/components';
   description="Learn about Retailaer's mission to transform airline retailing with customer-first technology."
 >
   <!-- Hero Section -->
-  <section class="page-hero">
+  <section class="page-hero hero-bright">
     <div class="container">
       <h1 class="page-title" data-editable="hero-title">About Retailaer</h1>
       <p class="page-subtitle" data-editable="hero-subtitle">
-        We're transforming airline retailing with a next-gen customer-first Offer and Order Management platform with a state-of-the-art Marketplace.
+        A team lead by a former airline executive, building airline retailing tech with airlines for airlines, defining the next-gen eCommerce solutions with Offers and Orders.
       </p>
     </div>
   </section>
@@ -24,20 +24,17 @@ import { Icon } from 'astro-icon/components';
         <div class="mission-content">
           <h2 data-editable="mission-title">Our Mission</h2>
           <p class="lead" data-editable="mission-lead">
-            To empower airlines with cutting-edge retailing technology that puts customers first,
-            drives revenue, and unlocks new opportunities in the evolving travel landscape.
+            To give airlines a modern system to reduce PNR-dependency with flexible order management that matches how customers shop, book, and change travel — today and in the era of agentic AI.
           </p>
+
+          <h3 class="subsection-title" data-editable="what-we-do-title">What we do</h3>
           <p data-editable="mission-paragraph-1">
-            Founded with a vision to modernise airline retailing, Retailaer has spent over a decade
-            building next-gen Offer and Order Management platform. We believe that the future of
-            airline retailing is customer-centric, data-driven, and built on modern technology
-            foundations.
+            Over a decade, we've built on third-gen eCommerce for airlines, an Offer and Order Management platform, that handles payments, customer data, dynamic offers and order servicing without legacy limits. Airlines use it to sell bundles, ancillaries, and partner products across channels while tracking everything in one order record.
           </p>
+
+          <h3 class="subsection-title" data-editable="why-it-works-title">Why it works</h3>
           <p data-editable="mission-paragraph-2">
-            Our platform can sit on top of any reservation and inventory system and support classical
-            documents needed for operational processes, as well as ticketless. Retailaer enables
-            flexible, scalable order management that adapts to how customers actually want to shop,
-            book, and manage their travel.
+            This setup cuts distribution costs, enables frictionless payments, and lets airlines personalise offers based on customer data — increasing revenue from better conversion and loyalty. Retailaer Connect Retail Distribution platform allows airlines to remain on their PSS and classical documents while ensuring business processes remains intact.
           </p>
         </div>
 
@@ -168,28 +165,32 @@ import { Icon } from 'astro-icon/components';
     <div class="container">
       <div class="commitment-content">
         <h2 data-editable="commitment-title">Our Commitment</h2>
-        <div class="commitment-grid">
+        <div class="commitment-grid commitment-grid-2x2">
           <div class="commitment-item">
             <h4 data-editable="commitment-1-title">To Airlines</h4>
             <p data-editable="commitment-1-text">
-              We're committed to helping you maximize revenue, reduce costs, and deliver
-              exceptional customer experiences that build loyalty and drive repeat business.
+              We're committed to helping you maximize revenue, reduce costs, and deliver exceptional customer experiences that build loyalty and drive repeat business.
             </p>
           </div>
 
           <div class="commitment-item">
-            <h4 data-editable="commitment-2-title">To Partners</h4>
+            <h4 data-editable="commitment-2-title">To Passengers</h4>
             <p data-editable="commitment-2-text">
-              We're committed to building lasting partnerships based on mutual success,
-              transparency, and continuous innovation together.
+              We're committed to making travel shopping and booking simpler, more transparent, and more personalized—putting you in control of your journey.
             </p>
           </div>
 
           <div class="commitment-item">
-            <h4 data-editable="commitment-3-title">To Innovation</h4>
+            <h4 data-editable="commitment-3-title">To Partners</h4>
             <p data-editable="commitment-3-text">
-              We're committed to staying at the forefront of travel technology, continuously
-              evolving our platform to meet emerging needs and opportunities.
+              We're committed to building lasting partnerships based on mutual success, transparency, and continuous innovation.
+            </p>
+          </div>
+
+          <div class="commitment-item">
+            <h4 data-editable="commitment-4-title">To Innovation</h4>
+            <p data-editable="commitment-4-text">
+              We're committed to staying at the forefront of travel technology, continuously evolving our platform to meet emerging needs and opportunities.
             </p>
           </div>
         </div>
@@ -200,15 +201,13 @@ import { Icon } from 'astro-icon/components';
   <!-- CTA Section -->
   <section class="section">
     <div class="container">
-      <div class="cta-box">
+      <div class="cta-box cta-box-bright">
         <h2 data-editable="cta-title">Ready to Transform Your Airline Retailing?</h2>
         <p data-editable="cta-text">
-          Let's discuss how Retailaer can help you drive revenue, enhance customer experiences,
-          and stay ahead of the competition.
+          Let's discuss how Retailaer can help you drive revenue, enhance customer experiences, and stay ahead of the competition.
         </p>
         <div class="cta-buttons">
-          <a href="/contact" class="btn btn-primary btn-lg" data-editable="cta-button-primary">Get in Touch</a>
-          <a href="mailto:info@retailaer.com" class="btn btn-secondary btn-lg" data-editable="cta-button-secondary">Email Us</a>
+          <a href="/contact" class="btn btn-gold btn-lg" data-editable="cta-button-primary">Get in Touch</a>
         </div>
       </div>
     </div>
@@ -216,10 +215,16 @@ import { Icon } from 'astro-icon/components';
 
   <style>
     .page-hero {
-      background: linear-gradient(135deg, #0a5c5c 0%, #084a4f 100%);
+      background: var(--theme-gradient-hero);
       padding: 120px 0 80px;
       text-align: center;
       color: white;
+    }
+
+    .hero-bright .page-title,
+    .hero-bright .page-subtitle {
+      color: white;
+      opacity: 1;
     }
 
     .page-title {
@@ -227,14 +232,62 @@ import { Icon } from 'astro-icon/components';
       font-weight: 700;
       margin-bottom: 1rem;
       letter-spacing: -1px;
+      color: white;
     }
 
     .page-subtitle {
       font-size: 1.25rem;
-      opacity: 0.95;
+      opacity: 1;
       line-height: 1.6;
       max-width: 700px;
       margin: 0 auto;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .subsection-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--theme-primary);
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .commitment-grid-2x2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .commitment-grid-2x2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .cta-box-bright h2,
+    .cta-box-bright p {
+      color: white;
+      opacity: 1;
+    }
+
+    .btn-gold {
+      background: var(--theme-gradient-accent);
+      color: var(--theme-text-on-accent);
+      font-weight: 600;
+      padding: 1rem 2.5rem;
+      border-radius: 50px;
+      border: none;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px var(--theme-accent-shadow);
+    }
+
+    .btn-gold:hover {
+      background: var(--theme-gradient-accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px var(--theme-accent-shadow);
+      color: var(--theme-text-on-accent);
     }
 
     .section {
@@ -242,7 +295,7 @@ import { Icon } from 'astro-icon/components';
     }
 
     .section-alt {
-      background: #f0f7f7;
+      background: var(--theme-surface);
     }
 
     .section-header {
@@ -254,13 +307,13 @@ import { Icon } from 'astro-icon/components';
     .section-header h2 {
       font-size: 2.5rem;
       font-weight: 700;
-      color: #0a1f1f;
+      color: var(--theme-text-primary);
       margin-bottom: 1rem;
     }
 
     .section-description {
       font-size: 1.125rem;
-      color: #5a7a7a;
+      color: var(--theme-text-secondary);
       line-height: 1.7;
     }
 
@@ -274,20 +327,20 @@ import { Icon } from 'astro-icon/components';
     .mission-content h2 {
       font-size: 2.5rem;
       font-weight: 700;
-      color: #0a5c5c;
+      color: var(--theme-primary);
       margin-bottom: 1.5rem;
     }
 
     .lead {
       font-size: 1.25rem;
       font-weight: 500;
-      color: #0a1f1f;
+      color: var(--theme-text-primary);
       line-height: 1.7;
       margin-bottom: 1.5rem;
     }
 
     .mission-content p {
-      color: #5a7a7a;
+      color: var(--theme-text-secondary);
       line-height: 1.8;
       margin-bottom: 1.25rem;
       font-size: 1.0625rem;
@@ -310,12 +363,12 @@ import { Icon } from 'astro-icon/components';
     .stat-number {
       font-size: 3.5rem;
       font-weight: 700;
-      color: #0a5c5c;
+      color: var(--theme-primary);
       margin-bottom: 0.5rem;
     }
 
     .stat-label {
-      color: #5a7a7a;
+      color: var(--theme-text-secondary);
       font-size: 1.125rem;
     }
 
@@ -346,12 +399,12 @@ import { Icon } from 'astro-icon/components';
     .value-card h3 {
       font-size: 1.375rem;
       font-weight: 600;
-      color: #0a5c5c;
+      color: var(--theme-primary);
       margin-bottom: 1rem;
     }
 
     .value-card p {
-      color: #5a7a7a;
+      color: var(--theme-text-secondary);
       line-height: 1.7;
     }
 
@@ -373,19 +426,19 @@ import { Icon } from 'astro-icon/components';
     .diff-number {
       font-size: 3rem;
       font-weight: 700;
-      color: #f5b800;
+      color: var(--theme-accent);
       opacity: 0.3;
     }
 
     .diff-content h3 {
       font-size: 1.5rem;
       font-weight: 600;
-      color: #0a1f1f;
+      color: var(--theme-text-primary);
       margin-bottom: 0.75rem;
     }
 
     .diff-content p {
-      color: #5a7a7a;
+      color: var(--theme-text-secondary);
       line-height: 1.8;
       font-size: 1.0625rem;
     }
@@ -399,7 +452,7 @@ import { Icon } from 'astro-icon/components';
     .commitment-content h2 {
       font-size: 2.5rem;
       font-weight: 700;
-      color: #0a1f1f;
+      color: var(--theme-text-primary);
       margin-bottom: 3rem;
     }
 
@@ -413,17 +466,17 @@ import { Icon } from 'astro-icon/components';
     .commitment-item h4 {
       font-size: 1.25rem;
       font-weight: 600;
-      color: #0a5c5c;
+      color: var(--theme-primary);
       margin-bottom: 1rem;
     }
 
     .commitment-item p {
-      color: #5a7a7a;
+      color: var(--theme-text-secondary);
       line-height: 1.7;
     }
 
     .cta-box {
-      background: linear-gradient(135deg, #0a5c5c 0%, #084a4f 100%);
+      background: var(--theme-gradient-hero);
       padding: 4rem;
       border-radius: 16px;
       text-align: center;
@@ -467,7 +520,7 @@ import { Icon } from 'astro-icon/components';
 
     .btn-secondary:hover {
       background: white;
-      color: #0a5c5c;
+      color: var(--theme-primary);
     }
 
     @media (max-width: 968px) {

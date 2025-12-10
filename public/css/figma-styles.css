@@ -2,18 +2,18 @@
    RetailAer Website - Figma Design Implementation
    ========================================================================== */
 
-/* CSS Custom Properties - Design System */
+/* CSS Custom Properties - Design System (Theme-Aware) */
 :root {
-    /* Colors */
-    --color-primary: #0a5c5c;
-    --color-accent: #f5b800;
-    --color-bg-light: #f0f7f7;
-    --color-bg-white: #ffffff;
-    --color-text-dark: #0a1f1f;
-    --color-text-body: #5a7a7a;
-    --color-text-light: rgba(255, 255, 255, 0.7);
-    --color-text-lighter: rgba(255, 255, 255, 0.6);
-    --color-border: rgba(10, 92, 92, 0.1);
+    /* Colors - Now reference theme variables with fallbacks */
+    --color-primary: var(--theme-primary, #0a5c5c);
+    --color-accent: var(--theme-accent, #f5b800);
+    --color-bg-light: var(--theme-surface, #f0f7f7);
+    --color-bg-white: var(--theme-background, #ffffff);
+    --color-text-dark: var(--theme-text-primary, #0a1f1f);
+    --color-text-body: var(--theme-text-secondary, #374151);
+    --color-text-light: rgba(255, 255, 255, 0.95);
+    --color-text-lighter: rgba(255, 255, 255, 0.9);
+    --color-border: var(--theme-border, rgba(10, 92, 92, 0.1));
 
     /* Typography */
     --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -277,7 +277,7 @@ ul {
    ========================================================================== */
 
 .hero {
-    background: linear-gradient(135deg, var(--color-primary) 0%, #084848 100%);
+    background: var(--theme-gradient-hero, linear-gradient(135deg, var(--color-primary) 0%, #084848 100%));
     padding: var(--spacing-4xl) 0;
     position: relative;
     overflow: hidden;
@@ -314,7 +314,7 @@ ul {
 .hero-description {
     font-size: var(--font-size-xl);
     line-height: 1.4;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 1);
     margin-bottom: var(--spacing-xl);
     letter-spacing: -0.01em;
     max-width: 450px;
@@ -793,7 +793,7 @@ ul {
    ========================================================================== */
 
 .cta-section {
-    background: linear-gradient(135deg, var(--color-primary) 0%, #084848 100%);
+    background: var(--theme-gradient-hero, linear-gradient(135deg, var(--color-primary) 0%, #084848 100%));
     padding: var(--spacing-4xl) 0;
 }
 
@@ -815,7 +815,7 @@ ul {
 
 .cta-description {
     font-size: var(--font-size-xl);
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 1);
     line-height: 1.4;
     margin-bottom: var(--spacing-xl);
     letter-spacing: -0.01em;
@@ -893,10 +893,13 @@ ul {
 }
 
 .footer-links h4 {
-    font-size: var(--font-size-small);
-    color: var(--color-accent);
-    font-weight: 400;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
     margin-bottom: var(--spacing-md);
+    cursor: default;
 }
 
 .footer-links ul {
@@ -909,11 +912,14 @@ ul {
     font-size: var(--font-size-small);
     color: var(--color-text-light);
     transition: var(--transition);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    padding-bottom: 2px;
 }
 
 .footer-links a:hover {
-    color: var(--color-bg-white);
-    padding-left: 4px;
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
 }
 
 .footer-bottom {
