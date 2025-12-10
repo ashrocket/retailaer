@@ -2,18 +2,20 @@
    RetailAer Website - Figma Design Implementation
    ========================================================================== */
 
-/* CSS Custom Properties - Design System (Theme-Aware) */
+/* CSS Custom Properties - Design System (New Dec 2025 Palette) */
 :root {
-    /* Colors - Now reference theme variables with fallbacks */
-    --color-primary: var(--theme-primary, #0a5c5c);
-    --color-accent: var(--theme-accent, #f5b800);
-    --color-bg-light: var(--theme-surface, #f0f7f7);
-    --color-bg-white: var(--theme-background, #ffffff);
-    --color-text-dark: var(--theme-text-primary, #0a1f1f);
-    --color-text-body: var(--theme-text-secondary, #374151);
+    /* Colors - New Designer Palette */
+    --color-primary: #2b3b4f;        /* Petrol */
+    --color-primary-dark: #1e2d3d;   /* Darker Petrol */
+    --color-primary-light: #00baa3;  /* Teal Green */
+    --color-accent: #ffb061;         /* Warm Orange */
+    --color-bg-light: #f5f7f8;
+    --color-bg-white: #ffffff;
+    --color-text-dark: #2b3b4f;      /* Petrol for headings */
+    --color-text-body: #787a7a;      /* Dark Grey for body */
     --color-text-light: rgba(255, 255, 255, 0.95);
     --color-text-lighter: rgba(255, 255, 255, 0.9);
-    --color-border: var(--theme-border, rgba(10, 92, 92, 0.1));
+    --color-border: rgba(43, 59, 79, 0.1);
 
     /* Typography */
     --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -913,13 +915,26 @@ ul {
     color: var(--color-text-light);
     transition: var(--transition);
     text-decoration: none;
-    border-bottom: 1px solid transparent;
-    padding-bottom: 2px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.footer-links a::after {
+    content: "›";
+    font-size: 1.2em;
+    opacity: 0.7;
+    transition: var(--transition);
+    font-weight: bold;
 }
 
 .footer-links a:hover {
     color: var(--color-accent);
-    border-bottom-color: var(--color-accent);
+}
+
+.footer-links a:hover::after {
+    opacity: 1;
+    transform: translateX(2px);
 }
 
 .footer-bottom {

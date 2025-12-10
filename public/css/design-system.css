@@ -8,25 +8,25 @@
    ============================================ */
 
 :root {
-  /* Colors - Primary */
-  --color-teal-dark: #0A4D52;
-  --color-teal-primary: #0D5C63;
-  --color-teal-light: #5DA9A9;
+  /* Colors - Primary (New Designer Palette Dec 2025) */
+  --color-teal-dark: #2b3b4f;      /* Petrol - primary dark */
+  --color-teal-primary: #2b3b4f;   /* Petrol - headers, footer */
+  --color-teal-light: #00baa3;     /* Teal Green - primary light */
 
   /* Colors - Accent */
-  --color-yellow-primary: #FDB913;
-  --color-yellow-hover: #E5A610;
+  --color-yellow-primary: #ffb061; /* Warm Orange - CTA buttons */
+  --color-yellow-hover: #f5a050;   /* Warm Orange hover */
 
   /* Colors - Neutrals */
   --color-white: #FFFFFF;
   --color-gray-50: #F8F9FA;
   --color-gray-100: #E9ECEF;
-  --color-gray-400: #6C757D;
-  --color-gray-900: #2C3E50;
+  --color-gray-400: #787a7a;       /* Dark Grey - body text */
+  --color-gray-900: #2b3b4f;       /* Petrol - headings */
 
-  /* Gradients */
-  --gradient-hero: linear-gradient(135deg, #0A4D52 0%, #5DA9A9 100%);
-  --gradient-teal: linear-gradient(180deg, #0D5C63 0%, #0A4D52 100%);
+  /* Gradients (Updated) */
+  --gradient-hero: linear-gradient(135deg, #2b3b4f 0%, #00baa3 100%);
+  --gradient-teal: linear-gradient(180deg, #2b3b4f 0%, #1e2d3d 100%);
 
   /* Typography */
   --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;

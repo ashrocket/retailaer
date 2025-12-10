@@ -1,0 +1,536 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const faqCategories = [
+  {
+    title: "General Questions",
+    faqs: [
+      {
+        question: "What is Retailaer's Offer and Order Management System?",
+        answer: "Retailaer is an offer and order management platform (OMS) built with airlines for airlines to reduce dependency on legacy PNR-based workflows. It consolidates how airlines manage offers (flights, ancillaries, third-party products) and orders (customer purchases) into a single, flexible system. This enables faster, personalized customer experiences and greater revenue control across all sales channels."
+      },
+      {
+        question: "How does Retailaer differ from my current PSS (Passenger Service System)?",
+        answer: "Your PSS focuses on core operational functions — reservations, ticketing, and departure control. Retailaer handles the commercial layer: dynamic pricing, personalized offers, payment orchestration, and order servicing. Many airlines run both in parallel: Retailaer manages modern retailing; your PSS handles operations. This hybrid approach lets you innovate faster without replacing legacy infrastructure."
+      },
+      {
+        question: "Do I need to replace my existing systems to use Retailaer?",
+        answer: "No. Retailaer works as an independent layer on top of your existing PSS. It's PSS-neutral, meaning it integrates with Amadeus, Sabre, Navitaire, or any other system you currently use. You can introduce order-based processes on your website or NDC channel while your PSS continues managing core operational functions."
+      },
+      {
+        question: "Is Retailaer compliant with IATA ONE Order standards?",
+        answer: "Retailaer supports ONE Order principles by managing orders as unified records that consolidate flight bookings, ancillaries, and third-party services. For full IATA ONE Order certification specifics, contact our sales team."
+      }
+    ]
+  },
+  {
+    title: "Implementation & Integration",
+    faqs: [
+      {
+        question: "How long does implementation typically take?",
+        answer: "Implementation timelines vary based on scope. A basic integration of our Retailaer Connect Platform with your website and payments can take 3–6 months. More complex deployments involving NDC channels, revenue management integration, and loyalty program connections may extend to 9–12 months. Our team builds a phased roadmap tailored to your priorities."
+      },
+      {
+        question: "What systems does Retailaer need to integrate with?",
+        answer: "At minimum: your PSS (for inventory and fulfillment), payment gateway, and your website. Additionally, Retailaer can integrate with revenue management systems, loyalty programs, CRM platforms, third-party content providers, distribution partners (OTAs, aggregators), and fulfillment systems (check-in)."
+      },
+      {
+        question: "Can Retailaer handle our NDC distribution channel?",
+        answer: "Yes. Retailaer is built for NDC API distribution. It manages offer creation and serialization, so your NDC API can serve shopping and ordering flows to travel agents, OTAs, and corporate platforms. You can run NDC and GDS/EDIFACT channels in parallel."
+      },
+      {
+        question: "How does Retailaer sync with my existing PNRs and EMDs?",
+        answer: "Retailaer maintains backward compatibility. When an order is created in Retailaer, it generates a PNR in your PSS (for operations), an e-ticket (for the flight), and EMDs (for ancillaries) as needed. The order stays the source of truth in Retailaer; changes propagate back to your PSS in near real time as well in reverse should changes occur on the PSS side."
+      }
+    ]
+  },
+  {
+    title: "Product & Capabilities",
+    faqs: [
+      {
+        question: "What can I sell through Retailaer?",
+        answer: "Imagination is your limit — flights, branded fares, seats, baggage allowances, lounge access, meals, priority boarding, seat upgrades, third-party services (car rental, insurance, hotels), and ancillaries from affiliate partners (eSim, Meals, Duty Free, baseball caps). You can bundle and price these dynamically for different customer segments via Retailaer Connect."
+      },
+      {
+        question: "Does Retailaer support dynamic pricing and personalisation?",
+        answer: "Yes. Retailaer creates and prices offers based on customer data (loyalty status, booking history, search behaviour), corporate contracts, demand, and rules you define. Each customer sees personalised offers and pricing that maximise relevance and conversion."
+      },
+      {
+        question: "Can customers add multiple flights to one order?",
+        answer: "Yes. Retailaer's shopping basket functions like standard eCommerce: customers can add, modify, and remove flights, seats, and ancillaries from multiple bookings before checkout. This increases conversion by reducing friction and cart abandonment."
+      },
+      {
+        question: "Does Retailaer support corporate travel and travel policies?",
+        answer: "Retailaer handles corporate fares, policy rules (max cabin class, restricted airports), cost centre allocation, and approval workflows. Corporate travellers see compliant options, and your TMC or finance team gets centralised booking and payment data."
+      },
+      {
+        question: "What payment methods does Retailaer support?",
+        answer: "Credit/debit cards, digital wallets, BNPL (Buy Now, Pay Later), corporate billing, and settlement through IATA BSP (and ARC to be added when required). Retailaer's payment orchestration layer manages multiple gateways and payment flows to reduce failures and friction at checkout."
+      }
+    ]
+  },
+  {
+    title: "Servicing & Changes",
+    faqs: [
+      {
+        question: "Can customers change or cancel orders after booking?",
+        answer: "Yes. Retailaer's order management enables full servicing: flight changes, seat changes, addition or removal of ancillaries, and cancellations with refunds or credits. Customers can re-shop (rebook to a different flight) directly in the system with instant repricing."
+      },
+      {
+        question: "What happens to loyalty miles or frequent flyer benefits in an order?",
+        answer: "Retailaer integrates with your loyalty system, applies loyalty discounts to offers, and tracks earned miles from the order. When fulfilling the order, loyalty redemptions and accruals are synchronized with your loyalty platform."
+      }
+    ]
+  },
+  {
+    title: "Omnichannel Distribution",
+    faqs: [
+      {
+        question: "Can I sell the same offers across multiple channels?",
+        answer: "Yes. Retailaer is channel-agnostic. Your product catalogue flows to your website, mobile app, NDC API, contact centre, airport kiosks, and travel partners. Each channel displays the same current offers and pricing (or channel-specific variants you define)."
+      },
+      {
+        question: "How does Retailaer work with travel agents and OTAs?",
+        answer: "Retailaer powers NDC APIs that agents and OTAs connect to for shopping and ordering. Alternatively, integration partners can plug into Retailaer's offer catalogue via API. Retailers see your full product lineup, earn commissions, and process orders end-to-end."
+      },
+      {
+        question: "Does Retailaer support interline and partnership arrangements?",
+        answer: "Retailaer can ingest offers and inventory from partner airlines and display them alongside your own in a unified order. This enables co-branded or marketplace shopping experiences."
+      }
+    ]
+  },
+  {
+    title: "Data & Reporting",
+    faqs: [
+      {
+        question: "How does Retailaer handle customer data and privacy?",
+        answer: "Retailaer adheres to GDPR, CCPA, and other data protection regulations. Customer data is encrypted at rest and in transit. You control data retention, customer consent, and third-party sharing. Retailaer undergoes regular security audits and penetration testing."
+      },
+      {
+        question: "Can I export order data to my BI or data warehouse tools?",
+        answer: "Yes. Retailaer provides API access and bulk export capabilities so you can ingest order data into your analytics platform, data lake, or business intelligence tools for deeper analysis."
+      }
+    ]
+  },
+  {
+    title: "Technical & Support",
+    faqs: [
+      {
+        question: "What are the uptime and performance SLAs?",
+        answer: "Retailaer operates on cloud-native and agnostic infrastructure with 99.99% uptime SLA. The platform auto-scales during peak booking periods and supports high-frequency, concurrent transactions without degradation."
+      },
+      {
+        question: "Who owns the customer data—Retailaer or my airline?",
+        answer: "Your airline owns all customer and order data. Retailaer is a processor; you are the data controller. You can export data anytime and are not locked into our platform."
+      },
+      {
+        question: "What training and support does Retailaer provide?",
+        answer: "Retailaer offers onboarding training for your IT, product, revenue management, and customer service teams. Ongoing support includes a dedicated support portal, regular check-ins, and access to our customer success team. Professional services are available for custom integrations or complex use cases."
+      },
+      {
+        question: "Is Retailaer a SaaS platform or on-premises?",
+        answer: "Retailaer is cloud-native and cloud agnostic SaaS. You access it via APIs and web portals; no on-premises infrastructure required. This ensures automatic updates, security patches, and scalability without your operational burden."
+      }
+    ]
+  },
+  {
+    title: "Business & ROI",
+    faqs: [
+      {
+        question: "What kind of revenue uplift can we expect?",
+        answer: "Airlines typically see 3–7% conversion uplift from streamlined checkout and personalised offers, 15–25% increase in ancillary attachment through smart bundling, and improved customer lifetime value through better servicing and loyalty via Retailaer Connect. Results vary by airline maturity, business model and implementation scope."
+      },
+      {
+        question: "How does Retailaer help reduce cart abandonment?",
+        answer: "Retailaer tackles the top reasons for abandonment: cumbersome checkout (frictionless payments, saved payment methods), payment failures (multi-gateway orchestration), unclear pricing, and lack of flexibility (easy changes to orders). Airlines using modern OMS typically see 2–5% cart abandonment reduction."
+      },
+      {
+        question: "Can Retailaer help us compete with low-cost carriers or OTAs?",
+        answer: "Yes. Retailaer enables the pricing flexibility, personalisation, and omnichannel presence that competitors use. You can dynamically adjust ancillary pricing, run targeted promotions, and serve offers in real time across web, mobile, and NDC channels at competitive speeds."
+      },
+      {
+        question: "What is the typical cost model?",
+        answer: "Retailaer pricing is typically an implementation and transaction-based (per order) with optional volume discounts, plus implementation and professional services. We can discuss options tailored to your airline size and transaction volume."
+      }
+    ]
+  },
+  {
+    title: "Getting Started",
+    faqs: [
+      {
+        question: "How do we evaluate Retailaer for our airline?",
+        answer: "We recommend: (1) an initial business case workshop to map your current distribution, identify quick wins, and project ROI; (2) a technical fit assessment with your IT team; (3) a pilot project on one sales channel (e.g., website or NDC with Retailaer Connect Retail & Distribution platform) to validate the approach before full rollout."
+      },
+      {
+        question: "Can we run a proof-of-concept?",
+        answer: "Yes. We can set up a limited POC environment where you test Retailaer against a subset of your customer base. POCs typically run 4–8 weeks and help validate business benefits and technical integration readiness."
+      },
+      {
+        question: "Who should be involved in the decision-making process?",
+        answer: "Key stakeholders include: Revenue Management (pricing strategy), Distribution (channel strategy), IT (integration and infrastructure), Commercial (partner negotiations), and Customer Service (order servicing workflows). Executive sponsorship from your Chief Commercial Officer or CTO accelerates decision-making and implementation success."
+      },
+      {
+        question: "What's the best way to contact Retailaer?",
+        answer: "Visit our website for a demo request, or email our sales team at info@retailaer.com. We can also arrange an introductory call with a solutions architect to discuss your airline's specific challenges and goals."
+      }
+    ]
+  }
+];
+
+// Flatten all FAQs for schema markup
+const allFaqs = faqCategories.flatMap(cat => cat.faqs);
+---
+
+<BaseLayout title="FAQ - Retailaer" description="Frequently asked questions about Retailaer's Offer and Order Management System for airlines. Learn about implementation, integration, capabilities, and ROI.">
+  <!-- Hero Section -->
+  <section class="faq-hero">
+    <div class="container">
+      <h1>Frequently Asked Questions</h1>
+      <p class="hero-subtitle">Everything you need to know about Retailaer's Offer and Order Management System</p>
+    </div>
+  </section>
+
+  <!-- FAQ Content -->
+  <section class="faq-content">
+    <div class="container">
+      <div class="faq-grid">
+        <!-- Quick Nav Sidebar -->
+        <aside class="faq-nav">
+          <nav>
+            <h3>Categories</h3>
+            <ul>
+              {faqCategories.map((category, index) => (
+                <li>
+                  <a href={`#category-${index}`}>{category.title}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </aside>
+
+        <!-- FAQ Accordions -->
+        <div class="faq-main">
+          {faqCategories.map((category, catIndex) => (
+            <div class="faq-category" id={`category-${catIndex}`}>
+              <h2>{category.title}</h2>
+              <div class="faq-list">
+                {category.faqs.map((faq, faqIndex) => (
+                  <details class="faq-item">
+                    <summary class="faq-question">
+                      <span>{faq.question}</span>
+                      <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6"/>
+                      </svg>
+                    </summary>
+                    <div class="faq-answer">
+                      <p>{faq.answer}</p>
+                    </div>
+                  </details>
+                ))}
+              </div>
+            </div>
+          ))}
+
+          <!-- CTA Section -->
+          <div class="faq-cta">
+            <h3>Still have questions?</h3>
+            <p>Our team is ready to help you understand how Retailaer can transform your airline's retailing capabilities.</p>
+            <div class="cta-buttons">
+              <a href="/contact" class="btn btn-primary">Get in Touch</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Schema.org FAQ Structured Data for SEO -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": allFaqs.map(faq => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
+    }))
+  })} />
+</BaseLayout>
+
+<style>
+  .faq-hero {
+    background: var(--gradient-hero, linear-gradient(135deg, #0A4D52 0%, #5DA9A9 100%));
+    color: white;
+    padding: 4rem 0 3rem;
+    text-align: center;
+  }
+
+  .faq-hero h1 {
+    font-size: 2.75rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--color-accent, #ffb061);
+  }
+
+  .hero-subtitle {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.95);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .faq-content {
+    padding: 3rem 0 5rem;
+    background: var(--color-bg-white, #ffffff);
+  }
+
+  .faq-grid {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  /* Sidebar Navigation */
+  .faq-nav {
+    position: sticky;
+    top: 100px;
+  }
+
+  .faq-nav h3 {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-gray-400, #6b7280);
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+
+  .faq-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .faq-nav li {
+    margin-bottom: 0.5rem;
+  }
+
+  .faq-nav a {
+    color: var(--color-text-body, #374151);
+    text-decoration: none;
+    font-size: 0.95rem;
+    display: block;
+    padding: 0.5rem 0;
+    border-left: 2px solid transparent;
+    padding-left: 1rem;
+    transition: all 0.2s ease;
+  }
+
+  .faq-nav a:hover {
+    color: var(--color-primary, #0a5c5c);
+    border-left-color: var(--color-primary, #0a5c5c);
+  }
+
+  /* FAQ Categories */
+  .faq-category {
+    margin-bottom: 3rem;
+    scroll-margin-top: 100px;
+  }
+
+  .faq-category h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-primary, #0a5c5c);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--color-bg-light, #f0f7f7);
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  /* Accordion Items */
+  .faq-item {
+    background: var(--color-bg-light, #f8f9fa);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.2s ease;
+  }
+
+  .faq-item:hover {
+    background: #f0f4f4;
+  }
+
+  .faq-item[open] {
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .faq-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 1.5rem;
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--color-text-dark, #1a202c);
+    list-style: none;
+    gap: 1rem;
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-question span {
+    flex: 1;
+  }
+
+  .faq-icon {
+    flex-shrink: 0;
+    color: var(--color-primary, #0a5c5c);
+    transition: transform 0.3s ease;
+  }
+
+  .faq-item[open] .faq-icon {
+    transform: rotate(180deg);
+  }
+
+  .faq-answer {
+    padding: 0 1.5rem 1.5rem;
+    color: var(--color-text-body, #374151);
+    line-height: 1.7;
+  }
+
+  .faq-answer p {
+    margin: 0;
+  }
+
+  /* CTA Section */
+  .faq-cta {
+    background: linear-gradient(135deg, #0A4D52 0%, #0D6B6B 100%);
+    color: white;
+    padding: 3rem;
+    border-radius: 12px;
+    text-align: center;
+    margin-top: 3rem;
+  }
+
+  .faq-cta h3 {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .faq-cta p {
+    opacity: 0.9;
+    margin-bottom: 2rem;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.875rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .btn-primary {
+    background: var(--color-accent, #f5b800);
+    color: var(--color-primary-dark, #0a3d3d);
+  }
+
+  .btn-primary:hover {
+    background: #e5a800;
+    transform: translateY(-2px);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+  }
+
+  .btn-secondary:hover {
+    background: white;
+    color: var(--color-primary, #0a5c5c);
+  }
+
+  /* Mobile Responsive */
+  @media (max-width: 900px) {
+    .faq-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .faq-nav {
+      position: static;
+      margin-bottom: 2rem;
+    }
+
+    .faq-nav ul {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .faq-nav a {
+      border-left: none;
+      padding-left: 0;
+      padding: 0.5rem 1rem;
+      background: var(--color-bg-light, #f0f7f7);
+      border-radius: 20px;
+      font-size: 0.85rem;
+    }
+
+    .faq-nav a:hover {
+      background: var(--color-primary, #0a5c5c);
+      color: white;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .faq-hero h1 {
+      font-size: 2rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1rem;
+    }
+
+    .faq-question {
+      padding: 1rem;
+      font-size: 0.95rem;
+    }
+
+    .faq-answer {
+      padding: 0 1rem 1rem;
+      font-size: 0.95rem;
+    }
+
+    .faq-cta {
+      padding: 2rem 1.5rem;
+    }
+
+    .faq-cta h3 {
+      font-size: 1.5rem;
+    }
+  }
+</style>

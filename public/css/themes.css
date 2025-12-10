@@ -10,14 +10,14 @@
 
 :root,
 [data-theme="current"] {
-  /* Primary Colors */
-  --theme-primary: #0D5C63;
-  --theme-primary-dark: #0A4D52;
-  --theme-primary-light: #5DA9A9;
+  /* Primary Colors - New Designer Palette Dec 2025 */
+  --theme-primary: #2b3b4f;        /* Petrol */
+  --theme-primary-dark: #1e2d3d;   /* Darker Petrol */
+  --theme-primary-light: #00baa3;  /* Teal Green */
 
   /* Accent Colors */
-  --theme-accent: #FDB913;
-  --theme-accent-hover: #E5A610;
+  --theme-accent: #ffb061;         /* Warm Orange */
+  --theme-accent-hover: #f5a050;   /* Darker Orange */
 
   /* Backgrounds */
   --theme-background: #FFFFFF;
@@ -25,21 +25,21 @@
   --theme-surface-alt: #E9ECEF;
 
   /* Text */
-  --theme-text-primary: #1a202c;
-  --theme-text-secondary: #374151;
+  --theme-text-primary: #2b3b4f;   /* Petrol for headings */
+  --theme-text-secondary: #787a7a; /* Dark Grey for body */
   --theme-text-on-primary: #FFFFFF;
-  --theme-text-on-accent: #0A4D52;
+  --theme-text-on-accent: #2b3b4f; /* Petrol on orange */
 
   /* Gradients */
-  --theme-gradient-hero: linear-gradient(135deg, #0A4D52 0%, #5DA9A9 100%);
-  --theme-gradient-primary: linear-gradient(180deg, #0D5C63 0%, #0A4D52 100%);
-  --theme-gradient-accent: linear-gradient(135deg, #FDB913 0%, #E5A610 100%);
-  --theme-gradient-accent-hover: linear-gradient(135deg, #FFD54F 0%, #FDB913 100%);
+  --theme-gradient-hero: linear-gradient(135deg, #2b3b4f 0%, #00baa3 100%);
+  --theme-gradient-primary: linear-gradient(180deg, #2b3b4f 0%, #1e2d3d 100%);
+  --theme-gradient-accent: linear-gradient(135deg, #ffb061 0%, #f5a050 100%);
+  --theme-gradient-accent-hover: linear-gradient(135deg, #ffc080 0%, #ffb061 100%);
 
   /* Borders & Shadows */
-  --theme-border: rgba(13, 92, 99, 0.1);
+  --theme-border: rgba(43, 59, 79, 0.1);
   --theme-shadow-color: rgba(0, 0, 0, 0.1);
-  --theme-accent-shadow: rgba(253, 185, 19, 0.3);
+  --theme-accent-shadow: rgba(255, 176, 97, 0.3);
 }
 
 /* ============================================

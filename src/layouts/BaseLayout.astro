@@ -2,7 +2,7 @@
 import FeedbackWidget from '../components/FeedbackWidget.astro';
 import CookieConsent from '../components/CookieConsent.astro';
 import EditMode from '../components/EditMode.astro';
-import ThemeSwitcher from '../components/ThemeSwitcher.astro';
+// ThemeSwitcher removed - using original theme only
 
 interface Props {
   title: string;
@@ -71,7 +71,7 @@ const basePath = themePrefix ? `/${themePrefix}` : '';
 </head>
 <body>
   <!-- Theme Switcher -->
-  <ThemeSwitcher />
+  <!-- ThemeSwitcher removed -->
 
   <!-- Edit Mode Toolbar -->
   {filePath && <EditMode filePath={filePath} />}
@@ -123,6 +123,7 @@ const basePath = themePrefix ? `/${themePrefix}` : '';
           <ul>
             <li><a href={`${basePath}/company`}>About Us</a></li>
             <li><a href={`${basePath}/insights`}>Insights</a></li>
+            <li><a href={`${basePath}/faq`}>FAQ</a></li>
             <li><a href={`${basePath}/contact`}>Contact</a></li>
           </ul>
         </div>
