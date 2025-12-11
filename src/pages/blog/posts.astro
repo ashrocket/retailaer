@@ -1,56 +1,24 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { requireAuth } from '../../lib/auth';
-import { readdir, readFile } from 'node:fs/promises';
-import { join } from 'node:path';
 
 export const prerender = false;
 
 // Require authentication
 const session = requireAuth(Astro.cookies);
 
-// Read all blog posts from the content directory
-let posts: any[] = [];
-
-try {
-  const contentDir = join(process.cwd(), 'src/content/blog');
-
-  // Try to read directory, return empty array if it doesn't exist
-  let files: string[] = [];
-  try {
-    files = await readdir(contentDir);
-  } catch (err) {
-    console.log('Blog directory does not exist yet, will be created when first post is saved');
-    files = [];
-  }
-
-  if (files.length > 0) {
-    posts = await Promise.all(
-      files
-        .filter(file => file.endsWith('.json'))
-        .map(async file => {
-          try {
-            const content = await readFile(join(contentDir, file), 'utf-8');
-            return JSON.parse(content);
-          } catch (err) {
-            console.error(`Error reading post ${file}:`, err);
-            return null;
-          }
-        })
-    );
-
-    // Filter out any null values from failed reads
-    posts = posts.filter(post => post !== null);
-
-    // Sort by date, newest first
-    if (posts.length > 0) {
-      posts.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
-    }
-  }
-} catch (error) {
-  console.error('Error loading posts:', error);
-  posts = [];
+if (!session) {
+  return Astro.redirect('/blog/login');
 }
+
+// Import all blog posts at build time (Cloudflare Workers compatible)
+const blogModules = import.meta.glob('../../content/blog/*.json', { eager: true });
+
+// Process blog posts from imported modules
+const posts = Object.values(blogModules)
+  .map((module: any) => module.default || module)
+  .filter(post => post !== null)
+  .sort((a, b) => new Date(b.updatedAt || b.publishedAt).getTime() - new Date(a.updatedAt || a.publishedAt).getTime());
 ---
 
 <BaseLayout title="Blog Posts - Retailaer">

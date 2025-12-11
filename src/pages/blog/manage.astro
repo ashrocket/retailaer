@@ -6,6 +6,10 @@ export const prerender = false;
 // Require authentication
 const session = requireAuth(Astro.cookies);
 
+if (!session) {
+  return Astro.redirect('/blog/login');
+}
+
 // Using mock data
 const insights = [
   {

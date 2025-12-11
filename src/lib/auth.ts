@@ -47,21 +47,11 @@ export function isAuthenticated(cookies: AstroCookies): boolean {
 }
 
 /**
- * Require authentication - redirect to login if not authenticated
+ * Require authentication - returns session or null
+ * Pages should check the result and redirect manually if needed
  */
-export function requireAuth(cookies: AstroCookies, redirectUrl: string = '/blog/login'): Session {
-  const session = getSession(cookies);
-
-  if (!session) {
-    throw new Response(null, {
-      status: 302,
-      headers: {
-        Location: redirectUrl,
-      },
-    });
-  }
-
-  return session;
+export function requireAuth(cookies: AstroCookies): Session | null {
+  return getSession(cookies);
 }
 
 /**
