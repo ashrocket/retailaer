@@ -1,0 +1,45 @@
+{
+  "generatedAt": "2025-12-10T14:25:15.976Z",
+  "screenshots": [
+    {
+      "filename": "01-homepage-full.png",
+      "path": "contrast-audit/01-homepage-full.png"
+    },
+    {
+      "filename": "02-homepage-hero.png",
+      "path": "contrast-audit/02-homepage-hero.png"
+    },
+    {
+      "filename": "04-homepage-benefits.png",
+      "path": "contrast-audit/04-homepage-benefits.png"
+    },
+    {
+      "filename": "05-homepage-how-it-works.png",
+      "path": "contrast-audit/05-homepage-how-it-works.png"
+    },
+    {
+      "filename": "06-homepage-footer.png",
+      "path": "contrast-audit/06-homepage-footer.png"
+    },
+    {
+      "filename": "07-solutions-full.png",
+      "path": "contrast-audit/07-solutions-full.png"
+    },
+    {
+      "filename": "08-company-full.png",
+      "path": "contrast-audit/08-company-full.png"
+    },
+    {
+      "filename": "09-insights-full.png",
+      "path": "contrast-audit/09-insights-full.png"
+    },
+    {
+      "filename": "10-contact-full.png",
+      "path": "contrast-audit/10-contact-full.png"
+    },
+    {
+      "filename": "11-homepage-contrast-highlights.png",
+      "path": "contrast-audit/11-homepage-contrast-highlights.png"
+    }
+  ]
+}

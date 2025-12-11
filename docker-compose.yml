@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  retailaer-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4321:4321"
+    volumes:
+      - ./src:/app/src
+      - ./public:/app/public
+      - ./astro.config.mjs:/app/astro.config.mjs
+    environment:
+      - NODE_ENV=development
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4321/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  playwright:
+    image: mcr.microsoft.com/playwright:v1.40.0-jammy
+    depends_on:
+      retailaer-dev:
+        condition: service_healthy
+    volumes:
+      - ./tests:/app/tests
+      - ./theme-screenshots:/app/theme-screenshots
+      - ./playwright.config.ts:/app/playwright.config.ts
+      - ./package.json:/app/package.json
+    working_dir: /app
+    environment:
+      - BASE_URL=http://retailaer-dev:4321
+    command: npx playwright test tests/theme-screenshots.spec.ts --project=chromium

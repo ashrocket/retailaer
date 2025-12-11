@@ -114,30 +114,20 @@ const iconMap: Record<string, string> = {
     padding: 32px 28px;
     border-radius: 20px;
     text-decoration: none;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: border 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
+    border: 2px solid transparent;
   }
 
-  .insight-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(255, 255, 255, 0);
-    transition: background 0.3s;
-    pointer-events: none;
+  /* Active card indicator - shows current/first visible card */
+  .insight-card.active {
+    border-color: #f5b800;
   }
 
-  .insight-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
-  }
-
-  .insight-card:hover::before {
-    background: rgba(255, 255, 255, 0.3);
+  .insight-card:focus {
+    outline: none;
+    border-color: #f5b800;
   }
 
   .insight-image {
@@ -159,7 +149,7 @@ const iconMap: Record<string, string> = {
   .insight-meta {
     font-size: 11px;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 1);
     margin-bottom: 16px;
     letter-spacing: 1.2px;
     text-transform: uppercase;
@@ -369,6 +359,7 @@ const iconMap: Record<string, string> = {
 
       // Initial update
       this.updateButtons();
+      this.updateActiveCard();
     }
 
     dragStart(e: MouseEvent | TouchEvent) {
@@ -466,6 +457,17 @@ const iconMap: Record<string, string> = {
 
       this.updateButtons();
       this.updateIndicators();
+      this.updateActiveCard();
+    }
+
+    updateActiveCard() {
+      // Remove active class from all cards
+      this.cards.forEach(card => card.classList.remove('active'));
+
+      // Add active class to the first visible card (current index)
+      if (this.cards[this.currentIndex]) {
+        this.cards[this.currentIndex].classList.add('active');
+      }
     }
 
     updateButtons() {

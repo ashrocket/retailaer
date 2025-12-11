@@ -4,6 +4,10 @@
   "viewport": "1920x1080",
   "screenshots": [
     {
+      "filename": "after-scroll-to-why-retailaer.png",
+      "label": "after scroll to why retailaer"
+    },
+    {
       "filename": "desktop-company-full.png",
       "label": "company full"
     },
@@ -58,6 +62,22 @@
     {
       "filename": "desktop-solutions-pillars.png",
       "label": "solutions pillars"
+    },
+    {
+      "filename": "hero-after-adjustment.png",
+      "label": "hero after adjustment"
+    },
+    {
+      "filename": "how-it-works-navigation.png",
+      "label": "how it works navigation"
+    },
+    {
+      "filename": "scroll-to-top-visible.png",
+      "label": "scroll to top visible"
+    },
+    {
+      "filename": "why-retailaer-navigation.png",
+      "label": "why retailaer navigation"
     }
   ]
 }

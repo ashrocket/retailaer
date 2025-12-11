@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RetailAer Contrast Issues Audit Report</title>
+  <style>
+    :root {
+      --primary: #0D5C63;
+      --primary-light: #5DA9A9;
+      --accent: #FDB913;
+      --text-dark: #1a202c;
+      --text-body: #374151;
+      --text-light: #6b7280;
+      --bg-light: #f8fafc;
+      --border: #e2e8f0;
+      --danger: #dc2626;
+      --warning: #f59e0b;
+      --success: #10b981;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.6;
+      color: var(--text-body);
+      background: var(--bg-light);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+      padding: 3rem 2rem;
+      margin-bottom: 2rem;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    header .meta {
+      opacity: 0.9;
+      font-size: 0.95rem;
+    }
+
+    .summary-box {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      border-left: 4px solid var(--primary);
+    }
+
+    .summary-box h2 {
+      color: var(--text-dark);
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+
+    .issue-list {
+      list-style: none;
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .issue-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    .issue-list li::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      background: var(--danger);
+      border-radius: 50%;
+      margin-top: 0.5rem;
+      flex-shrink: 0;
+    }
+
+    .issue-card {
+      background: white;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    .issue-card-header {
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .issue-number {
+      background: var(--danger);
+      color: white;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .issue-number.medium {
+      background: var(--warning);
+    }
+
+    .issue-number.low {
+      background: var(--success);
+    }
+
+    .issue-card-header h3 {
+      color: var(--text-dark);
+      font-size: 1.25rem;
+    }
+
+    .issue-card-body {
+      padding: 2rem;
+    }
+
+    .issue-card-body h4 {
+      color: var(--text-dark);
+      font-size: 1rem;
+      margin: 1.5rem 0 0.75rem;
+    }
+
+    .issue-card-body h4:first-child {
+      margin-top: 0;
+    }
+
+    .issue-card-body p {
+      margin-bottom: 1rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      background: var(--bg-light);
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    tr:hover td {
+      background: #f1f5f9;
+    }
+
+    code {
+      background: #f1f5f9;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.85em;
+      color: var(--primary);
+    }
+
+    pre {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 1.5rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 1rem 0;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+    }
+
+    .css-comment { color: #6b7280; }
+    .css-selector { color: #f59e0b; }
+    .css-property { color: #38bdf8; }
+    .css-value { color: #4ade80; }
+
+    .screenshot-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+
+    .screenshot-item {
+      background: var(--bg-light);
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .screenshot-item img {
+      max-width: 100%;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      margin-bottom: 0.5rem;
+    }
+
+    .screenshot-item span {
+      font-size: 0.85rem;
+      color: var(--text-light);
+    }
+
+    .fix-section {
+      background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+      border-radius: 12px;
+      padding: 2rem;
+      margin: 2rem 0;
+      border: 1px solid #a7f3d0;
+    }
+
+    .fix-section h2 {
+      color: #065f46;
+      margin-bottom: 1.5rem;
+    }
+
+    .fix-item {
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      border: 1px solid #a7f3d0;
+    }
+
+    .fix-item h4 {
+      color: #065f46;
+      margin-bottom: 0.75rem;
+    }
+
+    .priority-table {
+      margin: 2rem 0;
+    }
+
+    .priority-high {
+      color: var(--danger);
+      font-weight: 600;
+    }
+
+    .priority-medium {
+      color: var(--warning);
+      font-weight: 600;
+    }
+
+    .priority-low {
+      color: var(--success);
+      font-weight: 600;
+    }
+
+    .color-swatch {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0.25rem 0;
+    }
+
+    .color-swatch .swatch {
+      width: 24px;
+      height: 24px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+    }
+
+    .checklist {
+      list-style: none;
+      margin: 1rem 0;
+    }
+
+    .checklist li {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .checklist li::before {
+      content: "";
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--border);
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    .files-list {
+      background: var(--bg-light);
+      border-radius: 8px;
+      padding: 1rem 1.5rem;
+    }
+
+    .files-list li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .files-list li:last-child {
+      border-bottom: none;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+      }
+
+      header {
+        padding: 2rem 1rem;
+      }
+
+      header h1 {
+        font-size: 1.75rem;
+      }
+
+      .issue-card-body {
+        padding: 1.5rem;
+      }
+
+      table {
+        display: block;
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>RetailAer Contrast Issues Audit Report</h1>
+      <p class="meta">Generated: December 9, 2025 | Site: retailaer.us</p>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Executive Summary -->
+    <div class="summary-box">
+      <h2>Executive Summary</h2>
+      <p>After reviewing the CSS files and taking screenshots across all pages, I've identified several contrast issues that affect readability. The main problems fall into these categories:</p>
+      <ul class="issue-list">
+        <li><strong>Gray body text on white backgrounds</strong> - Using <code>--color-gray-400</code> (#4a5568 or #6C757D) for body text</li>
+        <li><strong>Visited link states</strong> - Browser default purple visited links appearing in unexpected places</li>
+        <li><strong>Section subtitles</strong> - Low contrast gray text used for supporting copy</li>
+        <li><strong>Footer link hierarchy</strong> - Some footer elements have inconsistent contrast</li>
+      </ul>
+    </div>
+
+    <!-- Issue #1 -->
+    <div class="issue-card">
+      <div class="issue-card-header">
+        <span class="issue-number">1</span>
+        <h3>Gray Body Text (<code>--color-gray-400</code>)</h3>
+      </div>
+      <div class="issue-card-body">
+        <h4>Problem</h4>
+        <p>Body text, card descriptions, and subtitles use <code>--color-gray-400</code> which resolves to <code>#4a5568</code> or <code>#6C757D</code>. While technically passing WCAG AA for large text, this creates a "washed out" appearance that's hard to read, especially on lower-quality screens.</p>
+
+        <div class="color-swatch">
+          <span class="swatch" style="background: #4a5568;"></span>
+          <span>Current: #4a5568</span>
+        </div>
+        <div class="color-swatch">
+          <span class="swatch" style="background: #374151;"></span>
+          <span>Recommended: #374151</span>
+        </div>
+
+        <h4>Affected Elements</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Element</th>
+              <th>CSS Class/Selector</th>
+              <th>Current Color</th>
+              <th>Location</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Paragraphs</td>
+              <td><code>p</code></td>
+              <td><code>--color-gray-400</code></td>
+              <td>All pages</td>
+            </tr>
+            <tr>
+              <td>Card text</td>
+              <td><code>.card-text</code></td>
+              <td><code>--color-gray-400</code></td>
+              <td>Homepage "How it Works" cards</td>
+            </tr>
+            <tr>
+              <td>Benefit descriptions</td>
+              <td><code>.benefit-description</code></td>
+              <td><code>--color-text-body</code> (#3d5c5c)</td>
+              <td>Solutions page</td>
+            </tr>
+            <tr>
+              <td>Section subtitles</td>
+              <td><code>.section-subtitle</code>, <code>.section-header p</code></td>
+              <td><code>--color-gray-400</code></td>
+              <td>All section headers</td>
+            </tr>
+            <tr>
+              <td>Stat labels</td>
+              <td><code>.stat-label</code></td>
+              <td><code>--color-gray-400</code></td>
+              <td>Homepage stats bar</td>
+            </tr>
+            <tr>
+              <td>Insight excerpts</td>
+              <td><code>.insight-excerpt</code></td>
+              <td><code>--color-gray-400</code></td>
+              <td>Insights carousel</td>
+            </tr>
+            <tr>
+              <td>Process descriptions</td>
+              <td><code>.process-description</code></td>
+              <td><code>--color-text-body</code></td>
+              <td>How it Works section</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4>CSS Locations</h4>
+        <ul>
+          <li><code>public/css/design-system.css:131</code> - <code>p { color: var(--color-gray-400) }</code></li>
+          <li><code>public/css/design-system.css:255</code> - <code>.card-text { color: var(--color-gray-400) }</code></li>
+          <li><code>public/css/homepage.css:102</code> - <code>.stat-label { color: var(--color-gray-400) }</code></li>
+          <li><code>public/css/homepage.css:121</code> - <code>.section-header p { color: var(--color-gray-400) }</code></li>
+          <li><code>public/css/homepage.css:203</code> - <code>.insight-excerpt { color: var(--color-gray-400) }</code></li>
+        </ul>
+
+        <h4>Screenshots</h4>
+        <div class="screenshot-grid">
+          <div class="screenshot-item">
+            <img src="01-homepage-full.png" alt="Homepage full" loading="lazy">
+            <span>01-homepage-full.png</span>
+          </div>
+          <div class="screenshot-item">
+            <img src="08-company-full.png" alt="Company page" loading="lazy">
+            <span>08-company-full.png</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Issue #2 -->
+    <div class="issue-card">
+      <div class="issue-card-header">
+        <span class="issue-number medium">2</span>
+        <h3>Footer Text Contrast</h3>
+      </div>
+      <div class="issue-card-body">
+        <h4>Problem</h4>
+        <p>Footer column headings use <code>--color-accent</code> (yellow #FDB913) which has poor contrast against the teal background. Footer body text is semi-transparent white which reduces readability.</p>
+
+        <h4>Affected Elements</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Element</th>
+              <th>Current Style</th>
+              <th>Issue</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Footer column headings (h5)</td>
+              <td>Yellow <code>--color-accent</code> on teal</td>
+              <td>Yellow on teal = poor contrast</td>
+            </tr>
+            <tr>
+              <td>Footer description text</td>
+              <td>White with opacity 0.95</td>
+              <td>Acceptable but could be better</td>
+            </tr>
+            <tr>
+              <td>Footer copyright</td>
+              <td>White with opacity 0.9</td>
+              <td>Slightly faded</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4>CSS Location</h4>
+        <p><code>public/css/figma-styles.css:897</code> - <code>.footer-links h4 { color: var(--color-accent) }</code></p>
+
+        <h4>Screenshot</h4>
+        <div class="screenshot-grid">
+          <div class="screenshot-item">
+            <img src="06-homepage-footer.png" alt="Footer" loading="lazy">
+            <span>06-homepage-footer.png - Yellow headings visible</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Issue #3 -->
+    <div class="issue-card">
+      <div class="issue-card-header">
+        <span class="issue-number medium">3</span>
+        <h3>Visited Link States</h3>
+      </div>
+      <div class="issue-card-body">
+        <h4>Problem</h4>
+        <p>Although <code>themes.css</code> has visited link overrides, they use <code>!important</code> which is a code smell and may not cover all edge cases. The selectors are specific but could miss dynamically added links.</p>
+
+        <h4>Current Fix in themes.css</h4>
+        <pre><code><span class="css-comment">/* Navigation links - keep white */</span>
+<span class="css-selector">.navbar a:visited</span> { <span class="css-property">color</span>: <span class="css-value">rgba(255, 255, 255, 0.9)</span> !important; }
+
+<span class="css-comment">/* Footer links - keep white/light */</span>
+<span class="css-selector">.footer a:visited</span> { <span class="css-property">color</span>: <span class="css-value">rgba(255, 255, 255, 0.9)</span> !important; }
+
+<span class="css-comment">/* General content links - use primary color */</span>
+<span class="css-selector">main a:not(.btn):visited</span> { <span class="css-property">color</span>: <span class="css-value">var(--theme-primary)</span>; }</code></pre>
+
+        <h4>Potential Gaps</h4>
+        <ul>
+          <li>Links added via JavaScript after page load</li>
+          <li>Links in components that don't match the selectors</li>
+          <li>Edge cases where specificity battles occur</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Issue #4 -->
+    <div class="issue-card">
+      <div class="issue-card-header">
+        <span class="issue-number low">4</span>
+        <h3>"Why Leading Airlines Choose Us" Section</h3>
+      </div>
+      <div class="issue-card-body">
+        <h4>Problem</h4>
+        <p>The teal-on-teal gradient background with white text is fine, but the subtitle text could have better contrast.</p>
+
+        <h4>Affected Elements</h4>
+        <ul>
+          <li>Subtitle: "Tangible benefits of choosing Retailaer..."</li>
+          <li>Currently white but at full opacity which is good</li>
+        </ul>
+
+        <div class="screenshot-grid">
+          <div class="screenshot-item">
+            <img src="04-homepage-benefits.png" alt="Benefits section" loading="lazy">
+            <span>04-homepage-benefits.png</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Issue #5 -->
+    <div class="issue-card">
+      <div class="issue-card-header">
+        <span class="issue-number low">5</span>
+        <h3>Form Labels and Placeholder Text</h3>
+      </div>
+      <div class="issue-card-body">
+        <h4>Problem</h4>
+        <p>On the Contact page, form field labels and placeholder text may have insufficient contrast.</p>
+
+        <h4>Affected Elements</h4>
+        <ul>
+          <li>Form labels</li>
+          <li>Placeholder text in inputs</li>
+          <li>Helper text below fields</li>
+        </ul>
+
+        <div class="screenshot-grid">
+          <div class="screenshot-item">
+            <img src="10-contact-full.png" alt="Contact page" loading="lazy">
+            <span>10-contact-full.png</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Issue #6 -->
+    <div class="issue-card">
+      <div class="issue-card-header">
+        <span class="issue-number low">6</span>
+        <h3>"Topics We Cover" Section (Insights Page)</h3>
+      </div>
+      <div class="issue-card-body">
+        <h4>Problem</h4>
+        <p>The icon descriptions under each topic category use gray text that's hard to read.</p>
+
+        <div class="screenshot-grid">
+          <div class="screenshot-item">
+            <img src="09-insights-full.png" alt="Insights page" loading="lazy">
+            <span>09-insights-full.png</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recommended Fixes -->
+    <div class="fix-section">
+      <h2>Recommended Fixes</h2>
+
+      <div class="fix-item">
+        <h4>Fix 1: Increase Body Text Contrast</h4>
+        <p><strong>Current:</strong> <code>--color-gray-400: #4a5568</code> (contrast ratio ~7:1 on white - passes AA)</p>
+        <p><strong>Recommended:</strong> <code>--color-gray-600: #374151</code> (contrast ratio ~10:1 on white - passes AAA)</p>
+        <pre><code><span class="css-comment">/* In design-system.css - update the default */</span>
+<span class="css-property">--color-gray-400</span>: <span class="css-value">var(--theme-text-secondary, #374151)</span>;
+
+<span class="css-comment">/* Or create a new variable for body text */</span>
+<span class="css-property">--color-text-body</span>: <span class="css-value">#374151</span>;</code></pre>
+      </div>
+
+      <div class="fix-item">
+        <h4>Fix 2: Standardize Text Colors</h4>
+        <p>Create a simpler, more consistent text color system:</p>
+        <pre><code><span class="css-selector">:root</span> {
+  <span class="css-comment">/* Text Colors - High Contrast */</span>
+  <span class="css-property">--text-primary</span>: <span class="css-value">#1a202c</span>;      <span class="css-comment">/* Headings, important text */</span>
+  <span class="css-property">--text-secondary</span>: <span class="css-value">#374151</span>;    <span class="css-comment">/* Body text, descriptions */</span>
+  <span class="css-property">--text-tertiary</span>: <span class="css-value">#6b7280</span>;     <span class="css-comment">/* Captions, metadata only */</span>
+  <span class="css-property">--text-on-dark</span>: <span class="css-value">#ffffff</span>;      <span class="css-comment">/* Text on dark backgrounds */</span>
+  <span class="css-property">--text-on-dark-muted</span>: <span class="css-value">rgba(255, 255, 255, 0.85)</span>;
+}</code></pre>
+      </div>
+
+      <div class="fix-item">
+        <h4>Fix 3: Fix Footer Headings</h4>
+        <p>Change footer headings from yellow to white or a lighter teal:</p>
+        <pre><code><span class="css-selector">.footer-links h4,
+.footer-col h5</span> {
+  <span class="css-property">color</span>: <span class="css-value">var(--color-white)</span>;  <span class="css-comment">/* Instead of --color-accent */</span>
+  <span class="css-property">font-weight</span>: <span class="css-value">600</span>;
+}</code></pre>
+      </div>
+
+      <div class="fix-item">
+        <h4>Fix 4: Global Visited Link Reset</h4>
+        <p>Add a more robust visited link reset at the top of the stylesheet:</p>
+        <pre><code><span class="css-comment">/* Global visited link reset - prevent purple visited links */</span>
+<span class="css-selector">a, a:visited</span> {
+  <span class="css-property">color</span>: <span class="css-value">inherit</span>;
+}
+
+<span class="css-comment">/* Then set specific colors where needed */</span>
+<span class="css-selector">.content-area a</span> { <span class="css-property">color</span>: <span class="css-value">var(--theme-primary)</span>; }
+<span class="css-selector">.content-area a:visited</span> { <span class="css-property">color</span>: <span class="css-value">var(--theme-primary)</span>; }
+<span class="css-selector">.content-area a:hover</span> { <span class="css-property">color</span>: <span class="css-value">var(--theme-primary-light)</span>; }</code></pre>
+      </div>
+
+      <div class="fix-item">
+        <h4>Fix 5: Update Card Descriptions</h4>
+        <pre><code><span class="css-selector">.card-text,
+.benefit-description,
+.process-description,
+.insight-excerpt</span> {
+  <span class="css-property">color</span>: <span class="css-value">var(--text-secondary)</span>;  <span class="css-comment">/* #374151 instead of #4a5568 */</span>
+}</code></pre>
+      </div>
+    </div>
+
+    <!-- Implementation Priority -->
+    <div class="issue-card">
+      <div class="issue-card-header">
+        <h3>Implementation Priority</h3>
+      </div>
+      <div class="issue-card-body">
+        <table class="priority-table">
+          <thead>
+            <tr>
+              <th>Priority</th>
+              <th>Issue</th>
+              <th>Impact</th>
+              <th>Effort</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="priority-high">HIGH</span></td>
+              <td>Gray body text (#1)</td>
+              <td>Affects entire site</td>
+              <td>Low - CSS variable change</td>
+            </tr>
+            <tr>
+              <td><span class="priority-high">HIGH</span></td>
+              <td>Card descriptions (#1)</td>
+              <td>Affects key content</td>
+              <td>Low - CSS update</td>
+            </tr>
+            <tr>
+              <td><span class="priority-medium">MEDIUM</span></td>
+              <td>Footer headings (#2)</td>
+              <td>Affects footer readability</td>
+              <td>Low - one line change</td>
+            </tr>
+            <tr>
+              <td><span class="priority-medium">MEDIUM</span></td>
+              <td>Visited links (#3)</td>
+              <td>Edge cases only</td>
+              <td>Medium - testing needed</td>
+            </tr>
+            <tr>
+              <td><span class="priority-low">LOW</span></td>
+              <td>Form labels (#5)</td>
+              <td>Contact page only</td>
+              <td>Low - CSS update</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Files to Modify -->
+    <div class="issue-card">
+      <div class="issue-card-header">
+        <h3>Files to Modify</h3>
+      </div>
+      <div class="issue-card-body">
+        <ol class="files-list">
+          <li><code>public/css/design-system.css</code> - Update <code>--color-gray-400</code> or add new text variables</li>
+          <li><code>public/css/figma-styles.css</code> - Update footer heading colors</li>
+          <li><code>public/css/themes.css</code> - Strengthen visited link overrides</li>
+          <li><code>public/css/homepage.css</code> - Update card and description colors</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- Testing Checklist -->
+    <div class="issue-card">
+      <div class="issue-card-header">
+        <h3>Testing Checklist</h3>
+      </div>
+      <div class="issue-card-body">
+        <p>After implementing fixes:</p>
+        <ul class="checklist">
+          <li>Run Lighthouse accessibility audit</li>
+          <li>Test with browser dev tools color contrast checker</li>
+          <li>Verify on mobile devices</li>
+          <li>Check all visited link states by visiting pages</li>
+          <li>Test with browser extensions like WAVE or axe</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Screenshots Index -->
+    <div class="issue-card">
+      <div class="issue-card-header">
+        <h3>Screenshots Index</h3>
+      </div>
+      <div class="issue-card-body">
+        <table>
+          <thead>
+            <tr>
+              <th>File</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>01-homepage-full.png</code></td><td>Full homepage</td></tr>
+            <tr><td><code>02-homepage-hero.png</code></td><td>Hero section</td></tr>
+            <tr><td><code>03-homepage-stats.png</code></td><td>Stats bar</td></tr>
+            <tr><td><code>04-homepage-benefits.png</code></td><td>Benefits section</td></tr>
+            <tr><td><code>05-homepage-how-it-works.png</code></td><td>How it Works</td></tr>
+            <tr><td><code>06-homepage-footer.png</code></td><td>Footer</td></tr>
+            <tr><td><code>07-solutions-full.png</code></td><td>Solutions page</td></tr>
+            <tr><td><code>08-company-full.png</code></td><td>Company page</td></tr>
+            <tr><td><code>09-insights-full.png</code></td><td>Insights page</td></tr>
+            <tr><td><code>10-contact-full.png</code></td><td>Contact page</td></tr>
+            <tr><td><code>11-homepage-contrast-highlights.png</code></td><td>Highlighted problem areas</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>RetailAer Contrast Audit Report | Generated by Claude Code</p>
+  </footer>
+</body>
+</html>

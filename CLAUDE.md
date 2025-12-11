@@ -1,503 +1,476 @@
-# Retailaer Website - Project Guide
+# CLAUDE.md
 
-**Last Updated:** 2025-10-14
-**Status:** Phase 3 - Figma Design Complete, Ready for Production
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ---
 
 ## Project Overview
 
-**Goal:** Redesign and rebuild the Retailaer marketing website with a modern, professional appearance suitable for a B2B SaaS provider in the airline retailing industry.
+**Retailaer Marketing Website** - B2B SaaS marketing site for airline retailing technology platform.
 
-**Approach:** Figma-based design implemented in vanilla HTML/CSS/JS with Cloudflare Pages deployment.
+**Tech Stack:**
+- **Framework:** Astro 5.x (SSR mode)
+- **Adapter:** Cloudflare Pages (@astrojs/cloudflare)
+- **Content:** MDX for blog posts
+- **Styling:** Vanilla CSS with design system tokens
+- **Deployment:** Cloudflare Pages (auto-deploy from main branch)
 
----
-
-## Sites
-
-- **Production:** https://retailaer.com (content source for reference)
-- **Staging:** https://retailaer.us (auto-deploys from main branch)
-- **Dev Pages:** https://retailaer.pages.dev
+**Live Sites:**
+- **Staging:** https://retailaer.us (auto-deploys from main)
+- **Production:** https://retailaer.com
 
 ---
 
 ## Business Context
 
-### Company Profile
-- **Name:** Retailaer
-- **Industry:** Airline technology / Travel tech B2B SaaS
-- **Product:** Customer-first Offer and Order Management solution for airlines
-- **Target Audience:** Airlines, airline executives, travel tech partners
+**Company:** Retailaer
+**Industry:** Airline Technology / Travel Tech B2B SaaS
+**Product:** Customer-first Offer and Order Management platform
+**Target Audience:** Airlines, airline executives, travel tech partners
 
-### Key Metrics
+**Key Stats:**
 - 12 years in business
-- 5M+ orders processed
-- 300+ capabilities
+- **204M+ orders processed** (update from 5M in November 2025)
+- 300+ platform capabilities
 
-### Value Proposition
+**Value Proposition:**
 "Empowering modern airline retailing with the world's only customer-first Offer and Order Management solution."
 
 ---
 
-## Current Project Structure
+## Architecture
 
-### New Figma Design (Ready to Deploy)
-Located in `designs/figma/`:
-- `index-figma.html` - Homepage
-- `solutions-figma.html` - Solutions page
-- `company-figma.html` - Company/about page
-- `insights-figma.html` - Insights/blog listing
-- `contact-figma.html` - Contact page with form
+### Project Structure
 
-### Assets
-- `css/figma-styles.css` - Complete responsive stylesheet
-- `css/figma-scripts.js` - Interactive features (mobile menu, animations)
-- `assets/` - Images, icons, SVGs
-- `functions/api/contact.js` - Cloudflare Function for contact form
+```
+retailaer/
+├── src/
+│   ├── pages/              # Astro pages (file-based routing)
+│   │   ├── index.astro     # Homepage
+│   │   ├── solutions.astro # Solutions page
+│   │   ├── company.astro   # About/company page
+│   │   ├── insights.astro  # Blog listing
+│   │   ├── contact.astro   # Contact page
+│   │   ├── api/            # API endpoints (Cloudflare Functions)
+│   │   └── blog/           # Blog management pages
+│   ├── layouts/
+│   │   └── BaseLayout.astro # Main layout with nav/footer
+│   ├── components/
+│   │   ├── InsightsCarousel.astro
+│   │   ├── ExpandableFeatureCards.astro
+│   │   ├── FeedbackWidget.astro
+│   │   ├── EditMode.astro
+│   │   └── CookieConsent.astro
+│   ├── content/
+│   │   └── blog/           # MDX blog posts
+│   └── config/
+├── public/
+│   ├── css/
+│   │   ├── design-system.css  # Design tokens
+│   │   ├── figma-styles.css   # Main styles
+│   │   └── homepage.css       # Homepage-specific
+│   ├── js/
+│   └── assets/
+├── dist/                   # Build output (Cloudflare Pages)
+└── astro.config.mjs        # Astro configuration
+```
 
-### Current Live Pages (Old Design)
-Root-level HTML files:
-- `index.html`, `solutions.html`, `company.html`, `insights.html`, `contact.html`
+### Key Architectural Decisions
 
-### Reference Materials
-- `jadoo-design/` - Bootstrap template reference
-- `designs/` - Design assets, screenshots, reference images
+**1. Astro SSR Mode**
+- `output: 'server'` in astro.config.mjs
+- Enables server-side rendering on Cloudflare Pages
+- Required for API routes and dynamic features
+
+**2. File-Based Routing**
+- Pages in `src/pages/` automatically become routes
+- `/` → `src/pages/index.astro`
+- `/solutions` → `src/pages/solutions.astro`
+- `/blog/[slug]` → `src/pages/blog/[slug].astro` (dynamic routes)
+
+**3. API Routes**
+- Located in `src/pages/api/`
+- Deployed as Cloudflare Functions
+- Examples: `/api/feedback.ts`, `/api/commit.ts`, `/api/auth/*`
+
+**4. Content Collections**
+- Blog posts stored as MDX in `src/content/blog/`
+- Managed through custom CMS at `/blog/manage`
+- Deployed via Git commits (see `/api/commit.ts`)
+
+**5. Edit Mode Feature**
+- Live editing toolbar on pages (when `filePath` prop provided)
+- Allows authenticated users to edit content in-browser
+- Commits changes via GitHub API
+
+---
+
+## Development Commands
+
+### Local Development
+```bash
+npm run dev          # Start dev server at http://localhost:4321
+```
+
+### Build & Preview
+```bash
+npm run build        # Build for production (outputs to dist/)
+npm run preview      # Preview production build locally
+```
+
+### Testing
+```bash
+# Playwright visual regression tests
+npx playwright install              # Install browsers (first time)
+npx playwright test                 # Run all tests
+npx playwright test --ui            # Run with UI mode
+npx playwright test desktop-screenshots.spec.ts  # Run specific test
+```
+
+### Deployment
+```bash
+# Auto-deploys on push to main
+git add .
+git commit -m "Description"
+git push
+
+# Manual deploy (if needed)
+wrangler pages deploy dist
+```
 
 ---
 
 ## Design System
 
-### Colors
-- **Primary:** `#0a5c5c` (Deep teal - trust, travel tech)
-- **Accent:** `#f5b800` (Bright yellow - CTAs, highlights)
-- **Backgrounds:** White, `#f0f7f7` (Light teal)
-- **Text:** `#0a1f1f` (Dark), `#5a7a7a` (Body text)
+### Color Palette
+Defined in [public/css/design-system.css](public/css/design-system.css):
+- **Primary:** `#0a5c5c` (Deep teal)
+- **Accent:** `#f5b800` (Bright yellow)
+- **Background:** White, `#f0f7f7` (Light teal)
+- **Text:** `#0a1f1f` (Dark), `#5a7a7a` (Body)
 
 ### Typography
-- **Font:** Inter (Google Fonts)
-- **Base Size:** 16px minimum
+- **Font:** Inter (Google Fonts, weights 300-700)
+- **Base:** 16px
 - **Scale:** 14px - 60px responsive
-- **Weights:** Regular (400), Medium (500)
 
-### Layout
-- **Spacing:** 8px grid system
-- **Breakpoints:**
-  - Mobile: < 768px
-  - Tablet: 768px - 1024px
-  - Desktop: > 1024px
-- **Grid:** Responsive (1/2/3 columns based on breakpoint)
+### Breakpoints
+```css
+/* Mobile: default */
+/* Tablet: 768px */
+/* Desktop: 1024px */
+```
 
----
-
-## Implementation Status
-
-### ✅ Completed (Phase 1-2)
-- [x] Discovery and planning
-- [x] Design strategy documented
-- [x] Figma designs created
-- [x] All 5 pages implemented in HTML/CSS/JS
-- [x] Responsive design (mobile/tablet/desktop)
-- [x] Interactive features (mobile menu, animations)
-- [x] Contact form with Cloudflare Function
-- [x] Accessibility features (WCAG 2.1 AA)
-
-### 🔄 Current Phase (Phase 3)
-- [ ] Test Figma pages on all devices
-- [ ] Configure contact form email endpoint
-- [ ] Update email addresses
-- [ ] Final content review
-- [ ] Cross-browser testing
-- [ ] Performance optimization
-
-### ⏳ Next Phase (Phase 4 - Production)
-- [ ] Deploy Figma design as main site
-- [ ] Point retailaer.com to new design
-- [ ] Monitor performance
-- [ ] Gather feedback
+### CSS Architecture
+1. `design-system.css` - Design tokens (colors, typography, spacing)
+2. `figma-styles.css` - Global styles and components
+3. `homepage.css` - Homepage-specific styles
+4. Component-scoped styles in `.astro` files
 
 ---
 
-## Features
+## Key Features & Components
 
-### Responsive Design
-- Mobile-first approach
-- Hamburger menu on mobile
-- Adaptive grid layouts
-- Touch-optimized interactions
+### 1. Blog System (`/blog/*`)
+- **Listing:** `/insights` → [src/pages/insights.astro](src/pages/insights.astro)
+- **Single post:** `/blog/[slug]` → [src/pages/blog/[slug].astro](src/pages/blog/[slug].astro)
+- **CMS:** `/blog/manage` (authenticated)
+- **Editor:** `/blog/editor` (Milkdown WYSIWYG)
+- **Publishing:** Commits to `src/content/blog/` via `/api/commit.ts`
 
-### Accessibility
-- Semantic HTML5
-- ARIA labels for interactive elements
-- Keyboard navigation
-- High contrast colors (WCAG AA)
-- Respects `prefers-reduced-motion`
+### 2. Insights Carousel
+- Component: [src/components/InsightsCarousel.astro](src/components/InsightsCarousel.astro)
+- Shows latest blog posts on homepage
+- Swipeable on mobile, grid on desktop
+- Uses brand colors for gradients
 
-### Performance
-- No build process
-- Minimal dependencies (Google Fonts only)
-- ~50KB total (HTML+CSS+JS)
-- Target: Lighthouse 90+ scores
+### 3. Expandable Feature Cards
+- Component: [src/components/ExpandableFeatureCards.astro](src/components/ExpandableFeatureCards.astro)
+- Used on Solutions page
+- Click to expand/collapse details
 
-### Interactive Features
-- Sticky navigation
-- Smooth scroll
-- Scroll-triggered animations
-- Hover effects
-- Form validation
+### 4. Feedback Widget
+- Component: [src/components/FeedbackWidget.astro](src/components/FeedbackWidget.astro)
+- Fixed position widget on all pages
+- Submits via `/api/feedback.ts`
 
----
+### 5. Edit Mode
+- Component: [src/components/EditMode.astro](src/components/EditMode.astro)
+- Live editing toolbar for authenticated users
+- Requires `filePath` prop in BaseLayout
+- Commits changes via GitHub API
 
-## Tech Stack
-
-- **Frontend:** Vanilla HTML5, CSS3, JavaScript (ES6+)
-- **Fonts:** Google Fonts (Inter)
-- **Hosting:** Cloudflare Pages
-- **Functions:** Cloudflare Functions (contact form)
-- **Deployment:** Auto-deploy from GitHub main branch
-- **Version Control:** Git/GitHub
+### 6. Authentication
+- Session-based auth for blog management
+- Routes: `/api/auth/*`
+- Protected pages check session in server code
 
 ---
 
-## Deployment
+## Content Management
 
-### Current Setup
-- **Repository:** GitHub (main branch)
-- **Hosting:** Cloudflare Pages
-- **Domain:** retailaer.us (staging)
-- **Auto-deploy:** Push to main = instant deploy
-- **Configuration:** `wrangler.toml`
+### Adding Blog Posts
 
-### Deploy New Design
+**Option 1: Via CMS (Recommended)**
+1. Go to `/blog/manage`
+2. Login if needed
+3. Click "Create New Post"
+4. Write in Milkdown editor
+5. Save → auto-commits to Git
 
-**Test Current Figma Design:**
-Visit: https://retailaer.us/designs/figma/index-figma.html
+**Option 2: Manual**
+1. Create `.mdx` file in `src/content/blog/`
+2. Add frontmatter:
+```yaml
+---
+title: "Post Title"
+description: "Brief description"
+date: 2025-11-19
+author: "Author Name"
+image: "/images/post-image.jpg"
+---
+```
+3. Commit and push
 
-**Replace Current Site:**
+### Editing Pages
+
+**Option 1: Edit Mode (Live)**
+1. Navigate to page
+2. Click "Edit" in toolbar (if authenticated)
+3. Edit content inline
+4. Save → auto-commits
+
+**Option 2: Direct File Edit**
+1. Edit `.astro` file in `src/pages/`
+2. Save and preview locally
+3. Commit and push
+
+---
+
+## Common Development Tasks
+
+### Adding a New Page
+```astro
+// src/pages/new-page.astro
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Page Title">
+  <!-- Content -->
+</BaseLayout>
+```
+
+### Creating an API Endpoint
+```typescript
+// src/pages/api/example.ts
+export async function GET({ request }) {
+  return new Response(JSON.stringify({ data: 'hello' }), {
+    headers: { 'Content-Type': 'application/json' }
+  });
+}
+```
+
+### Adding Global Styles
+1. Edit [public/css/design-system.css](public/css/design-system.css) for tokens
+2. Edit [public/css/figma-styles.css](public/css/figma-styles.css) for global styles
+3. Or use scoped styles in `.astro` component:
+```astro
+<style>
+  .my-component { ... }
+</style>
+```
+
+### Screenshot Testing
 ```bash
-# Copy Figma files to root
-cp designs/figma/*.html .
+# Generate design review screenshots
+npx playwright test desktop-screenshots.spec.ts
+npx playwright test mobile-screenshots.spec.ts
 
-# Rename (remove -figma suffix)
-for file in *-figma.html; do mv "$file" "${file/-figma/}"; done
-
-# Commit and push
-git add .
-git commit -m "Launch new Figma-based website"
-git push
-```
-
-### Contact Form Setup
-
-1. Edit `functions/api/contact.js`
-2. Uncomment MailChannels code (lines 56-80)
-3. Update email address to yours
-4. Push changes
-
-See [DEPLOY.md](DEPLOY.md) for full details.
-
----
-
-## File Organization
-
-```
-retailaer/
-├── designs/
-│   └── figma/              # New Figma design pages
-│       ├── index-figma.html
-│       ├── solutions-figma.html
-│       ├── company-figma.html
-│       ├── insights-figma.html
-│       └── contact-figma.html
-├── css/
-│   ├── figma-styles.css    # Main stylesheet
-│   └── figma-scripts.js    # Interactive JS
-├── assets/                 # Images, icons, SVGs
-├── functions/
-│   └── api/
-│       └── contact.js      # Contact form handler
-├── jadoo-design/           # Reference template
-├── index.html              # Current live homepage
-├── solutions.html          # Current live pages
-├── company.html
-├── insights.html
-├── contact.html
-├── README.md               # Quick start guide
-├── CLAUDE.md               # This file - project context
-├── DEPLOY.md               # Deployment instructions
-└── wrangler.toml           # Cloudflare config
+# Output: design-review-output/
 ```
 
 ---
 
-## Pages Overview
+## Important Context: November 2025 Requirements
 
-### 1. Homepage (`index-figma.html`)
-- Hero section with value proposition
-- Stats bar (12 years, 5M orders, 300 capabilities)
-- 9 benefits grid
-- How it works (3 steps)
-- Insights preview
-- CTA section
-- Footer
+See [NOVEMBER-REQUIREMENTS-TODO.md](NOVEMBER-REQUIREMENTS-TODO.md) for detailed implementation checklist.
 
-### 2. Solutions (`solutions-figma.html`)
-- Platform overview
-- Airlines solutions
-- Travel brands solutions
-- Integration information
-- CTA
+### Key Changes Required
+- **Stats update:** 5M → **204M orders** (critical update)
+- **Hero CTA:** "Book a Demo" → "Get in Touch"
+- **Features:** 9 → 4 boxes
+- **Company values:** 6 → 3
+- **Solutions pillars:** Updated content + new "Customer-First" pillar
+- **Distribution channels:** 9 specific channels with exact wording
+- **Footer:** White logo, new description text
+- **Navigation:** White centered logo, hamburger menu
+- **Remove:** "certifications" from Enterprise Security text
 
-### 3. Company (`company-figma.html`)
-- About Retailaer
-- Mission and values
-- Key stats
-- Team/contact CTA
-
-### 4. Insights (`insights-figma.html`)
-- Blog/article listing (6 cards)
-- Newsletter signup
-- Categories/topics
-
-### 5. Contact (`contact-figma.html`)
-- Contact form (Cloudflare Function)
-- Email addresses
-- Response time info
-- CTA
-
----
-
-## Content Strategy
-
-### Core Features/Benefits (from retailaer.com)
-1. Enhance Customer Loyalty
-2. Personalized Experiences
-3. Drive Repeat Business
-4. Higher Conversion Rates
-5. Boost Ancillary Sales
-6. Streamlined Processes
-7. Reduced Dependencies
-8. Stay Ahead of Competition
-9. Positive Reputation
-
-### CTAs
-- "Book a Demo"
-- "Get In Touch"
-- "Learn More"
-- "See How It Works"
-
-### Navigation
-- Solutions
-- Company
-- Insights
-- Contact
-
----
-
-## Development Workflow
-
-### Making Changes
-
-**Edit Figma design pages:**
-```bash
-code designs/figma/index-figma.html
-```
-
-**Edit styles:**
-```bash
-code css/figma-styles.css
-```
-
-**Edit scripts:**
-```bash
-code css/figma-scripts.js
-```
-
-**Test locally:**
-```bash
-# Option 1: Direct file
-open designs/figma/index-figma.html
-
-# Option 2: Local server
-python3 -m http.server 8000
-# Visit: http://localhost:8000/designs/figma/index-figma.html
-```
-
-**Deploy:**
-```bash
-git add .
-git commit -m "Description of changes"
-git push  # Auto-deploys to retailaer.us
-```
+### Priority Files to Update
+1. [src/pages/index.astro](src/pages/index.astro) - Homepage updates
+2. [src/pages/company.astro](src/pages/company.astro) - Stats (204M), mission, "What Sets Us Apart"
+3. [src/pages/solutions.astro](src/pages/solutions.astro) - Pillars, channels, content refinements
+4. [src/layouts/BaseLayout.astro](src/layouts/BaseLayout.astro) - Footer, navigation
 
 ---
 
 ## Cloudflare Integration
 
 ### Pages Configuration
-- Auto-deploy on push to main
-- No build command needed
-- Output directory: root
+- **Build command:** `npm run build`
+- **Build output:** `dist/`
+- **Node version:** 18+
+- **Environment:** Production
 
-### Functions
-- Contact form: `functions/api/contact.js`
-- Uses MailChannels for email (free for Cloudflare)
-- Environment variables not needed (for MailChannels)
+### Functions (API Routes)
+- Automatically deployed from `src/pages/api/`
+- Serverless functions on Cloudflare Workers runtime
+- No environment variables needed (uses Cloudflare bindings)
 
 ### Custom Domains
-Current: retailaer.us
-To add: retailaer.com (via Cloudflare Dashboard)
+- Staging: retailaer.us (configured)
+- Production: retailaer.com (configured)
 
 ---
 
-## Pre-Launch Checklist
+## Testing Strategy
 
-### Testing
-- [ ] All pages load on desktop
-- [ ] All pages load on tablet
-- [ ] All pages load on mobile
+### Visual Regression Tests
+Located in `tests/`:
+- [desktop-screenshots.spec.ts](tests/desktop-screenshots.spec.ts) - Desktop viewport captures
+- [mobile-screenshots.spec.ts](tests/mobile-screenshots.spec.ts) - Mobile viewport captures
+
+**Purpose:**
+- Generate screenshots for design review
+- Compare implementations against Figma
+- Document visual state
+
+**Output:** `design-review-output/` directory
+
+### Manual Testing Checklist
+- [ ] All pages load correctly
 - [ ] Navigation works between pages
-- [ ] Mobile menu toggles correctly
-- [ ] Contact form submits (when configured)
-- [ ] All links work
-- [ ] Images load
-- [ ] Animations smooth
+- [ ] Mobile hamburger menu functions
+- [ ] Contact form submits
+- [ ] Blog posts display correctly
+- [ ] Responsive on mobile/tablet/desktop
 - [ ] No console errors
 
-### Configuration
-- [ ] Contact form email endpoint set up
-- [ ] Email addresses updated in contact page
-- [ ] Google Analytics added (optional)
-- [ ] Social media links updated
-- [ ] Meta tags for SEO/social sharing
-
-### Performance
-- [ ] Lighthouse audit run (target: 90+)
-- [ ] Mobile performance tested
-- [ ] Images optimized
-- [ ] Cross-browser testing (Chrome, Firefox, Safari, Edge)
-
-### Content
-- [ ] All copy proofread
-- [ ] All placeholder content replaced
-- [ ] Legal pages added if needed (Privacy, Terms)
-
 ---
 
-## Success Metrics
+## Deployment Workflow
 
-### Design Quality
-- Modern, professional appearance
-- Consistent branding
-- High contrast and accessibility (WCAG AA)
-- Clear visual hierarchy
-
-### Performance
-- Lighthouse score: 90+ (all categories)
-- Page load time: <2 seconds
-- Optimized images
-- Minimal JavaScript
-
-### User Experience
-- Clear navigation
-- Mobile-friendly
-- Fast interactions
-- Working forms
-- No broken links
-
-### Business Goals
-- Clear value proposition
-- Strong CTAs
-- Trust signals (metrics, testimonials)
-- Easy path to demo booking
-
----
-
-## Next Steps
-
-### Immediate
-1. Test all Figma pages at https://retailaer.us/designs/figma/
-2. Configure contact form email (see DEPLOY.md)
-3. Update email addresses in contact page
-4. Review all content
-5. Run performance tests
-
-### Before Production Launch
-1. Cross-browser testing
-2. Mobile device testing
-3. Lighthouse audit
-4. Final content review
-5. Set up analytics (optional)
-6. Replace current site with Figma design
-
-### After Launch
-1. Monitor analytics
-2. Gather user feedback
-3. Add real blog posts to Insights
-4. Consider A/B testing CTAs
-5. Iterate based on performance
-
----
-
-## Tools & Utilities
-
-### Available Commands (via .claude.access)
-- Git operations (status, diff, log, add, commit, push)
-- File operations (ls, cat, grep)
-- Wrangler commands (deploy, status, logs)
-- npm/build commands
-- Python server for local testing
-
-### Wrangler CLI
+### Standard Flow
 ```bash
-# List projects
-wrangler pages project list
+# 1. Make changes locally
+# 2. Test locally
+npm run dev
 
-# List deployments
-wrangler pages deployment list
+# 3. Preview production build
+npm run build
+npm run preview
 
-# View logs
-wrangler pages deployment tail
+# 4. Commit and push
+git add .
+git commit -m "Description of changes"
+git push  # Auto-deploys to retailaer.us
+```
+
+### Rollback
+```bash
+# Revert last commit
+git revert HEAD
+git push
+
+# Or restore specific commit
+git reset --hard <commit-hash>
+git push --force  # Use with caution
 ```
 
 ---
 
-## Reference Materials
+## Configuration Files
 
-### External Resources
-- Production site: https://retailaer.com
-- Staging site: https://retailaer.us
-- Cloudflare Pages Docs: https://developers.cloudflare.com/pages/
-- WCAG Guidelines: https://www.w3.org/WAI/WCAG21/quickref/
+### astro.config.mjs
+```javascript
+{
+  output: 'server',           // SSR mode
+  adapter: cloudflare(),      // Cloudflare Pages adapter
+  site: 'https://retailaer.us',
+  integrations: [mdx(), icon()]
+}
+```
 
-### Internal Docs
+### wrangler.toml
+```toml
+name = "retailaer"
+compatibility_date = "2025-08-22"
+pages_build_output_dir = "dist"
+```
+
+### package.json Scripts
+- `dev` - Start Astro dev server
+- `build` - Build for production
+- `preview` - Preview production build
+
+---
+
+## Troubleshooting
+
+### Build Fails
+```bash
+# Clear Astro cache
+rm -rf .astro dist
+
+# Reinstall dependencies
+rm -rf node_modules package-lock.json
+npm install
+
+# Try building again
+npm run build
+```
+
+### Styles Not Updating
+- Check if CSS file is linked in BaseLayout
+- Clear browser cache (Cmd+Shift+R)
+- Verify file path is correct (`/css/` not `css/`)
+
+### API Route Not Working
+- Check route naming: must be `.ts` in `src/pages/api/`
+- Verify export: `export async function GET/POST`
+- Check Cloudflare Functions logs in dashboard
+
+### Edit Mode Not Showing
+- Ensure `filePath` prop passed to BaseLayout
+- Check authentication status
+- Verify EditMode component imported
+
+---
+
+## Reference Documentation
+
+### External
+- Astro Docs: https://docs.astro.build
+- Cloudflare Pages: https://developers.cloudflare.com/pages/
+- MDX: https://mdxjs.com
+
+### Internal
 - [README.md](README.md) - Quick start guide
-- [DEPLOY.md](DEPLOY.md) - Deployment instructions
-- `designs/` - Design assets and references
+- [NOVEMBER-REQUIREMENTS-TODO.md](NOVEMBER-REQUIREMENTS-TODO.md) - Current implementation checklist
+- [DEPLOY.md](DEPLOY.md) - Deployment guide (legacy, pre-Astro migration)
 
 ---
 
 ## Notes
 
-- No build process required (vanilla HTML/CSS/JS)
-- Google Fonts loaded from CDN (can self-host for performance)
-- Icons are inline SVG (can replace with icon font or sprite)
-- All animations respect `prefers-reduced-motion`
-- Contact form uses Cloudflare Functions (free tier)
-- MailChannels email service free for Cloudflare users
+- **Migration:** This project migrated from vanilla HTML/CSS/JS to Astro
+- **Legacy files:** Old reference files exist in `designs/figma/` directory
+- **Auto-deploy:** Main branch auto-deploys to staging (retailaer.us)
+- **Blog storage:** Content stored in Git, not database
+- **Authentication:** Session-based cookies for blog management
 
 ---
 
-## Questions for Client
-
-1. **Contact form**: Confirm email address for submissions
-2. **Analytics**: Should we add Google Analytics?
-3. **Social media**: Provide LinkedIn/Twitter URLs for footer
-4. **Blog**: How often will Insights be updated? Need CMS?
-5. **Legal pages**: Need Privacy Policy, Terms of Service?
-6. **Domain**: When to switch retailaer.com to new design?
-
----
-
-**Version:** 2.0 (Figma Design)
-**Last Updated:** 2025-10-14
-**Status:** Ready for production deployment
+**Last Updated:** 2025-11-19
+**Framework:** Astro 5.x + Cloudflare Pages
+**Status:** Active development - November 2025 requirements implementation in progress

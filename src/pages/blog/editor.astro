@@ -1140,13 +1140,14 @@ if (!session) {
     previewIconSelect?.addEventListener('change', updateCarouselPreview);
     previewGradientSelect?.addEventListener('change', updateCarouselPreview);
 
-    // Publish button
-    document.getElementById('publish-btn')?.addEventListener('click', () => {
+    // Shared publish/save function
+    async function savePost(status: 'draft' | 'published') {
       const title = (document.getElementById('title') as HTMLInputElement).value;
       const content = (document.getElementById('editor') as HTMLElement).innerHTML;
+      const coverSrc = (document.getElementById('cover-preview') as HTMLImageElement).src;
 
       if (!title || !content) {
-        alert('Please add a title and content before publishing.');
+        alert('Please add a title and content before saving.');
         return;
       }
 
@@ -1159,8 +1160,91 @@ if (!session) {
         backgroundGradient: previewGradientSelect?.value || 'linear-gradient(135deg, #FFF5E6 0%, #FFE4CC 100%)'
       };
 
-      console.log('Publishing:', { title, content, carouselPreview });
-      alert('Publishing feature coming soon!');
+      // Get existing post ID from localStorage draft if editing
+      const draft = localStorage.getItem('article-draft');
+      const draftData = draft ? JSON.parse(draft) : {};
+
+      const postData = {
+        title,
+        content,
+        status,
+        carouselPreview,
+        coverImage: coverSrc && !coverSrc.includes('undefined') ? coverSrc : undefined,
+        excerpt: carouselPreview.excerpt,
+        id: draftData.id, // Will be undefined for new posts
+        createdAt: draftData.createdAt,
+        publishedAt: draftData.publishedAt,
+      };
+
+      // Show loading state
+      const publishBtn = document.getElementById('publish-btn') as HTMLButtonElement;
+      const saveBtn = document.getElementById('save-draft') as HTMLButtonElement;
+      const activeBtn = status === 'published' ? publishBtn : saveBtn;
+      const originalText = activeBtn.innerHTML;
+
+      activeBtn.innerHTML = status === 'published' ? 'Publishing...' : 'Saving...';
+      activeBtn.disabled = true;
+
+      try {
+        const response = await fetch('/api/blog/publish', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(postData),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.error || 'Failed to save');
+        }
+
+        // Update localStorage with the saved post info
+        localStorage.setItem('article-draft', JSON.stringify({
+          ...draftData,
+          id: result.id,
+          title,
+          content,
+          cover: postData.coverImage,
+          carouselPreview,
+          createdAt: result.post?.createdAt || draftData.createdAt,
+          timestamp: Date.now(),
+        }));
+
+        // Show success message
+        if (status === 'published') {
+          alert(`Post published successfully!\n\nIt will be live at:\n${result.post.url}\n\n(Deploys in 1-2 minutes)`);
+        } else {
+          const saveText = saveBtn?.querySelector('.save-text');
+          if (saveText) {
+            saveText.textContent = 'Saved!';
+            saveBtn?.classList.add('saved');
+            setTimeout(() => {
+              saveText.textContent = 'Save Draft';
+              saveBtn?.classList.remove('saved');
+            }, 2000);
+          }
+        }
+
+        console.log('Saved:', result);
+
+      } catch (error) {
+        console.error('Save error:', error);
+        alert(`Failed to ${status === 'published' ? 'publish' : 'save'}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      } finally {
+        activeBtn.innerHTML = originalText;
+        activeBtn.disabled = false;
+      }
+    }
+
+    // Save Draft button - now commits to GitHub as draft
+    document.getElementById('save-draft')?.addEventListener('click', async (e) => {
+      e.preventDefault();
+      await savePost('draft');
+    });
+
+    // Publish button
+    document.getElementById('publish-btn')?.addEventListener('click', async () => {
+      await savePost('published');
     });
   </script>
 </body>

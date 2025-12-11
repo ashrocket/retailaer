@@ -1,89 +1,126 @@
-# November Requirements - Implementation TODO
+# November 2025 Website Updates - Implementation Status
 
-**Status as of:** 2025-11-27
-**Source Document:** `NovemberRequirements.pdf`
-
----
-
-## COMPLETION STATUS OVERVIEW
-
-**Progress:** 100% Complete
-
-All November 2025 requirements have been implemented and deployed to retailaer.us.
+**Last Updated:** 2025-11-28
+**Source Document:** `Web site updates 11.25.pdf`
 
 ---
 
-## ✅ COMPLETED ITEMS
+## IMPLEMENTATION STATUS
 
-### Homepage
-- ✅ Hero CTA changed to "Get in Touch" (was "Book a Demo")
-- ✅ Stats section removed from homepage
-- ✅ Features reduced from 9 to 4 boxes
-- ✅ "How it works" section with correct order: Payment Orchestration, Customer Profiling, Order Simplification, Dynamic Offerings
-- ✅ CTA section with 6 benefit bullets:
-  - Increase ancillary revenue by 25%+
-  - Improve shopping conversion rates 15%+
-  - Streamline multi-channel distribution
-  - Enhance customer satisfaction scores 15%+
-  - Real-time inventory and PNR synchronisation
-  - Increase average shopping basket value 20%+
-- ✅ Insights carousel uses brand colors (teal/yellow gradients)
-- ✅ Google Analytics (G-206SDTT0S9) added
+**Progress:** 100% Complete (November 28 update)
 
-### Navigation
-- ✅ White Retailaer logo
-- ✅ Hamburger menu for mobile (slides in from right)
-- ✅ Mobile menu closes on link click and outside click
+All changes from the November 25 PDF update have been implemented.
 
-### Footer
-- ✅ White Retailaer logo
-- ✅ Footer description text added
-- ✅ "Solutions" changed to "Connect Retail Distribution"
-- ✅ Contact email: info@retailaer.com
+---
 
-### Company Page
-- ✅ Stats updated: 12 years, **204M+ orders**, 300+ capabilities
-- ✅ Hero subtitle updated
-- ✅ Mission section with correct wording
-- ✅ Values reduced to 3: Customer First, Innovation, Partnership
-- ✅ "What Sets Us Apart" section with 4 points:
-  1. True Customer-First Architecture
-  2. Modern Technology Stack
-  3. Deep Travel Tech Expertise
-  4. Proven at Scale (204 million+ orders)
-- ✅ Commitment section: To Airlines, To Partners, To Innovation
+## COMPLETED CHANGES (November 28, 2025)
 
-### Solutions Page
-- ✅ Hero subtitle updated
-- ✅ 4 Platform Pillars:
-  1. Dynamic Offers
-  2. Order Simplification
-  3. Frictionless Payments
-  4. Customer-First (NEW)
-- ✅ Marketplace section added with 4 features
-- ✅ 9 Distribution Channels (exact wording from requirements):
-  1. For Consumers
-  2. For Corporates
-  3. For Agencies
-  4. For Call centre
-  5. For Mobile
-  6. For Self-servicing
-  7. For Holidays
-  8. For NDC
-  9. For Airline Staff
-- ✅ "certifications" removed from Enterprise Security text
-- ✅ Expanded integrations list (13 items)
+### Homepage Changes
+
+1. **Benefits section moved to second position** (after hero)
+   - Title changed to "Why Leading Airlines Choose Us"
+   - New subtitle: "Tangible benefits of choosing Retailaer. Our next-gen Offer and Order platform delivers measurable results."
+
+2. **Updated benefit statistics:**
+   - 3-5%+ conversion rates
+   - 20%+ increased average order value
+   - 60% customer retention rate
+   - 25%+ ancillary revenue up-lift
+   - 15%+ enhanced customer satisfaction score
+   - 30% or less shopping cart abandonment
+
+3. **"How it works" section updated:**
+   - New subtitle: "Built on key retail driving principles"
+   - Renamed items to Key Retail Fundamentals:
+     - Frictionless Payments
+     - Unified Customer View
+     - Order Optimisation
+     - Dynamic Offers
+   - Removed "See our insights" and "Back to benefits" buttons
+   - Centralized gold "Get in Touch" button
+
+4. **Gold button styling** applied throughout (diamond gold gradient)
+
+### Solutions Page Changes
+
+1. **Hero subtitle updated:** "Next-gen airline retailing with Offers and Orders and Marketplace - built with airlines for airlines."
+
+2. **Platform subtitle updated:** "Connect Retail Distribution platform is built on four pillars."
+
+3. **Pillar updates:**
+   - Dynamic Offers: Removed "frictionless" from description
+   - Order Simplification: Updated description to match PDF
+   - Customer-First: Updated description (removed "advanced" from text)
+   - 2x2 grid layout on desktop
+
+4. **Marketplace section:**
+   - Removed "Simplified Integration" box
+   - Renamed "Revenue Generation" to "Revenue Uplift"
+   - Updated descriptions
+   - 2x2 grid layout
+
+5. **Distribution section:**
+   - Removed "Retailaer" prefix from title → "Connect Retail Distribution"
+   - Updated subtitle
+   - "For Consumers" → "For Travellers"
+   - "For NDC" → "For Aggregators"
+   - Updated all channel descriptions per PDF
+
+### Company Page Changes
+
+1. **Hero text brightened** (increased opacity to 1)
+
+2. **Hero subtitle updated:** "A team lead by a former airline executive, building airline retailing tech with airlines for airlines, defining the next-gen eCommerce solutions with Offers and Orders."
+
+3. **Mission section restructured:**
+   - New mission statement about reducing PNR-dependency
+   - Added "What we do" subsection
+   - Added "Why it works" subsection
+
+4. **Commitment section:**
+   - Added "To Passengers" commitment
+   - Changed to 2x2 grid layout
+
+5. **CTA section:**
+   - Removed "Email Us" button
+   - Changed to gold "Get in Touch" button
+   - Brightened text
+
+---
+
+## STYLING UPDATES
+
+- **Gold button class (.btn-gold):** Diamond gold gradient (#f5b800 → #d9a400)
+- **Centered navigation class (.centered-nav)**
+- **Section subtitle class (.section-subtitle)**
+- **2x2 layouts** for pillars, marketplace, and commitments
 
 ---
 
 ## DEPLOYMENT STATUS
 
-- **Staging (retailaer.us):** Deployed and live
+- **Staging (retailaer.us):** Ready for deployment
 - **Production (retailaer.com):** Requires DNS configuration at 123-reg (2FA with Anders)
 
 ---
 
-## NOTES
+## REMAINING ITEMS (Not in PDF scope)
+
+1. **Production DNS setup** - Requires 123-reg access with Anders' 2FA
+2. **Customer quote placeholder** - PDF shows "Customer quote" placeholder in benefits section (optional)
+
+---
+
+## FILES CLEANED UP
+
+Removed extraneous files:
+- `design-review-export.html`
+- `design-review-mobile.html`
+- `NovemberRequirements.pdf` (superseded by `Web site updates 11.25.pdf`)
+
+---
+
+## TECHNICAL NOTES
 
 - Site uses Cloudflare Pages with SSR (Server-Side Rendering)
 - Cannot be deployed to traditional hosting (requires Cloudflare Workers)
@@ -93,6 +130,5 @@ All November 2025 requirements have been implemented and deployed to retailaer.u
 
 ---
 
-**Last Updated:** 2025-11-27
 **Framework:** Astro 5.x + Cloudflare Pages
-**Status:** Complete - awaiting production DNS configuration
+**Status:** Implementation complete - ready for review and deployment
