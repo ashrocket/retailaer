@@ -8,7 +8,7 @@ import { Icon } from 'astro-icon/components';
   description="Customer-first Offer and Order Management solutions for modern airlines and travel brands."
 >
   <!-- Hero Section -->
-  <section class="page-hero">
+  <section class="page-hero hero-bright">
     <div class="container">
       <h1 class="page-title" data-editable="hero-title">Solutions</h1>
       <p class="page-subtitle" data-editable="hero-subtitle">
@@ -105,10 +105,10 @@ import { Icon } from 'astro-icon/components';
         </p>
       </div>
 
-      <div class="features-grid marketplace-grid">
+      <div class="features-grid marketplace-grid-2x2">
         <div class="feature-card">
           <div class="feature-icon">
-            <Icon name="lucide:git-branch" />
+            <Icon name="lucide:layers" />
           </div>
           <h4 data-editable="marketplace-feature-1-title">Multi-Channel Distribution</h4>
           <p data-editable="marketplace-feature-1-text">
@@ -355,6 +355,12 @@ import { Icon } from 'astro-icon/components';
       color: white;
     }
 
+    .hero-bright .page-title,
+    .hero-bright .page-subtitle {
+      color: white;
+      opacity: 1;
+    }
+
     .page-title {
       font-size: 3.5rem;
       font-weight: 700;
@@ -365,11 +371,11 @@ import { Icon } from 'astro-icon/components';
 
     .page-subtitle {
       font-size: 1.25rem;
-      opacity: 0.95;
+      opacity: 1;
       line-height: 1.6;
       max-width: 700px;
       margin: 0 auto;
-      color: rgba(255, 255, 255, 0.9);
+      color: rgba(255, 255, 255, 0.95);
     }
 
     .section {
@@ -406,13 +412,13 @@ import { Icon } from 'astro-icon/components';
       margin-top: 3rem;
     }
 
-    .marketplace-grid {
+    .marketplace-grid-2x2 {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 2rem;
     }
 
-    .marketplace-grid .feature-card:last-child {
+    .marketplace-grid-2x2 .feature-card:nth-child(3) {
       grid-column: 1 / -1;
       max-width: 50%;
       margin: 0 auto;
@@ -420,11 +426,11 @@ import { Icon } from 'astro-icon/components';
 
     @media (max-width: 768px) {
       .pillars-grid,
-      .marketplace-grid {
+      .marketplace-grid-2x2 {
         grid-template-columns: 1fr;
       }
 
-      .marketplace-grid .feature-card:last-child {
+      .marketplace-grid-2x2 .feature-card:nth-child(3) {
         max-width: 100%;
       }
     }

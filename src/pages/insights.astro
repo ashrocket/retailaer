@@ -1,45 +1,15 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Icon } from 'astro-icon/components';
-import { readdir, readFile } from 'node:fs/promises';
-import { join } from 'node:path';
 
-// Read published blog posts
-let posts: any[] = [];
+// Import all blog posts at build time (Cloudflare Workers compatible)
+const blogModules = import.meta.glob('../content/blog/*.json', { eager: true });
 
-try {
-  const contentDir = join(process.cwd(), 'src/content/blog');
-
-  let files: string[] = [];
-  try {
-    files = await readdir(contentDir);
-  } catch (err) {
-    files = [];
-  }
-
-  if (files.length > 0) {
-    const allPosts = await Promise.all(
-      files
-        .filter(file => file.endsWith('.json'))
-        .map(async file => {
-          try {
-            const content = await readFile(join(contentDir, file), 'utf-8');
-            return JSON.parse(content);
-          } catch (err) {
-            return null;
-          }
-        })
-    );
-
-    // Filter for published posts only
-    posts = allPosts
-      .filter(post => post !== null && post.status === 'published')
-      .sort((a, b) => new Date(b.publishedAt || b.updatedAt).getTime() - new Date(a.publishedAt || a.updatedAt).getTime());
-  }
-} catch (error) {
-  console.error('Error loading posts:', error);
-  posts = [];
-}
+// Process and filter published posts
+const posts = Object.values(blogModules)
+  .map((module: any) => module.default || module)
+  .filter(post => post && post.status === 'published')
+  .sort((a, b) => new Date(b.publishedAt || b.updatedAt).getTime() - new Date(a.publishedAt || a.updatedAt).getTime());
 ---
 
 <BaseLayout

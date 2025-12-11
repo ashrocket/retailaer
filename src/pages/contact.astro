@@ -8,7 +8,7 @@ import { Icon } from 'astro-icon/components';
   description="Get in touch with Retailaer to learn how we can transform your airline retailing strategy."
 >
   <!-- Hero Section -->
-  <section class="page-hero">
+  <section class="page-hero hero-bright">
     <div class="container">
       <h1 class="page-title" data-editable="hero-title">Get In Touch</h1>
       <p class="page-subtitle" data-editable="hero-subtitle">
@@ -227,6 +227,12 @@ import { Icon } from 'astro-icon/components';
       color: white;
     }
 
+    .hero-bright .page-title,
+    .hero-bright .page-subtitle {
+      color: white;
+      opacity: 1;
+    }
+
     .page-title {
       font-size: 3.5rem;
       font-weight: 700;
@@ -237,11 +243,11 @@ import { Icon } from 'astro-icon/components';
 
     .page-subtitle {
       font-size: 1.25rem;
-      opacity: 0.95;
+      opacity: 1;
       line-height: 1.6;
       max-width: 700px;
       margin: 0 auto;
-      color: rgba(255, 255, 255, 0.9);
+      color: rgba(255, 255, 255, 0.95);
     }
 
     .section {

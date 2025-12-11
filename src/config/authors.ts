@@ -35,6 +35,13 @@ export const ALLOWED_AUTHORS: Author[] = [
     linkedinUrl: 'https://www.linkedin.com/in/ashleyraiteri',
     email: 'ashley@raiteri.net',
   },
+  {
+    id: 'julia-reichel',
+    name: 'Julia Reichel',
+    linkedinUsername: 'julia-reichel-travelandtransportation',
+    linkedinUrl: 'https://www.linkedin.com/in/julia-reichel-travelandtransportation/',
+    email: undefined, // Will need to add email once known for LinkedIn OAuth
+  },
 ];
 
 /**
