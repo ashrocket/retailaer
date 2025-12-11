@@ -1,0 +1,359 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { requireAuth } from '../../lib/auth';
+
+export const prerender = false;
+
+// Require authentication
+const session = requireAuth(Astro.cookies);
+
+if (!session) {
+  return Astro.redirect('/blog/login');
+}
+---
+
+<BaseLayout title="Preview - Retailaer">
+  <div class="preview-banner">
+    <div class="preview-banner-content">
+      <span class="preview-badge">PREVIEW MODE</span>
+      <span class="preview-text">This is a preview. The post has not been published yet.</span>
+      <div class="preview-actions">
+        <button id="back-to-editor" class="btn-secondary">← Back to Editor</button>
+        <button id="publish-from-preview" class="btn-primary">Publish Now</button>
+      </div>
+    </div>
+  </div>
+
+  <article class="blog-post preview-post">
+    <div class="post-header">
+      <img id="preview-cover" class="post-cover hidden" alt="Cover image" />
+      <h1 id="preview-title" class="post-title">Loading preview...</h1>
+      <div class="post-meta">
+        <span class="post-author">By {session.name}</span>
+        <span class="post-date" id="preview-date"></span>
+      </div>
+    </div>
+    <div id="preview-content" class="post-content">
+      <!-- Content will be injected here -->
+    </div>
+  </article>
+
+  <style>
+    .preview-banner {
+      position: fixed;
+      top: 80px;
+      left: 0;
+      right: 0;
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: white;
+      padding: 12px 24px;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .preview-banner-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .preview-badge {
+      background: rgba(0, 0, 0, 0.2);
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .preview-text {
+      flex: 1;
+      font-size: 14px;
+    }
+
+    .preview-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .preview-banner .btn-secondary {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .preview-banner .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .preview-banner .btn-primary {
+      background: white;
+      color: #d97706;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .preview-banner .btn-primary:hover {
+      background: #fef3c7;
+      transform: translateY(-1px);
+    }
+
+    .preview-post {
+      margin-top: 140px !important;
+    }
+
+    .blog-post {
+      max-width: 800px;
+      margin: 120px auto 80px;
+      padding: 0 24px;
+    }
+
+    .post-header {
+      margin-bottom: 48px;
+    }
+
+    .post-cover {
+      width: 100%;
+      max-height: 500px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 32px;
+    }
+
+    .post-cover.hidden {
+      display: none;
+    }
+
+    .post-title {
+      font-size: 48px;
+      font-weight: 700;
+      color: #0a1f1f;
+      line-height: 1.2;
+      margin: 0 0 24px 0;
+    }
+
+    .post-meta {
+      display: flex;
+      gap: 24px;
+      color: #6b7280;
+      font-size: 16px;
+    }
+
+    .post-author {
+      font-weight: 500;
+    }
+
+    .post-content {
+      font-size: 18px;
+      line-height: 1.8;
+      color: #374151;
+    }
+
+    .post-content h2 {
+      font-size: 32px;
+      font-weight: 700;
+      color: #0a1f1f;
+      margin: 48px 0 24px;
+    }
+
+    .post-content h3 {
+      font-size: 24px;
+      font-weight: 600;
+      color: #0a1f1f;
+      margin: 36px 0 16px;
+    }
+
+    .post-content p {
+      margin-bottom: 24px;
+    }
+
+    .post-content ul,
+    .post-content ol {
+      margin: 24px 0;
+      padding-left: 32px;
+    }
+
+    .post-content li {
+      margin: 12px 0;
+    }
+
+    .post-content a {
+      color: #0a5c5c;
+      text-decoration: underline;
+    }
+
+    .post-content a:hover {
+      color: #084a4f;
+    }
+
+    .post-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin: 32px 0;
+    }
+
+    .post-content blockquote {
+      border-left: 4px solid #f5b800;
+      padding-left: 24px;
+      margin: 32px 0;
+      font-style: italic;
+      color: #6b7280;
+      font-size: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .preview-banner-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .preview-actions {
+        width: 100%;
+      }
+
+      .preview-actions button {
+        flex: 1;
+      }
+
+      .preview-post {
+        margin-top: 180px !important;
+      }
+
+      .post-title {
+        font-size: 32px;
+      }
+
+      .post-content {
+        font-size: 16px;
+      }
+    }
+  </style>
+
+  <script>
+    // Load preview data from localStorage
+    const draft = localStorage.getItem('article-draft');
+
+    if (draft) {
+      const data = JSON.parse(draft);
+
+      // Set title
+      const titleEl = document.getElementById('preview-title');
+      if (titleEl && data.title) {
+        titleEl.textContent = data.title;
+      }
+
+      // Set cover image
+      const coverEl = document.getElementById('preview-cover') as HTMLImageElement;
+      if (coverEl && data.cover && !data.cover.includes('undefined')) {
+        coverEl.src = data.cover;
+        coverEl.classList.remove('hidden');
+      }
+
+      // Set content
+      const contentEl = document.getElementById('preview-content');
+      if (contentEl && data.content) {
+        contentEl.innerHTML = data.content;
+      }
+
+      // Set date
+      const dateEl = document.getElementById('preview-date');
+      if (dateEl) {
+        dateEl.textContent = new Date().toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+      }
+    } else {
+      // No draft data
+      const titleEl = document.getElementById('preview-title');
+      if (titleEl) {
+        titleEl.textContent = 'No preview data found';
+      }
+      const contentEl = document.getElementById('preview-content');
+      if (contentEl) {
+        contentEl.innerHTML = '<p>Please go back to the editor and create some content first.</p>';
+      }
+    }
+
+    // Back to editor button
+    document.getElementById('back-to-editor')?.addEventListener('click', () => {
+      window.close();
+      // Fallback if window.close() doesn't work (wasn't opened by script)
+      window.location.href = '/blog/editor';
+    });
+
+    // Publish from preview
+    document.getElementById('publish-from-preview')?.addEventListener('click', async () => {
+      const draft = localStorage.getItem('article-draft');
+      if (!draft) {
+        alert('No content to publish. Please go back to the editor.');
+        return;
+      }
+
+      const data = JSON.parse(draft);
+      const btn = document.getElementById('publish-from-preview') as HTMLButtonElement;
+      const originalText = btn.textContent;
+      btn.textContent = 'Publishing...';
+      btn.disabled = true;
+
+      try {
+        const response = await fetch('/api/blog/publish', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title: data.title,
+            content: data.content,
+            status: 'published',
+            carouselPreview: data.carouselPreview,
+            coverImage: data.cover,
+            excerpt: data.carouselPreview?.excerpt,
+            id: data.id,
+            createdAt: data.createdAt,
+            publishedAt: data.publishedAt,
+          }),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.error || 'Failed to publish');
+        }
+
+        // Update localStorage with published info
+        localStorage.setItem('article-draft', JSON.stringify({
+          ...data,
+          id: result.id,
+          publishedAt: new Date().toISOString(),
+        }));
+
+        alert(`Published successfully!\n\nYour post will be live at:\n${result.post.url}\n\n(Deploys in 1-2 minutes)`);
+
+        // Redirect to the published post or manage page
+        window.location.href = '/blog/manage';
+
+      } catch (error) {
+        console.error('Publish error:', error);
+        alert(`Failed to publish: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        btn.textContent = originalText;
+        btn.disabled = false;
+      }
+    });
+  </script>
+</BaseLayout>

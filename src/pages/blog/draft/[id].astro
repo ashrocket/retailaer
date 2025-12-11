@@ -1,0 +1,311 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+
+export const prerender = false;
+
+const { id } = Astro.params;
+
+// Load the draft from content/blog
+let post = null;
+let error = null;
+
+try {
+  // Import all blog posts at build time (Cloudflare Workers compatible)
+  const blogModules = import.meta.glob('../../../content/blog/*.json', { eager: true });
+
+  // Find the post with matching ID
+  for (const [path, module] of Object.entries(blogModules)) {
+    const data = (module as any).default || module;
+    if (data.id === id) {
+      post = data;
+      break;
+    }
+  }
+
+  if (!post) {
+    error = 'Draft not found';
+  }
+} catch (e) {
+  console.error('Error loading draft:', e);
+  error = 'Failed to load draft';
+}
+---
+
+<BaseLayout title={post ? `Draft: ${post.title}` : 'Draft Not Found'}>
+  {error ? (
+    <div class="error-container">
+      <div class="error-content">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <h1>Draft Not Found</h1>
+        <p>This draft may have been deleted or the link is invalid.</p>
+        <a href="/" class="btn-primary">Go to Homepage</a>
+      </div>
+    </div>
+  ) : (
+    <>
+      <div class="draft-banner">
+        <div class="draft-banner-content">
+          <span class="draft-badge">DRAFT PREVIEW</span>
+          <span class="draft-text">This is an unpublished draft shared for review.</span>
+          {post.status === 'published' && (
+            <a href={`/blog/${post.slug}`} class="view-live-btn">View Published Version →</a>
+          )}
+        </div>
+      </div>
+
+      <article class="blog-post draft-post">
+        <div class="post-header">
+          {post.coverImage && (
+            <img src={post.coverImage} alt="Cover image" class="post-cover" />
+          )}
+          <h1 class="post-title">{post.title}</h1>
+          <div class="post-meta">
+            <span class="post-author">By {post.author}</span>
+            <span class="post-date">
+              {new Date(post.updatedAt || post.createdAt).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}
+            </span>
+            <span class="post-status">
+              {post.status === 'draft' ? '📝 Draft' : '✓ Published'}
+            </span>
+          </div>
+        </div>
+        <div class="post-content" set:html={post.content} />
+      </article>
+    </>
+  )}
+
+  <style>
+    .error-container {
+      min-height: 60vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px;
+    }
+
+    .error-content {
+      text-align: center;
+      max-width: 400px;
+    }
+
+    .error-content svg {
+      color: #9ca3af;
+      margin-bottom: 24px;
+    }
+
+    .error-content h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1f2937;
+      margin: 0 0 12px 0;
+    }
+
+    .error-content p {
+      font-size: 16px;
+      color: #6b7280;
+      margin: 0 0 24px 0;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background: #0a5c5c;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: #084a4f;
+    }
+
+    .draft-banner {
+      position: fixed;
+      top: 80px;
+      left: 0;
+      right: 0;
+      background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+      color: white;
+      padding: 12px 24px;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .draft-banner-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .draft-badge {
+      background: rgba(0, 0, 0, 0.2);
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .draft-text {
+      flex: 1;
+      font-size: 14px;
+    }
+
+    .view-live-btn {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .view-live-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .draft-post {
+      margin-top: 140px !important;
+    }
+
+    .blog-post {
+      max-width: 800px;
+      margin: 120px auto 80px;
+      padding: 0 24px;
+    }
+
+    .post-header {
+      margin-bottom: 48px;
+    }
+
+    .post-cover {
+      width: 100%;
+      max-height: 500px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 32px;
+    }
+
+    .post-title {
+      font-size: 48px;
+      font-weight: 700;
+      color: #0a1f1f;
+      line-height: 1.2;
+      margin: 0 0 24px 0;
+    }
+
+    .post-meta {
+      display: flex;
+      gap: 24px;
+      color: #6b7280;
+      font-size: 16px;
+      flex-wrap: wrap;
+    }
+
+    .post-author {
+      font-weight: 500;
+    }
+
+    .post-status {
+      background: #f3f4f6;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 14px;
+    }
+
+    .post-content {
+      font-size: 18px;
+      line-height: 1.8;
+      color: #374151;
+    }
+
+    .post-content :global(h2) {
+      font-size: 32px;
+      font-weight: 700;
+      color: #0a1f1f;
+      margin: 48px 0 24px;
+    }
+
+    .post-content :global(h3) {
+      font-size: 24px;
+      font-weight: 600;
+      color: #0a1f1f;
+      margin: 36px 0 16px;
+    }
+
+    .post-content :global(p) {
+      margin-bottom: 24px;
+    }
+
+    .post-content :global(ul),
+    .post-content :global(ol) {
+      margin: 24px 0;
+      padding-left: 32px;
+    }
+
+    .post-content :global(li) {
+      margin: 12px 0;
+    }
+
+    .post-content :global(a) {
+      color: #0a5c5c;
+      text-decoration: underline;
+    }
+
+    .post-content :global(a:hover) {
+      color: #084a4f;
+    }
+
+    .post-content :global(img) {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin: 32px 0;
+    }
+
+    .post-content :global(blockquote) {
+      border-left: 4px solid #f5b800;
+      padding-left: 24px;
+      margin: 32px 0;
+      font-style: italic;
+      color: #6b7280;
+      font-size: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .draft-banner-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .draft-post {
+        margin-top: 180px !important;
+      }
+
+      .post-title {
+        font-size: 32px;
+      }
+
+      .post-content {
+        font-size: 16px;
+      }
+    }
+  </style>
+</BaseLayout>

@@ -187,14 +187,21 @@ if (!session) {
     </div>
   </div>
 
-  <!-- Preview Modal -->
-  <div id="preview-modal" class="modal hidden">
-    <div class="modal-content preview-content">
-      <div class="modal-header">
-        <h2>Preview</h2>
-        <button id="close-preview" class="close-btn">×</button>
+  <!-- Share Link Notification -->
+  <div id="share-notification" class="share-notification hidden">
+    <div class="share-notification-content">
+      <div class="share-header">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+        </svg>
+        <span>Draft saved! Share this link for review:</span>
+        <button id="close-share-notification" class="close-share-btn">&times;</button>
       </div>
-      <div id="preview-body" class="preview-body"></div>
+      <div class="share-link-container">
+        <input type="text" id="share-link-input" readonly />
+        <button id="copy-share-link" class="copy-btn">Copy</button>
+      </div>
     </div>
   </div>
 
@@ -650,6 +657,112 @@ if (!session) {
       display: none !important;
     }
 
+    /* Share Notification */
+    .share-notification {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 2000;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(100px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .share-notification-content {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+      border: 1px solid #e5e7eb;
+      overflow: hidden;
+      min-width: 380px;
+    }
+
+    .share-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px;
+      background: #f0fdf4;
+      border-bottom: 1px solid #dcfce7;
+      color: #166534;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .share-header svg {
+      flex-shrink: 0;
+      color: #22c55e;
+    }
+
+    .share-header span {
+      flex: 1;
+    }
+
+    .close-share-btn {
+      background: none;
+      border: none;
+      font-size: 20px;
+      color: #6b7280;
+      cursor: pointer;
+      padding: 0;
+      line-height: 1;
+    }
+
+    .close-share-btn:hover {
+      color: #374151;
+    }
+
+    .share-link-container {
+      display: flex;
+      gap: 8px;
+      padding: 12px 16px;
+    }
+
+    #share-link-input {
+      flex: 1;
+      padding: 10px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: monospace;
+      background: #f9fafb;
+      color: #374151;
+    }
+
+    #share-link-input:focus {
+      outline: none;
+      border-color: #0a5c5c;
+    }
+
+    .copy-btn {
+      padding: 10px 20px;
+      background: #0a5c5c;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .copy-btn:hover {
+      background: #084a4f;
+    }
+
+    .copy-btn.copied {
+      background: #22c55e;
+    }
+
     /* Preview Modal */
     .modal {
       position: fixed;
@@ -1015,60 +1128,25 @@ if (!session) {
       console.log('Draft loaded from', new Date(draftData.timestamp).toLocaleString());
     }
 
-    // Preview button
-    const previewModal = document.getElementById('preview-modal');
-    const previewBody = document.getElementById('preview-body');
+    // Preview button - opens full page preview in new tab
     const previewBtn = document.getElementById('preview-btn');
-    const closePreviewBtn = document.getElementById('close-preview');
 
     previewBtn?.addEventListener('click', () => {
       const title = (document.getElementById('title') as HTMLInputElement).value;
       const content = (document.getElementById('editor') as HTMLElement).innerHTML;
-      const coverSrc = (document.getElementById('cover-preview') as HTMLImageElement).src;
 
       if (!title && !content) {
         alert('Please add some content to preview.');
         return;
       }
 
-      let previewHTML = '';
+      // Save current state to localStorage so preview page can read it
+      saveDraft(false);
 
-      // Add cover image if exists
-      if (coverSrc && !coverSrc.includes('undefined')) {
-        previewHTML += `<img src="${coverSrc}" alt="Cover image" />`;
-      }
-
-      // Add title
-      if (title) {
-        previewHTML += `<h1>${title}</h1>`;
-      }
-
-      // Add content
-      previewHTML += content;
-
-      if (previewBody) {
-        previewBody.innerHTML = previewHTML;
-      }
-
-      previewModal?.classList.remove('hidden');
-    });
-
-    closePreviewBtn?.addEventListener('click', () => {
-      previewModal?.classList.add('hidden');
-    });
-
-    // Close modal on outside click
-    previewModal?.addEventListener('click', (e) => {
-      if (e.target === previewModal) {
-        previewModal.classList.add('hidden');
-      }
-    });
-
-    // Close modal on Escape key
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && !previewModal?.classList.contains('hidden')) {
-        previewModal?.classList.add('hidden');
-      }
+      // Small delay to ensure localStorage is updated
+      setTimeout(() => {
+        window.open('/blog/preview', '_blank');
+      }, 100);
     });
 
     // Carousel preview section toggle
@@ -1214,6 +1292,7 @@ if (!session) {
         if (status === 'published') {
           alert(`Post published successfully!\n\nIt will be live at:\n${result.post.url}\n\n(Deploys in 1-2 minutes)`);
         } else {
+          // Show saved indicator
           const saveText = saveBtn?.querySelector('.save-text');
           if (saveText) {
             saveText.textContent = 'Saved!';
@@ -1223,6 +1302,10 @@ if (!session) {
               saveBtn?.classList.remove('saved');
             }, 2000);
           }
+
+          // Show share link notification
+          const shareUrl = `${window.location.origin}/blog/draft/${result.id}`;
+          showShareNotification(shareUrl);
         }
 
         console.log('Saved:', result);
@@ -1246,6 +1329,57 @@ if (!session) {
     document.getElementById('publish-btn')?.addEventListener('click', async () => {
       await savePost('published');
     });
+
+    // Share notification functions
+    function showShareNotification(url: string) {
+      const notification = document.getElementById('share-notification');
+      const input = document.getElementById('share-link-input') as HTMLInputElement;
+
+      if (notification && input) {
+        input.value = url;
+        notification.classList.remove('hidden');
+      }
+    }
+
+    function hideShareNotification() {
+      const notification = document.getElementById('share-notification');
+      notification?.classList.add('hidden');
+    }
+
+    // Close share notification
+    document.getElementById('close-share-notification')?.addEventListener('click', hideShareNotification);
+
+    // Copy share link
+    document.getElementById('copy-share-link')?.addEventListener('click', async () => {
+      const input = document.getElementById('share-link-input') as HTMLInputElement;
+      const btn = document.getElementById('copy-share-link') as HTMLButtonElement;
+
+      if (input && btn) {
+        await navigator.clipboard.writeText(input.value);
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 2000);
+      }
+    });
+
+    // Auto-hide share notification after 30 seconds
+    const shareNotification = document.getElementById('share-notification');
+    if (shareNotification) {
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.attributeName === 'class' && !shareNotification.classList.contains('hidden')) {
+            setTimeout(() => {
+              hideShareNotification();
+            }, 30000);
+          }
+        });
+      });
+      observer.observe(shareNotification, { attributes: true });
+    }
   </script>
 </body>
 </html>
