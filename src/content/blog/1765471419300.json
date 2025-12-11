@@ -1,0 +1,20 @@
+{
+  "id": "1765471419300",
+  "title": "Test Publish 1765471417981",
+  "slug": "test-publish-1765471417981",
+  "content": "This is a test post created at 2025-12-11T16:43:37.981Z to verify publish functionality.",
+  "excerpt": "This is a test post created at 2025-12-11T16:43:37.981Z to verify publish functionality.",
+  "author": "Ashley Raiteri",
+  "authorId": "ashley-raiteri",
+  "status": "published",
+  "createdAt": "2025-12-11T16:43:39.300Z",
+  "updatedAt": "2025-12-11T16:43:39.300Z",
+  "publishedAt": "2025-12-11T16:43:39.300Z",
+  "carouselPreview": {
+    "title": "Test Publish 1765471417981",
+    "excerpt": "",
+    "meta": "ARTICLE",
+    "icon": "plane",
+    "backgroundGradient": "linear-gradient(135deg, #FFF5E6 0%, #FFE4CC 100%)"
+  }
+}
