@@ -181,7 +181,7 @@ a:hover {
 
 .btn-primary {
   background-color: var(--color-yellow-primary);
-  color: var(--color-teal-dark);
+  color: #1a1a1a;
   box-shadow: var(--shadow-sm);
 }
 

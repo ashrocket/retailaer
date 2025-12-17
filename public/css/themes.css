@@ -28,7 +28,7 @@
   --theme-text-primary: #2b3b4f;   /* Petrol for headings */
   --theme-text-secondary: #787a7a; /* Dark Grey for body */
   --theme-text-on-primary: #FFFFFF;
-  --theme-text-on-accent: #2b3b4f; /* Petrol on orange */
+  --theme-text-on-accent: #1a1a1a; /* Dark text on accent for accessibility */
 
   /* Gradients */
   --theme-gradient-hero: linear-gradient(135deg, #2b3b4f 0%, #00baa3 100%);
