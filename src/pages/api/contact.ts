@@ -1,6 +1,4 @@
 import type { APIRoute } from 'astro';
-import { EmailMessage } from 'cloudflare:email';
-import { createMimeMessage } from 'mimetext';
 
 export const prerender = false;
 
@@ -13,6 +11,29 @@ interface ContactFormData {
   interest?: string;
   message: string;
   consent: string;
+}
+
+// Get Microsoft Graph access token using client credentials
+async function getMsGraphToken(tenantId: string, clientId: string, clientSecret: string): Promise<string> {
+  const tokenUrl = `https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/token`;
+
+  const response = await fetch(tokenUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      client_id: clientId,
+      client_secret: clientSecret,
+      scope: 'https://graph.microsoft.com/.default',
+      grant_type: 'client_credentials',
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Token request failed: ${await response.text()}`);
+  }
+
+  const data = await response.json();
+  return data.access_token;
 }
 
 export const POST: APIRoute = async ({ request, locals }) => {
@@ -75,32 +96,58 @@ export const POST: APIRoute = async ({ request, locals }) => {
       </p>
     `;
 
-    // Send via Cloudflare Email Routing
+    // Get Microsoft Graph credentials
     const runtime = locals.runtime;
-    const emailBinding = runtime?.env?.EMAIL;
+    const tenantId = runtime?.env?.MS_TENANT_ID || import.meta.env.MS_TENANT_ID;
+    const clientId = runtime?.env?.MS_CLIENT_ID || import.meta.env.MS_CLIENT_ID;
+    const clientSecret = runtime?.env?.MS_CLIENT_SECRET || import.meta.env.MS_CLIENT_SECRET;
+    // Use sales@retailaer.com as both sender and recipient
+    const salesEmail = 'sales@retailaer.com';
 
-    if (emailBinding) {
+    if (tenantId && clientId && clientSecret) {
       try {
-        const msg = createMimeMessage();
-        msg.setSender({ name: 'Retailaer Website', addr: 'contact@retailaer.com' });
-        msg.setRecipient('sales@retailaer.com');
-        msg.setHeader('Reply-To', { name: `${data.firstName} ${data.lastName}`, addr: data.email });
-        msg.setSubject(emailSubject);
-        msg.addMessage({ contentType: 'text/html', data: emailHtml });
+        const accessToken = await getMsGraphToken(tenantId, clientId, clientSecret);
 
-        const message = new EmailMessage('contact@retailaer.com', 'sales@retailaer.com', msg.asRaw());
-        await emailBinding.send(message);
+        // Send email via Microsoft Graph
+        const sendMailUrl = `https://graph.microsoft.com/v1.0/users/${salesEmail}/sendMail`;
+
+        const emailResponse = await fetch(sendMailUrl, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            message: {
+              subject: emailSubject,
+              body: {
+                contentType: 'HTML',
+                content: emailHtml,
+              },
+              toRecipients: [
+                { emailAddress: { address: salesEmail } }
+              ],
+              replyTo: [
+                { emailAddress: { address: data.email, name: `${data.firstName} ${data.lastName}` } }
+              ],
+            },
+          }),
+        });
+
+        if (!emailResponse.ok) {
+          const errorText = await emailResponse.text();
+          console.error('Microsoft Graph error:', errorText);
+        }
       } catch (emailError) {
         console.error('Email send error:', emailError);
-        // Log submission as fallback
         console.log('=== CONTACT FORM SUBMISSION (email failed) ===');
         console.log(JSON.stringify(data, null, 2));
         console.log('==============================================');
       }
     } else {
-      // Log submission if email binding not configured
+      // Log submission if MS Graph not configured
       console.log('=== CONTACT FORM SUBMISSION ===');
-      console.log('EMAIL binding not configured - logging submission');
+      console.log('Microsoft Graph not configured - logging submission');
       console.log(JSON.stringify(data, null, 2));
       console.log('===============================');
     }

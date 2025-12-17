@@ -414,24 +414,22 @@ import { Icon } from 'astro-icon/components';
 
     .marketplace-grid-2x2 {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 2rem;
     }
 
-    .marketplace-grid-2x2 .feature-card:nth-child(3) {
-      grid-column: 1 / -1;
-      max-width: 50%;
-      margin: 0 auto;
+    @media (max-width: 992px) {
+      .marketplace-grid-2x2 {
+        grid-template-columns: 1fr;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+      }
     }
 
     @media (max-width: 768px) {
-      .pillars-grid,
-      .marketplace-grid-2x2 {
+      .pillars-grid {
         grid-template-columns: 1fr;
-      }
-
-      .marketplace-grid-2x2 .feature-card:nth-child(3) {
-        max-width: 100%;
       }
     }
 
