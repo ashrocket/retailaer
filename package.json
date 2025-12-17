@@ -3,9 +3,9 @@
   "type": "module",
   "version": "1.0.0",
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
+    "dev": "npx serve legacy-site",
+    "build": "rm -rf dist && cp -r legacy-site dist",
+    "preview": "npx serve dist",
     "astro": "astro"
   },
   "dependencies": {
