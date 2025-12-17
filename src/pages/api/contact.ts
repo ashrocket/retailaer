@@ -1,4 +1,6 @@
 import type { APIRoute } from 'astro';
+import { EmailMessage } from 'cloudflare:email';
+import { createMimeMessage } from 'mimetext';
 
 export const prerender = false;
 
@@ -37,11 +39,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
       });
     }
 
-    // Get environment variables
-    const runtime = locals.runtime;
-    const resendApiKey = runtime?.env?.RESEND_API_KEY || import.meta.env.RESEND_API_KEY;
-
-    // Format the email content
+    // Format email content
     const emailSubject = `New Contact: ${data.interest || 'General Inquiry'} from ${data.company}`;
     const emailHtml = `
       <h2>New Contact Form Submission</h2>
@@ -77,37 +75,36 @@ export const POST: APIRoute = async ({ request, locals }) => {
       </p>
     `;
 
-    // If Resend API key is configured, send email
-    if (resendApiKey) {
-      const emailResponse = await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${resendApiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          from: 'Retailaer Website <noreply@retailaer.com>',
-          to: ['sales@retailaer.com'],
-          reply_to: data.email,
-          subject: emailSubject,
-          html: emailHtml,
-        }),
-      });
+    // Send via Cloudflare Email Routing
+    const runtime = locals.runtime;
+    const emailBinding = runtime?.env?.EMAIL;
 
-      if (!emailResponse.ok) {
-        const errorText = await emailResponse.text();
-        console.error('Resend API error:', errorText);
-        // Don't fail the request - log the data anyway
+    if (emailBinding) {
+      try {
+        const msg = createMimeMessage();
+        msg.setSender({ name: 'Retailaer Website', addr: 'contact@retailaer.com' });
+        msg.setRecipient('sales@retailaer.com');
+        msg.setHeader('Reply-To', { name: `${data.firstName} ${data.lastName}`, addr: data.email });
+        msg.setSubject(emailSubject);
+        msg.addMessage({ contentType: 'text/html', data: emailHtml });
+
+        const message = new EmailMessage('contact@retailaer.com', 'sales@retailaer.com', msg.asRaw());
+        await emailBinding.send(message);
+      } catch (emailError) {
+        console.error('Email send error:', emailError);
+        // Log submission as fallback
+        console.log('=== CONTACT FORM SUBMISSION (email failed) ===');
+        console.log(JSON.stringify(data, null, 2));
+        console.log('==============================================');
       }
     } else {
-      // Log the submission if no email service configured
+      // Log submission if email binding not configured
       console.log('=== CONTACT FORM SUBMISSION ===');
-      console.log('No RESEND_API_KEY configured - logging submission:');
+      console.log('EMAIL binding not configured - logging submission');
       console.log(JSON.stringify(data, null, 2));
       console.log('===============================');
     }
 
-    // Return success
     return new Response(JSON.stringify({
       success: true,
       message: 'Thank you for your message. We will get back to you within 24 hours.'

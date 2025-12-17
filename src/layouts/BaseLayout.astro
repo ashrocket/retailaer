@@ -2,6 +2,7 @@
 import FeedbackWidget from '../components/FeedbackWidget.astro';
 import CookieConsent from '../components/CookieConsent.astro';
 import EditMode from '../components/EditMode.astro';
+import { getSession } from '../lib/auth';
 // ThemeSwitcher removed - using original theme only
 
 interface Props {
@@ -17,6 +18,9 @@ const {
   image = "/og-image.png",
   filePath
 } = Astro.props;
+
+// Check if user is logged in (for showing feedback widget)
+const session = getSession(Astro.cookies);
 
 // Canonical URL (always use root domain without theme prefix)
 const canonicalURL = new URL(Astro.url.pathname.replace(/^\/(0|1|2)\//, '/'), 'https://retailaer.com').href;
@@ -232,7 +236,7 @@ const basePath = themePrefix ? `/${themePrefix}` : '';
     </div>
   </footer>
 
-  <FeedbackWidget />
+  {session && <FeedbackWidget />}
   <CookieConsent />
 
   <script is:inline src="/css/figma-scripts.js"></script>

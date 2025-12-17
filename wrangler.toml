@@ -2,3 +2,8 @@
 name = "retailaer"
 compatibility_date = "2025-08-22"
 pages_build_output_dir = "dist"
+
+# Email binding for sending contact form submissions
+# Requires Email Routing to be enabled on retailaer.com in Cloudflare dashboard
+[[send_email]]
+name = "EMAIL"
