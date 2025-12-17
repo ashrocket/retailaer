@@ -2,9 +2,15 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ExpandableFeatureCards from '../components/ExpandableFeatureCards.astro';
 import InsightsCarousel from '../components/InsightsCarousel.astro';
+import { isAuthenticated } from '../lib/auth';
+
+export const prerender = false;
 
 // Enable editing for this page
 const filePath = 'src/pages/index.astro';
+
+// Check if user is logged in (for showing Manage Insights link)
+const isLoggedIn = isAuthenticated(Astro.cookies);
 
 // Sample insights data
 const insights = [
@@ -311,7 +317,9 @@ const insights = [
       <div class="section-header">
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <h2 data-editable="latest-insights-title">Latest Insights</h2>
-          <a href="/blog/manage" class="view-all-link" data-editable="latest-insights-manage-link">Manage Insights →</a>
+          {isLoggedIn && (
+            <a href="/blog/manage" class="view-all-link">Manage Insights →</a>
+          )}
         </div>
       </div>
 
