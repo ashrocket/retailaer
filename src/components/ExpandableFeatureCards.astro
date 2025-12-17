@@ -152,15 +152,35 @@
     padding: 0.5rem;
     color: var(--color-primary, #0a5c5c);
     transition: transform 0.3s ease;
-    opacity: 0.85;
+    animation: bounce-hint 2s ease-in-out infinite;
+  }
+
+  @keyframes bounce-hint {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(3px);
+    }
   }
 
   .expandable-card:hover .expand-btn {
-    opacity: 1;
+    animation: none;
+    transform: translateY(2px);
+  }
+
+  .expandable-card.expanded .expand-btn {
+    animation: none;
   }
 
   .expandable-card.expanded .expand-btn svg {
     transform: rotate(180deg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .expand-btn {
+      animation: none;
+    }
   }
 
   .card-expanded-content {
