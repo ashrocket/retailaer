@@ -165,7 +165,7 @@ import { Icon } from 'astro-icon/components';
     <div class="container">
       <div class="commitment-content">
         <h2 data-editable="commitment-title">Our Commitment</h2>
-        <div class="commitment-grid commitment-grid-2x2">
+        <div class="commitment-grid">
           <div class="commitment-item">
             <h4 data-editable="commitment-1-title">To Airlines</h4>
             <p data-editable="commitment-1-text">
@@ -250,18 +250,6 @@ import { Icon } from 'astro-icon/components';
       color: var(--theme-primary);
       margin-top: 2rem;
       margin-bottom: 0.75rem;
-    }
-
-    .commitment-grid-2x2 {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 2.5rem;
-    }
-
-    @media (max-width: 768px) {
-      .commitment-grid-2x2 {
-        grid-template-columns: 1fr;
-      }
     }
 
     .cta-box-bright h2,
@@ -458,9 +446,15 @@ import { Icon } from 'astro-icon/components';
 
     .commitment-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: 2.5rem;
       text-align: left;
+    }
+
+    @media (max-width: 768px) {
+      .commitment-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     .commitment-item h4 {
