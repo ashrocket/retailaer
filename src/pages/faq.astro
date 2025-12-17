@@ -183,10 +183,10 @@ const allFaqs = faqCategories.flatMap(cat => cat.faqs);
 
 <BaseLayout title="FAQ - Retailaer" description="Frequently asked questions about Retailaer's Offer and Order Management System for airlines. Learn about implementation, integration, capabilities, and ROI.">
   <!-- Hero Section -->
-  <section class="faq-hero">
+  <section class="page-hero hero-bright">
     <div class="container">
-      <h1>Frequently Asked Questions</h1>
-      <p class="hero-subtitle">Everything you need to know about Retailaer's Offer and Order Management System</p>
+      <h1 class="page-title">Frequently Asked Questions</h1>
+      <p class="page-subtitle">Everything you need to know about Retailaer's Offer and Order Management System</p>
     </div>
   </section>
 
@@ -260,25 +260,34 @@ const allFaqs = faqCategories.flatMap(cat => cat.faqs);
 </BaseLayout>
 
 <style>
-  .faq-hero {
-    background: var(--gradient-hero, linear-gradient(135deg, #0A4D52 0%, #5DA9A9 100%));
-    color: white;
-    padding: 4rem 0 3rem;
+  .page-hero {
+    background: var(--theme-gradient-hero);
+    padding: 120px 0 80px;
     text-align: center;
+    color: white;
   }
 
-  .faq-hero h1 {
-    font-size: 2.75rem;
+  .hero-bright .page-title,
+  .hero-bright .page-subtitle {
+    color: white;
+    opacity: 1;
+  }
+
+  .page-title {
+    font-size: 3.5rem;
     font-weight: 700;
     margin-bottom: 1rem;
-    color: var(--color-accent, #ffb061);
+    letter-spacing: -1px;
+    color: white;
   }
 
-  .hero-subtitle {
-    font-size: 1.2rem;
-    color: rgba(255, 255, 255, 0.95);
-    max-width: 600px;
+  .page-subtitle {
+    font-size: 1.25rem;
+    opacity: 1;
+    line-height: 1.6;
+    max-width: 700px;
     margin: 0 auto;
+    color: rgba(255, 255, 255, 0.9);
   }
 
   .faq-content {
@@ -507,11 +516,15 @@ const allFaqs = faqCategories.flatMap(cat => cat.faqs);
   }
 
   @media (max-width: 600px) {
-    .faq-hero h1 {
+    .page-hero {
+      padding: 100px 0 60px;
+    }
+
+    .page-title {
       font-size: 2rem;
     }
 
-    .hero-subtitle {
+    .page-subtitle {
       font-size: 1rem;
     }
 
