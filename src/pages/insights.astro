@@ -5,6 +5,31 @@ import { Icon } from 'astro-icon/components';
 // Import all blog posts at build time (Cloudflare Workers compatible)
 const blogModules = import.meta.glob('../content/blog/*.json', { eager: true });
 
+// Calculate read time (approx 200 words per minute)
+function getReadTime(content: string): number {
+  const words = content?.split(/\s+/).length || 0;
+  return Math.max(1, Math.ceil(words / 200));
+}
+
+// Get icon name based on post type
+function getTypeIcon(type: string): string {
+  switch (type?.toUpperCase()) {
+    case 'LINKEDIN POST': return 'mdi:linkedin';
+    case 'ARTICLE': return 'lucide:file-text';
+    case 'BLOG POST': return 'lucide:pen-line';
+    case 'REPORT': return 'lucide:bar-chart-2';
+    case 'GUIDE': return 'lucide:book-open';
+    case 'CASE STUDY': return 'lucide:briefcase';
+    default: return 'lucide:file-text';
+  }
+}
+
+// Get display label for type
+function getTypeLabel(type: string): string {
+  if (type?.toUpperCase() === 'LINKEDIN POST') return '';
+  return type || 'ARTICLE';
+}
+
 // Process and filter published posts
 const posts = Object.values(blogModules)
   .map((module: any) => module.default || module)
@@ -54,14 +79,19 @@ const posts = Object.values(blogModules)
               )}
               <div class="insight-content">
                 <div class="insight-meta">
-                  <span class="insight-badge">{post.type || 'ARTICLE'}</span>
-                  <time datetime={post.publishedAt || post.updatedAt}>
-                    {new Date(post.publishedAt || post.updatedAt).toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric'
-                    })}
-                  </time>
+                  <span class={`insight-badge ${post.type?.toUpperCase() === 'LINKEDIN POST' ? 'linkedin-badge' : ''}`}>
+                    <Icon name={getTypeIcon(post.type)} />
+                    {getTypeLabel(post.type) && <span>{getTypeLabel(post.type)}</span>}
+                  </span>
+                  <div class="insight-meta-right">
+                    <span class="read-time">{getReadTime(post.content)} min read</span>
+                    <time datetime={post.publishedAt || post.updatedAt}>
+                      {new Date(post.publishedAt || post.updatedAt).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric'
+                      })}
+                    </time>
+                  </div>
                 </div>
 
                 <h2 class="insight-title">
@@ -313,14 +343,45 @@ const posts = Object.values(blogModules)
     }
 
     .insight-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
       background: var(--theme-surface);
       color: var(--theme-primary);
-      padding: 0.375rem 0.875rem;
+      padding: 0.375rem 0.75rem;
       border-radius: 20px;
       font-weight: 600;
       text-transform: uppercase;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       letter-spacing: 0.5px;
+    }
+
+    .insight-badge [data-icon] {
+      width: 14px;
+      height: 14px;
+    }
+
+    .insight-badge.linkedin-badge {
+      background: #0077b5;
+      color: white;
+      padding: 0.375rem 0.5rem;
+    }
+
+    .insight-badge.linkedin-badge [data-icon] {
+      width: 16px;
+      height: 16px;
+    }
+
+    .insight-meta-right {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: var(--theme-text-secondary);
+      font-size: 0.8rem;
+    }
+
+    .read-time {
+      color: var(--theme-text-secondary);
     }
 
     .insight-meta time {
