@@ -1,0 +1,23 @@
+# Retailaer robots.txt
+# https://retailaer.com
+
+User-agent: *
+Allow: /
+
+# Block admin and API routes
+Disallow: /blog/manage
+Disallow: /blog/editor
+Disallow: /blog/preview
+Disallow: /blog/draft/
+Disallow: /blog/republish-linkedin
+Disallow: /blog/posts
+Disallow: /api/
+Disallow: /login
+
+# Block theme variants (canonical is the root)
+Disallow: /0/
+Disallow: /1/
+Disallow: /2/
+
+# Sitemap location
+Sitemap: https://retailaer.com/sitemap.xml

@@ -532,31 +532,49 @@ import { Icon } from 'astro-icon/components';
       statusDiv.textContent = '';
 
       try {
-        // Simulate submission
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        // Submit to API
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
 
-        // Show success message
-        statusDiv.className = 'form-status success';
-        statusDiv.textContent = 'Thank you! Your message has been sent. We\'ll get back to you within 24 hours.';
+        const result = await response.json();
 
-        // Reset form
-        form.reset();
+        if (response.ok) {
+          // Show success message
+          statusDiv.className = 'form-status success';
+          statusDiv.textContent = result.message || 'Thank you! Your message has been sent. We\'ll get back to you within 24 hours.';
 
-        // Log to console for now (replace with actual API call)
-        console.log('Contact form submission:', data);
+          // Reset form
+          form.reset();
+
+          // Track conversion in GA4
+          if (typeof gtag !== 'undefined') {
+            gtag('event', 'generate_lead', {
+              event_category: 'Contact',
+              event_label: data.interest || 'General',
+              value: 1
+            });
+          }
+        } else {
+          throw new Error(result.error || 'Failed to send message');
+        }
 
       } catch (error) {
         console.error('Error submitting form:', error);
         statusDiv.className = 'form-status error';
-        statusDiv.textContent = 'Sorry, there was an error sending your message. Please try again or email us directly.';
+        statusDiv.textContent = 'Sorry, there was an error sending your message. Please try again or email us directly at sales@retailaer.com';
       } finally {
         submitButton.disabled = false;
         submitButton.textContent = originalText || 'Send Message';
 
-        // Hide status message after 5 seconds
+        // Hide status message after 8 seconds
         setTimeout(() => {
           statusDiv.className = 'form-status';
-        }, 5000);
+        }, 8000);
       }
     });
   </script>

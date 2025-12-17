@@ -7,10 +7,19 @@ import EditMode from '../components/EditMode.astro';
 interface Props {
   title: string;
   description?: string;
+  image?: string; // OG image URL
   filePath?: string; // Path to source file for editing
 }
 
-const { title, description = "Customer-first airline retailing—dynamic offers, simplified orders, and payments that don't get in the way.", filePath } = Astro.props;
+const {
+  title,
+  description = "Customer-first airline retailing—dynamic offers, simplified orders, and payments that don't get in the way.",
+  image = "/og-image.png",
+  filePath
+} = Astro.props;
+
+// Canonical URL (always use root domain without theme prefix)
+const canonicalURL = new URL(Astro.url.pathname.replace(/^\/(0|1|2)\//, '/'), 'https://retailaer.com').href;
 
 // Theme mapping
 const themeMap: Record<string, string> = {
@@ -53,10 +62,51 @@ const basePath = themePrefix ? `/${themePrefix}` : '';
     gtag('config', 'G-206SDTT0S9');
   </script>
 
+  <!-- LinkedIn Insight Tag - Get your Partner ID from LinkedIn Campaign Manager -->
+  <!-- To enable: Replace YOUR_PARTNER_ID with your actual LinkedIn Partner ID -->
+  <!-- <script type="text/javascript">
+    _linkedin_partner_id = "YOUR_PARTNER_ID";
+    window._linkedin_data_partner_ids = window._linkedin_data_partner_ids || [];
+    window._linkedin_data_partner_ids.push(_linkedin_partner_id);
+  </script>
+  <script type="text/javascript">
+    (function(l) {
+      if (!l){window.lintrk = function(a,b){window.lintrk.q.push([a,b])};
+      window.lintrk.q=[]}
+      var s = document.getElementsByTagName("script")[0];
+      var b = document.createElement("script");
+      b.type = "text/javascript";b.async = true;
+      b.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js";
+      s.parentNode.insertBefore(b, s);
+    })(window.lintrk);
+  </script>
+  <noscript>
+    <img height="1" width="1" style="display:none;" alt=""
+      src="https://px.ads.linkedin.com/collect/?pid=YOUR_PARTNER_ID&fmt=gif" />
+  </noscript> -->
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{title}</title>
   <meta name="description" content={description}>
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href={canonicalURL} />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={canonicalURL} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={new URL(image, 'https://retailaer.com').href} />
+  <meta property="og:site_name" content="Retailaer" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content={canonicalURL} />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={new URL(image, 'https://retailaer.com').href} />
 
   <!-- Google Fonts - Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -68,6 +118,40 @@ const basePath = themePrefix ? `/${themePrefix}` : '';
   <link rel="stylesheet" href="/css/design-system.css">
   <link rel="stylesheet" href="/css/figma-styles.css">
   <link rel="stylesheet" href="/css/homepage.css">
+
+  <!-- Organization Schema -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Retailaer",
+    "url": "https://retailaer.com",
+    "logo": "https://retailaer.com/retailaer-logo.svg",
+    "description": "Customer-first Offer and Order Management platform for modern airline retailing. 204M+ orders processed.",
+    "foundingDate": "2013",
+    "email": "info@retailaer.com",
+    "sameAs": [
+      "https://www.linkedin.com/company/retailaer"
+    ],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "sales",
+      "email": "sales@retailaer.com"
+    },
+    "offers": {
+      "@type": "Offer",
+      "description": "Airline Offer and Order Management Platform",
+      "category": "Software as a Service"
+    }
+  })} />
+
+  <!-- WebSite Schema for search -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Retailaer",
+    "url": "https://retailaer.com",
+    "description": "Customer-first airline retailing platform"
+  })} />
 </head>
 <body>
   <!-- Theme Switcher -->
@@ -153,5 +237,68 @@ const basePath = themePrefix ? `/${themePrefix}` : '';
 
   <script is:inline src="/css/figma-scripts.js"></script>
   <script is:inline src="/js/edit-mode-shortcut.js"></script>
+
+  <!-- GA4 Event Tracking -->
+  <script is:inline>
+    // Track CTA button clicks
+    document.querySelectorAll('.btn-primary, [href="/contact"]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'cta_click', {
+            event_category: 'Engagement',
+            event_label: this.textContent?.trim() || 'CTA Button',
+            link_url: this.href || window.location.pathname
+          });
+        }
+      });
+    });
+
+    // Track outbound links
+    document.querySelectorAll('a[href^="mailto:"], a[href^="tel:"]').forEach(function(link) {
+      link.addEventListener('click', function() {
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'contact_click', {
+            event_category: 'Contact',
+            event_label: this.href.replace('mailto:', '').replace('tel:', ''),
+            link_type: this.href.startsWith('mailto:') ? 'email' : 'phone'
+          });
+        }
+      });
+    });
+
+    // Track scroll depth
+    var scrollDepths = [25, 50, 75, 100];
+    var trackedDepths = [];
+
+    window.addEventListener('scroll', function() {
+      var scrollPercent = Math.round((window.scrollY + window.innerHeight) / document.body.scrollHeight * 100);
+
+      scrollDepths.forEach(function(depth) {
+        if (scrollPercent >= depth && trackedDepths.indexOf(depth) === -1) {
+          trackedDepths.push(depth);
+          if (typeof gtag !== 'undefined') {
+            gtag('event', 'scroll_depth', {
+              event_category: 'Engagement',
+              event_label: depth + '%',
+              value: depth
+            });
+          }
+        }
+      });
+    });
+
+    // Track navigation clicks
+    document.querySelectorAll('.navbar-nav a').forEach(function(link) {
+      link.addEventListener('click', function() {
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'navigation_click', {
+            event_category: 'Navigation',
+            event_label: this.textContent?.trim(),
+            link_url: this.href
+          });
+        }
+      });
+    });
+  </script>
 </body>
 </html>
