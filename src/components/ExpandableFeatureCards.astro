@@ -154,27 +154,27 @@
     transition: color 0.3s ease;
   }
 
-  /* Double bounce animation - two quick bounces up */
-  @keyframes double-bounce {
+  /* Sideways jiggle animation */
+  @keyframes sideways-jiggle {
     0%, 100% {
-      transform: translateY(0);
+      transform: translateX(0);
     }
-    15% {
-      transform: translateY(-6px);
+    20% {
+      transform: translateX(-3px);
     }
-    30% {
-      transform: translateY(0);
-    }
-    45% {
-      transform: translateY(-4px);
+    40% {
+      transform: translateX(3px);
     }
     60% {
-      transform: translateY(0);
+      transform: translateX(-2px);
+    }
+    80% {
+      transform: translateX(2px);
     }
   }
 
   .expand-btn.bouncing {
-    animation: double-bounce 0.5s ease-out;
+    animation: sideways-jiggle 0.6s ease-in-out;
   }
 
   /* Clicked carets change to accent color and stop bouncing */
@@ -282,8 +282,8 @@
     const cardIds = ['dynamic-offers', 'order-processing', 'customer-centric', 'revenue-uplift']; // Clockwise order: top-left, top-right, bottom-right, bottom-left
     const clickedCards = new Set<string>();
 
-    // Varying intervals for each card in sequence (ms)
-    const intervals = [800, 1200, 600, 1000];
+    // Varying intervals for each card in sequence (ms) - slower pace
+    const intervals = [1500, 2000, 1200, 1800];
 
     let isClockwise = true;
     let rotationCount = 0;
@@ -304,7 +304,7 @@
       if (btn) {
         btn.classList.add('bouncing');
         // Remove class after animation completes so it can be triggered again
-        setTimeout(() => btn.classList.remove('bouncing'), 500);
+        setTimeout(() => btn.classList.remove('bouncing'), 600);
       }
     }
 
