@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Button Contrast Versions</title>
+  <style>
+    :root{
+      --bg-top:#2f3b4a;
+      --bg-stripe:#1f7a75;
+      --btn-fill:#f6b26b; /* original yellow/orange fill */
+      --radius:9999px;
+      --pad-y:22px;
+      --pad-x:70px;
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:var(--font);
+      background: linear-gradient(180deg, var(--bg-top) 0 42%, var(--bg-stripe) 42% 58%, var(--bg-top) 58% 100%);
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:40px 18px;
+      color:#e6edf3;
+    }
+    .wrap{max-width:900px; width:100%;}
+    h1{
+      margin:0 0 14px 0;
+      font-size:18px;
+      font-weight:600;
+      opacity:.92;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap:18px;
+    }
+    .card{
+      background: rgba(0,0,0,.18);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius:16px;
+      padding:18px;
+      backdrop-filter: blur(6px);
+    }
+    .label{
+      font-size:13px;
+      opacity:.9;
+      margin:0 0 10px 0;
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .hex{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      opacity:.9;
+    }
+    .btn{
+      appearance:none;
+      border:0;
+      border-radius: var(--radius);
+      background: var(--btn-fill);
+      padding: var(--pad-y) var(--pad-x);
+      font-size: 40px;
+      line-height: 1;
+      font-weight: 650;
+      letter-spacing: .2px;
+      width:100%;
+      cursor:pointer;
+      transition: transform .08s ease, filter .12s ease;
+    }
+    .btn:hover{filter:brightness(.98)}
+    .btn:active{transform: translateY(1px)}
+    .v1{ color:#1F2933; }
+    .v2{ color:#0B1F33; }
+    .v3{ color:#4A2C1A; }
+    .v4{
+      color:#FFFFFF;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.45);
+    }
+    /* Optional focus style (keyboard) */
+    .btn:focus-visible{
+      outline: 3px solid rgba(255,255,255,.85);
+      outline-offset: 4px;
+    }
+    .note{
+      margin-top:14px;
+      font-size:12px;
+      opacity:.85;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Your button fill kept the same — 4 text-contrast versions</h1>
+    <div class="grid">
+      <div class="card">
+        <p class="label">
+          <span>Version 1 — Dark Slate</span>
+          <span class="hex">fill #F6B26B · text #1F2933</span>
+        </p>
+        <button class="btn v1">Get in Touch</button>
+      </div>
+
+      <div class="card">
+        <p class="label">
+          <span>Version 2 — Deep Navy</span>
+          <span class="hex">fill #F6B26B · text #0B1F33</span>
+        </p>
+        <button class="btn v2">Get in Touch</button>
+      </div>
+
+      <div class="card">
+        <p class="label">
+          <span>Version 3 — Espresso Brown</span>
+          <span class="hex">fill #F6B26B · text #4A2C1A</span>
+        </p>
+        <button class="btn v3">Get in Touch</button>
+      </div>
+
+      <div class="card">
+        <p class="label">
+          <span>Version 4 — White + Shadow</span>
+          <span class="hex">fill #F6B26B · text #FFF · shadow rgba(0,0,0,.45)</span>
+        </p>
+        <button class="btn v4">Get in Touch</button>
+      </div>
+    </div>
+
+    <div class="note">
+      Tip: If you want this to match your screenshot even closer, tell me the exact hex for the button fill and background and I’ll lock it in.
+    </div>
+  </div>
+</body>
+</html>
