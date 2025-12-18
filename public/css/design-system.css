@@ -187,6 +187,7 @@ a:hover {
 
 .btn-primary:hover {
   background-color: var(--color-yellow-hover);
+  color: #FFFFFF;
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }

@@ -211,7 +211,7 @@
 
 .btn-gold {
   background: var(--theme-gradient-accent, linear-gradient(135deg, var(--theme-accent) 0%, var(--theme-accent-hover) 100%));
-  color: var(--theme-text-on-accent, var(--color-gray-900));
+  color: #1F2933;
   font-weight: 600;
   padding: 1rem 2.5rem;
   border-radius: 50px;
@@ -226,7 +226,7 @@
   background: var(--theme-gradient-accent-hover, linear-gradient(135deg, var(--theme-accent) 0%, var(--theme-accent-hover) 100%));
   transform: translateY(-2px);
   box-shadow: 0 6px 20px var(--theme-accent-shadow, rgba(245, 184, 0, 0.4));
-  color: var(--theme-text-on-accent, var(--color-gray-900));
+  color: #FFFFFF;
 }
 
 .centered-nav {

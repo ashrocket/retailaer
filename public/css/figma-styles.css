@@ -249,6 +249,7 @@ ul {
 
 .btn-primary:hover {
     background-color: #e5a800;
+    color: #FFFFFF;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(245, 184, 0, 0.3);
 }
@@ -261,6 +262,7 @@ ul {
 
 .btn-primary-small:hover {
     background-color: #e5a800;
+    color: #FFFFFF;
 }
 
 .btn-secondary {
