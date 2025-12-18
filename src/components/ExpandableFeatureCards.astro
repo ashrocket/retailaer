@@ -151,26 +151,43 @@
     cursor: pointer;
     padding: 0.5rem;
     color: var(--color-primary, #0a5c5c);
-    transition: transform 0.3s ease;
-    animation: bounce-hint 2s ease-in-out infinite;
+    transition: color 0.3s ease;
   }
 
-  @keyframes bounce-hint {
+  /* Double bounce animation - two quick bounces up */
+  @keyframes double-bounce {
     0%, 100% {
       transform: translateY(0);
     }
-    50% {
-      transform: translateY(3px);
+    15% {
+      transform: translateY(-6px);
+    }
+    30% {
+      transform: translateY(0);
+    }
+    45% {
+      transform: translateY(-4px);
+    }
+    60% {
+      transform: translateY(0);
     }
   }
 
-  .expandable-card:hover .expand-btn {
-    animation: none;
-    transform: translateY(2px);
+  .expand-btn.bouncing {
+    animation: double-bounce 0.5s ease-out;
+  }
+
+  /* Clicked carets change to accent color and stop bouncing */
+  .expand-btn.clicked {
+    color: var(--color-accent, #f5b800);
+  }
+
+  .expandable-card:hover .expand-btn:not(.clicked) {
+    transform: translateY(-2px);
   }
 
   .expandable-card.expanded .expand-btn {
-    animation: none;
+    color: var(--color-accent, #f5b800);
   }
 
   .expandable-card.expanded .expand-btn svg {
@@ -262,12 +279,117 @@
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const cards = document.querySelectorAll('.expandable-card');
+    const cardIds = ['dynamic-offers', 'order-processing', 'customer-centric', 'revenue-uplift']; // Clockwise order: top-left, top-right, bottom-right, bottom-left
+    const clickedCards = new Set<string>();
 
+    // Varying intervals for each card in sequence (ms)
+    const intervals = [800, 1200, 600, 1000];
+
+    let isClockwise = true;
+    let rotationCount = 0;
+    let currentIndex = 0;
+    let animationTimeout: ReturnType<typeof setTimeout> | null = null;
+
+    // Get the expand button for a card by its ID
+    function getExpandBtn(cardId: string): HTMLElement | null {
+      const card = document.querySelector(`[data-card-id="${cardId}"]`);
+      return card ? card.querySelector('.expand-btn') : null;
+    }
+
+    // Trigger double bounce on a single caret
+    function bounceCard(cardId: string) {
+      if (clickedCards.has(cardId)) return; // Skip clicked cards
+
+      const btn = getExpandBtn(cardId);
+      if (btn) {
+        btn.classList.add('bouncing');
+        // Remove class after animation completes so it can be triggered again
+        setTimeout(() => btn.classList.remove('bouncing'), 500);
+      }
+    }
+
+    // Get the next card index based on direction
+    function getNextIndex(): number {
+      const order = isClockwise ? cardIds : [...cardIds].reverse();
+      const activeCards = order.filter(id => !clickedCards.has(id));
+
+      if (activeCards.length === 0) return -1; // All cards clicked
+
+      // Find current position in active cards
+      const currentCardId = isClockwise ? cardIds[currentIndex] : [...cardIds].reverse()[currentIndex % cardIds.length];
+      let nextActiveIndex = activeCards.indexOf(currentCardId);
+
+      if (nextActiveIndex === -1) {
+        nextActiveIndex = 0;
+      } else {
+        nextActiveIndex = (nextActiveIndex + 1) % activeCards.length;
+      }
+
+      // Return the original index of the next active card
+      return cardIds.indexOf(activeCards[nextActiveIndex]);
+    }
+
+    // Run the bouncing sequence
+    function runSequence() {
+      // Get active cards (not clicked)
+      const activeCardIds = cardIds.filter(id => !clickedCards.has(id));
+
+      if (activeCardIds.length === 0) {
+        // All cards clicked, stop animation
+        return;
+      }
+
+      // Get current order based on direction
+      const order = isClockwise ? activeCardIds : [...activeCardIds].reverse();
+      const currentCardId = order[currentIndex % order.length];
+
+      // Bounce the current card
+      bounceCard(currentCardId);
+
+      // Move to next card
+      currentIndex++;
+
+      // Check if we completed a full rotation
+      if (currentIndex >= order.length) {
+        currentIndex = 0;
+        rotationCount++;
+
+        // After 2 rotations, reverse direction
+        if (rotationCount >= 2) {
+          rotationCount = 0;
+          isClockwise = !isClockwise;
+        }
+      }
+
+      // Get interval for this position (use modulo for varying intervals)
+      const interval = intervals[currentIndex % intervals.length];
+
+      // Schedule next bounce
+      animationTimeout = setTimeout(runSequence, interval);
+    }
+
+    // Start the animation loop after a short delay
+    setTimeout(() => {
+      runSequence();
+    }, 1500);
+
+    // Handle card clicks
     cards.forEach(card => {
       card.addEventListener('click', (e) => {
         // Don't toggle if clicking on a link
         if ((e.target as HTMLElement).tagName === 'A') {
           return;
+        }
+
+        const cardId = card.getAttribute('data-card-id');
+        if (cardId) {
+          // Mark this card's caret as clicked
+          clickedCards.add(cardId);
+          const btn = card.querySelector('.expand-btn');
+          if (btn) {
+            btn.classList.add('clicked');
+            btn.classList.remove('bouncing');
+          }
         }
 
         // Close other expanded cards
@@ -281,5 +403,10 @@
         card.classList.toggle('expanded');
       });
     });
+
+    // Respect reduced motion preference
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      if (animationTimeout) clearTimeout(animationTimeout);
+    }
   });
 </script>
