@@ -284,6 +284,8 @@ a:visited {
 
 .btn.btn-primary:hover,
 .btn.btn-gold:hover,
+.btn.btn-primary:visited:hover,
+.btn.btn-gold:visited:hover,
 .hero-section .btn.btn-primary:hover,
 .hero-section .btn.btn-gold:hover,
 .cta-section .btn.btn-primary:hover,
