@@ -268,22 +268,60 @@ a:visited {
   color: var(--theme-accent) !important;
 }
 
-/* Primary/Gold buttons - slate text, white on hover */
-/* No visited styles - buttons should always look the same */
-.btn.btn-primary,
-.btn.btn-primary:visited,
-.btn.btn-primary:link,
-.btn.btn-gold,
-.btn.btn-gold:visited,
-.btn.btn-gold:link {
+/* Primary/Gold buttons on LIGHT backgrounds - slate text, white on hover */
+a.btn.btn-primary,
+a.btn.btn-primary:link,
+a.btn.btn-primary:visited,
+a.btn.btn-gold,
+a.btn.btn-gold:link,
+a.btn.btn-gold:visited {
   color: #1F2933 !important;
 }
 
-.btn.btn-primary:hover,
-.btn.btn-primary:active,
-.btn.btn-gold:hover,
-.btn.btn-gold:active {
+a.btn.btn-primary:hover,
+a.btn.btn-primary:active,
+a.btn.btn-primary:focus,
+a.btn.btn-primary:visited:hover,
+a.btn.btn-gold:hover,
+a.btn.btn-gold:active,
+a.btn.btn-gold:focus,
+a.btn.btn-gold:visited:hover {
   color: #FFFFFF !important;
+}
+
+/* Primary/Gold buttons on DARK backgrounds - white text, slate on hover */
+.how-it-works a.btn.btn-gold,
+.how-it-works a.btn.btn-gold:link,
+.how-it-works a.btn.btn-gold:visited,
+.cta-section a.btn.btn-gold,
+.cta-section a.btn.btn-gold:link,
+.cta-section a.btn.btn-gold:visited,
+.bg-teal a.btn.btn-gold,
+.bg-teal a.btn.btn-gold:link,
+.bg-teal a.btn.btn-gold:visited,
+.hero-section a.btn.btn-primary,
+.hero-section a.btn.btn-primary:link,
+.hero-section a.btn.btn-primary:visited {
+  color: #FFFFFF !important;
+}
+
+.how-it-works a.btn.btn-gold:hover,
+.how-it-works a.btn.btn-gold:active,
+.how-it-works a.btn.btn-gold:focus,
+.how-it-works a.btn.btn-gold:visited:hover,
+.cta-section a.btn.btn-gold:hover,
+.cta-section a.btn.btn-gold:active,
+.cta-section a.btn.btn-gold:focus,
+.cta-section a.btn.btn-gold:visited:hover,
+.bg-teal a.btn.btn-gold:hover,
+.bg-teal a.btn.btn-gold:active,
+.bg-teal a.btn.btn-gold:focus,
+.bg-teal a.btn.btn-gold:visited:hover,
+.hero-section a.btn.btn-primary:hover,
+.hero-section a.btn.btn-primary:active,
+.hero-section a.btn.btn-primary:focus,
+.hero-section a.btn.btn-primary:visited:hover {
+  color: #1F2933 !important;
 }
 
 /* Secondary/outline buttons */
