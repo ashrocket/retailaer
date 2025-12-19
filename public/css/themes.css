@@ -268,29 +268,21 @@ a:visited {
   color: var(--theme-accent) !important;
 }
 
-/* Primary button - slate text, white on hover */
-/* Use higher specificity to override section link rules */
+/* Primary/Gold buttons - slate text, white on hover */
+/* No visited styles - buttons should always look the same */
 .btn.btn-primary,
 .btn.btn-primary:visited,
+.btn.btn-primary:link,
 .btn.btn-gold,
 .btn.btn-gold:visited,
-.hero-section .btn.btn-primary,
-.hero-section .btn.btn-gold,
-.cta-section .btn.btn-primary,
-.cta-section .btn.btn-gold,
-.how-it-works .btn.btn-gold {
+.btn.btn-gold:link {
   color: #1F2933 !important;
 }
 
 .btn.btn-primary:hover,
+.btn.btn-primary:active,
 .btn.btn-gold:hover,
-.btn.btn-primary:visited:hover,
-.btn.btn-gold:visited:hover,
-.hero-section .btn.btn-primary:hover,
-.hero-section .btn.btn-gold:hover,
-.cta-section .btn.btn-primary:hover,
-.cta-section .btn.btn-gold:hover,
-.how-it-works .btn.btn-gold:hover {
+.btn.btn-gold:active {
   color: #FFFFFF !important;
 }
 
