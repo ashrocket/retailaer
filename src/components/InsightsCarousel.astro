@@ -9,6 +9,7 @@ export interface InsightCard {
   meta: string;
   icon: string;
   backgroundGradient: string;
+  previewImage?: string;
 }
 
 interface Props {
@@ -39,14 +40,20 @@ const iconMap: Record<string, string> = {
       {insights.map((insight, index) => (
         <a
           href={`/blog/${insight.slug}`}
-          class={`insight-card ${index % 2 === 0 ? 'card-light' : 'card-alt'}`}
+          class={`insight-card ${index % 2 === 0 ? 'card-light' : 'card-alt'} ${insight.previewImage ? 'has-image' : ''}`}
           data-accent={insight.backgroundGradient}
         >
-          <div class="insight-image">
-            <span class="insight-icon">
-              <Icon name={iconMap[insight.icon] || 'lucide:plane'} />
-            </span>
-          </div>
+          {insight.previewImage ? (
+            <div class="insight-preview-image">
+              <img src={insight.previewImage} alt={insight.title} loading="lazy" />
+            </div>
+          ) : (
+            <div class="insight-image">
+              <span class="insight-icon">
+                <Icon name={iconMap[insight.icon] || 'lucide:plane'} />
+              </span>
+            </div>
+          )}
           <div class="insight-meta">{insight.meta}</div>
           <h3 class="insight-title">{insight.title}</h3>
           <p class="insight-excerpt">{insight.excerpt}</p>
@@ -145,6 +152,24 @@ const iconMap: Record<string, string> = {
   .insight-card:focus {
     outline: none;
     border-color: #0a5c5c;
+  }
+
+  .insight-preview-image {
+    margin: -32px -28px 20px -28px;
+    height: 160px;
+    overflow: hidden;
+    border-radius: 18px 18px 0 0;
+  }
+
+  .insight-preview-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .insight-card:hover .insight-preview-image img {
+    transform: scale(1.05);
   }
 
   .insight-image {
@@ -278,6 +303,12 @@ const iconMap: Record<string, string> = {
 
     .insight-card {
       padding: 24px 20px;
+    }
+
+    .insight-preview-image {
+      margin: -24px -20px 16px -20px;
+      height: 140px;
+      border-radius: 18px 18px 0 0;
     }
 
     .insight-title {
