@@ -269,15 +269,26 @@ a:visited {
 }
 
 /* Primary button - slate text, white on hover */
-.btn-primary,
-.btn-primary:visited,
-.btn-gold,
-.btn-gold:visited {
+/* Use higher specificity to override section link rules */
+.btn.btn-primary,
+.btn.btn-primary:visited,
+.btn.btn-gold,
+.btn.btn-gold:visited,
+.hero-section .btn.btn-primary,
+.hero-section .btn.btn-gold,
+.cta-section .btn.btn-primary,
+.cta-section .btn.btn-gold,
+.how-it-works .btn.btn-gold {
   color: #1F2933 !important;
 }
 
-.btn-primary:hover,
-.btn-gold:hover {
+.btn.btn-primary:hover,
+.btn.btn-gold:hover,
+.hero-section .btn.btn-primary:hover,
+.hero-section .btn.btn-gold:hover,
+.cta-section .btn.btn-primary:hover,
+.cta-section .btn.btn-gold:hover,
+.how-it-works .btn.btn-gold:hover {
   color: #FFFFFF !important;
 }
 
@@ -303,19 +314,19 @@ a:visited {
   color: var(--theme-accent) !important;
 }
 
-/* Hero section links */
-.hero a,
-.hero a:visited,
-.hero-content a,
-.hero-content a:visited,
-.hero-section a,
-.hero-section a:visited {
+/* Hero section links - exclude buttons */
+.hero a:not(.btn),
+.hero a:not(.btn):visited,
+.hero-content a:not(.btn),
+.hero-content a:not(.btn):visited,
+.hero-section a:not(.btn),
+.hero-section a:not(.btn):visited {
   color: inherit !important;
 }
 
-/* CTA section links */
-.cta-section a,
-.cta-section a:visited {
+/* CTA section links - exclude buttons */
+.cta-section a:not(.btn),
+.cta-section a:not(.btn):visited {
   color: inherit !important;
 }
 
