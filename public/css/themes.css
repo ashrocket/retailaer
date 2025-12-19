@@ -324,9 +324,13 @@ a.btn.btn-gold:visited:hover {
   color: #1F2933 !important;
 }
 
-/* Secondary/outline buttons */
-.btn-secondary,
-.btn-secondary:visited {
+/* Secondary/outline buttons - only on dark backgrounds */
+.hero-section .btn-secondary,
+.hero-section .btn-secondary:visited,
+.cta-section .btn-secondary,
+.cta-section .btn-secondary:visited,
+.navbar .btn-secondary,
+.navbar .btn-secondary:visited {
   color: var(--theme-text-on-primary) !important;
 }
 
