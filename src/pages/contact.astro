@@ -215,6 +215,22 @@ import { Icon } from 'astro-icon/components';
             distribution capabilities for airlines and travel brands.
           </p>
         </div>
+
+        <div class="faq-item">
+          <h4 data-editable="faq-5-question">Can you integrate with our existing PSS?</h4>
+          <p data-editable="faq-5-answer">
+            Absolutely. Retailaer is designed to layer on top of existing systems,
+            providing modern retailing capabilities without replacing your core PSS.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h4 data-editable="faq-6-question">What regions do you support?</h4>
+          <p data-editable="faq-6-answer">
+            We work with airlines globally, with particular expertise in European,
+            North American, and Asia-Pacific markets. Our platform supports multiple currencies and languages.
+          </p>
+        </div>
       </div>
     </div>
   </section>
@@ -455,10 +471,16 @@ import { Icon } from 'astro-icon/components';
     /* FAQ */
     .faq-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: 2rem;
       max-width: 1000px;
       margin: 0 auto;
+    }
+
+    @media (max-width: 700px) {
+      .faq-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     .faq-item {

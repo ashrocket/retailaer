@@ -12,57 +12,57 @@ const filePath = 'src/pages/index.astro';
 // Check if user is logged in (for showing Manage Insights link)
 const isLoggedIn = isAuthenticated(Astro.cookies);
 
-// Sample insights data
+// Curated insights - includes Ann Cederhall's featured articles
 const insights = [
   {
     id: '1',
-    slug: 'dynamic-offers-ndc',
-    title: 'Modular in Travel Technology',
-    excerpt: 'Understanding the meaning of "modular" in travel tech - it\'s not just about IKEA kitchens anymore.',
+    slug: 'modern-airline-retailing-fact-or-fiction',
+    title: 'Modern Airline Retailing - Fact or Fiction?',
+    excerpt: 'Is modern airline retailing genuinely transformative or just industry hype? A clear-eyed look at what works.',
     meta: 'LINKEDIN POST',
     icon: 'rocket',
     backgroundGradient: 'linear-gradient(135deg, #0a5c5c 0%, #084a4f 100%)',
-    previewImage: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&h=400&fit=crop'
+    previewImage: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=600&h=400&fit=crop'
   },
   {
     id: '2',
     slug: 'orders-without-friction',
-    title: 'Orders without friction',
-    excerpt: 'Streamlining the booking experience while maximizing ancillary opportunities.',
+    title: 'Orders Without Friction',
+    excerpt: 'Streamlining the booking experience while maximizing ancillary opportunities for airlines.',
     meta: 'ARTICLE',
     icon: 'document',
-    backgroundGradient: 'linear-gradient(135deg, #f5b800 0%, #d9a400 100%)',
-    previewImage: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=600&h=400&fit=crop'
-  },
-  {
-    id: '3',
-    slug: 'payments-cfo-likes',
-    title: 'Payments your CFO likes',
-    excerpt: 'Everything from payments to payouts with ease—secure, reliable, and fully compliant.',
-    meta: 'REPORT',
-    icon: 'chart',
-    backgroundGradient: 'linear-gradient(135deg, #0a5c5c 0%, #084a4f 100%)',
-    previewImage: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600&h=400&fit=crop'
-  },
-  {
-    id: '4',
-    slug: 'customer-first-retailing',
-    title: 'The customer-first revolution',
-    excerpt: 'Putting customers at the center transforms your airline retailing strategy and boosts revenue.',
-    meta: 'BLOG POST',
-    icon: 'globe',
     backgroundGradient: 'linear-gradient(135deg, #f5b800 0%, #d9a400 100%)',
     previewImage: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop'
   },
   {
+    id: '3',
+    slug: 'three-pillars-of-ndc',
+    title: 'The Three Pillars of NDC',
+    excerpt: 'Cost, Control, and Retail were NDC\'s founding goals. A decade later, how much progress have we made?',
+    meta: 'LINKEDIN POST',
+    icon: 'chart',
+    backgroundGradient: 'linear-gradient(135deg, #0a5c5c 0%, #084a4f 100%)',
+    previewImage: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=600&h=400&fit=crop'
+  },
+  {
+    id: '4',
+    slug: 'customer-first-retailing',
+    title: 'The Customer-First Revolution',
+    excerpt: 'Putting customers at the center transforms your airline retailing strategy and boosts revenue.',
+    meta: 'BLOG POST',
+    icon: 'globe',
+    backgroundGradient: 'linear-gradient(135deg, #f5b800 0%, #d9a400 100%)',
+    previewImage: '/images/blog/customer-first-illustration.svg'
+  },
+  {
     id: '5',
-    slug: 'beyond-the-pnr',
-    title: 'Beyond the PNR',
-    excerpt: 'Why traditional PNR systems hold airlines back and how modern order management unlocks opportunities.',
-    meta: 'GUIDE',
+    slug: 'to-ndc-or-not-ndc',
+    title: 'To NDC or Not NDC?',
+    excerpt: 'After years of NDC discussions, the industry still needs demystifying. Are we asking the wrong questions?',
+    meta: 'LINKEDIN POST',
     icon: 'rocket',
     backgroundGradient: 'linear-gradient(135deg, #0a5c5c 0%, #084a4f 100%)',
-    previewImage: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=600&h=400&fit=crop'
+    previewImage: 'https://images.unsplash.com/photo-1569154941061-e231b4725ef1?w=600&h=400&fit=crop'
   },
 ];
 ---

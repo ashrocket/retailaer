@@ -1,0 +1,169 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600">
+  <defs>
+    <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#e8f4f4"/>
+      <stop offset="100%" style="stop-color:#ffffff"/>
+    </linearGradient>
+    <linearGradient id="tealGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a5c5c"/>
+      <stop offset="100%" style="stop-color:#087070"/>
+    </linearGradient>
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f5b800"/>
+      <stop offset="100%" style="stop-color:#e5a800"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="600" fill="url(#skyGradient)"/>
+
+  <!-- Divider line -->
+  <line x1="600" y1="80" x2="600" y2="520" stroke="#0a5c5c" stroke-width="2" stroke-dasharray="8,8" opacity="0.3"/>
+
+  <!-- LEFT SIDE: Easy Food Ordering -->
+  <g transform="translate(100, 100)">
+    <!-- Title -->
+    <text x="200" y="30" font-family="Inter, sans-serif" font-size="24" font-weight="700" fill="#0a5c5c" text-anchor="middle">Food Delivery</text>
+    <text x="200" y="55" font-family="Inter, sans-serif" font-size="14" fill="#5a7a7a" text-anchor="middle">Simple. Intuitive. Delightful.</text>
+
+    <!-- Happy customer with phone -->
+    <g transform="translate(120, 100)">
+      <!-- Person body -->
+      <ellipse cx="80" cy="280" rx="45" ry="15" fill="#e8e8e8" opacity="0.5"/>
+      <rect x="55" y="180" width="50" height="100" rx="10" fill="#3b82f6"/>
+      <!-- Head -->
+      <circle cx="80" cy="155" r="35" fill="#fcd5b8"/>
+      <!-- Hair -->
+      <path d="M50 145 Q50 115 80 115 Q110 115 110 145" fill="#4a3728"/>
+      <!-- Smile -->
+      <path d="M65 165 Q80 180 95 165" stroke="#333" stroke-width="2" fill="none"/>
+      <!-- Eyes -->
+      <circle cx="68" cy="150" r="4" fill="#333"/>
+      <circle cx="92" cy="150" r="4" fill="#333"/>
+      <!-- Arms -->
+      <line x1="55" y1="200" x2="25" y2="230" stroke="#fcd5b8" stroke-width="12" stroke-linecap="round"/>
+      <line x1="105" y1="200" x2="135" y2="220" stroke="#fcd5b8" stroke-width="12" stroke-linecap="round"/>
+
+      <!-- Phone in hand -->
+      <g transform="translate(120, 200)">
+        <rect x="0" y="0" width="50" height="90" rx="8" fill="#1a1a1a"/>
+        <rect x="4" y="8" width="42" height="74" rx="4" fill="#ffffff"/>
+        <!-- App screen -->
+        <rect x="8" y="15" width="34" height="25" rx="3" fill="#22c55e"/>
+        <text x="25" y="32" font-family="Inter, sans-serif" font-size="8" fill="white" text-anchor="middle">ORDER</text>
+        <circle cx="25" y="58" r="10" fill="#f5b800"/>
+        <text x="25" y="62" font-family="Inter, sans-serif" font-size="10" fill="#1a1a1a" text-anchor="middle">GO</text>
+      </g>
+    </g>
+
+    <!-- Delivery path (simple arrow) -->
+    <path d="M280 250 Q350 200 380 250" stroke="#22c55e" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <polygon points="385,245 395,250 385,255" fill="#22c55e"/>
+
+    <!-- Delivered food -->
+    <g transform="translate(320, 230)">
+      <rect x="0" y="30" width="70" height="50" rx="8" fill="#f5b800"/>
+      <rect x="5" y="35" width="60" height="40" rx="5" fill="#fff" opacity="0.9"/>
+      <!-- Food icon -->
+      <circle cx="35" cy="55" r="15" fill="#ef4444"/>
+      <rect x="28" y="48" width="14" height="6" rx="2" fill="#fcd34d"/>
+    </g>
+
+    <!-- Checkmarks showing ease -->
+    <g transform="translate(50, 350)" font-family="Inter, sans-serif" font-size="13" fill="#0a5c5c">
+      <circle cx="10" cy="-5" r="12" fill="#22c55e"/>
+      <text x="10" y="0" fill="white" text-anchor="middle" font-weight="bold">✓</text>
+      <text x="30" y="0">Knows your preferences</text>
+
+      <circle cx="10" cy="30" r="12" fill="#22c55e"/>
+      <text x="10" y="35" fill="white" text-anchor="middle" font-weight="bold">✓</text>
+      <text x="30" y="35">One-tap ordering</text>
+
+      <circle cx="10" cy="65" r="12" fill="#22c55e"/>
+      <text x="10" y="70" fill="white" text-anchor="middle" font-weight="bold">✓</text>
+      <text x="30" y="70">Real-time tracking</text>
+    </g>
+  </g>
+
+  <!-- RIGHT SIDE: Complex Airline Booking -->
+  <g transform="translate(620, 100)">
+    <!-- Title -->
+    <text x="270" y="30" font-family="Inter, sans-serif" font-size="24" font-weight="700" fill="#0a5c5c" text-anchor="middle">Airline Booking</text>
+    <text x="270" y="55" font-family="Inter, sans-serif" font-size="14" fill="#dc2626" text-anchor="middle">Complex. Frustrating. Outdated.</text>
+
+    <!-- Confused traveler with backpack -->
+    <g transform="translate(30, 100)">
+      <!-- Person body -->
+      <ellipse cx="50" cy="280" rx="40" ry="12" fill="#e8e8e8" opacity="0.5"/>
+      <rect x="25" y="180" width="50" height="100" rx="10" fill="#6b7280"/>
+      <!-- Head -->
+      <circle cx="50" cy="155" r="35" fill="#fcd5b8"/>
+      <!-- Hair -->
+      <path d="M20 145 Q20 115 50 115 Q80 115 80 145" fill="#8b7355"/>
+      <!-- Confused expression -->
+      <path d="M35 170 L65 170" stroke="#333" stroke-width="2"/>
+      <!-- Worried eyes -->
+      <circle cx="38" cy="148" r="4" fill="#333"/>
+      <circle cx="62" cy="148" r="4" fill="#333"/>
+      <!-- Sweat drop -->
+      <ellipse cx="78" cy="140" rx="4" ry="6" fill="#60a5fa"/>
+      <!-- Question marks -->
+      <text x="15" y="120" font-family="Inter, sans-serif" font-size="20" fill="#dc2626">?</text>
+      <text x="75" y="115" font-family="Inter, sans-serif" font-size="16" fill="#dc2626">?</text>
+
+      <!-- Backpack -->
+      <rect x="65" y="170" width="35" height="50" rx="5" fill="#92400e"/>
+      <rect x="70" y="175" width="25" height="20" rx="3" fill="#b45309"/>
+      <!-- Straps -->
+      <line x1="70" y1="175" x2="55" y2="185" stroke="#92400e" stroke-width="4"/>
+      <line x1="95" y1="175" x2="75" y2="185" stroke="#92400e" stroke-width="4"/>
+    </g>
+
+    <!-- Labyrinth / Maze -->
+    <g transform="translate(140, 120)" stroke="#0a5c5c" stroke-width="3" fill="none">
+      <!-- Outer walls -->
+      <rect x="0" y="0" width="250" height="180" rx="5" opacity="0.3"/>
+
+      <!-- Maze paths -->
+      <path d="M0 45 L180 45" opacity="0.4"/>
+      <path d="M70 45 L70 90" opacity="0.4"/>
+      <path d="M70 90 L180 90" opacity="0.4"/>
+      <path d="M180 45 L180 135" opacity="0.4"/>
+      <path d="M40 90 L40 135" opacity="0.4"/>
+      <path d="M40 135 L140 135" opacity="0.4"/>
+      <path d="M140 90 L140 180" opacity="0.4"/>
+      <path d="M0 135 L40 135" opacity="0.4"/>
+      <path d="M100 0 L100 45" opacity="0.4"/>
+      <path d="M210 90 L250 90" opacity="0.4"/>
+      <path d="M210 45 L210 135" opacity="0.4"/>
+
+      <!-- Traveler path (confused, zigzag) -->
+      <path d="M10 165 L30 145 L50 160 L70 130 L90 150 L110 120"
+            stroke="#dc2626" stroke-width="2" stroke-dasharray="5,3" opacity="0.7"/>
+
+      <!-- Ticket window at end -->
+      <rect x="200" y="130" width="45" height="45" rx="3" fill="#f5b800" stroke="none"/>
+      <text x="222" y="158" font-family="Inter, sans-serif" font-size="10" fill="#1a1a1a" text-anchor="middle">FRA→BER</text>
+    </g>
+
+    <!-- Frustration indicators -->
+    <g transform="translate(170, 350)" font-family="Inter, sans-serif" font-size="13" fill="#0a5c5c">
+      <circle cx="10" cy="-5" r="12" fill="#dc2626"/>
+      <text x="10" y="0" fill="white" text-anchor="middle" font-weight="bold">✗</text>
+      <text x="30" y="0">Doesn't know you</text>
+
+      <circle cx="10" cy="30" r="12" fill="#dc2626"/>
+      <text x="10" y="35" fill="white" text-anchor="middle" font-weight="bold">✗</text>
+      <text x="30" y="35">Byzantine fare rules</text>
+
+      <circle cx="10" cy="65" r="12" fill="#dc2626"/>
+      <text x="10" y="70" fill="white" text-anchor="middle" font-weight="bold">✗</text>
+      <text x="30" y="70">PNR = your identity</text>
+    </g>
+  </g>
+
+  <!-- Bottom message -->
+  <text x="600" y="560" font-family="Inter, sans-serif" font-size="18" font-weight="600" fill="#0a5c5c" text-anchor="middle">
+    Why should buying a flight be harder than ordering dinner?
+  </text>
+</svg>
