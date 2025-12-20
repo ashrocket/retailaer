@@ -12,59 +12,44 @@ const filePath = 'src/pages/index.astro';
 // Check if user is logged in (for showing Manage Insights link)
 const isLoggedIn = isAuthenticated(Astro.cookies);
 
-// Curated insights - includes Ann Cederhall's featured articles
-const insights = [
-  {
-    id: '1',
-    slug: 'modern-airline-retailing-fact-or-fiction',
-    title: 'Modern Airline Retailing - Fact or Fiction?',
-    excerpt: 'Is modern airline retailing genuinely transformative or just industry hype? A clear-eyed look at what works.',
-    meta: 'LINKEDIN POST',
-    icon: 'rocket',
-    backgroundGradient: 'linear-gradient(135deg, #0a5c5c 0%, #084a4f 100%)',
-    previewImage: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=600&h=400&fit=crop'
-  },
-  {
-    id: '2',
-    slug: 'orders-without-friction',
-    title: 'Orders Without Friction',
-    excerpt: 'Streamlining the booking experience while maximizing ancillary opportunities for airlines.',
-    meta: 'ARTICLE',
-    icon: 'document',
-    backgroundGradient: 'linear-gradient(135deg, #f5b800 0%, #d9a400 100%)',
-    previewImage: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop'
-  },
-  {
-    id: '3',
-    slug: 'three-pillars-of-ndc',
-    title: 'The Three Pillars of NDC',
-    excerpt: 'Cost, Control, and Retail were NDC\'s founding goals. A decade later, how much progress have we made?',
-    meta: 'LINKEDIN POST',
-    icon: 'chart',
-    backgroundGradient: 'linear-gradient(135deg, #0a5c5c 0%, #084a4f 100%)',
-    previewImage: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=600&h=400&fit=crop'
-  },
-  {
-    id: '4',
-    slug: 'customer-first-retailing',
-    title: 'The Customer-First Revolution',
-    excerpt: 'Putting customers at the center transforms your airline retailing strategy and boosts revenue.',
-    meta: 'BLOG POST',
-    icon: 'globe',
-    backgroundGradient: 'linear-gradient(135deg, #f5b800 0%, #d9a400 100%)',
-    previewImage: '/images/blog/customer-first-illustration.svg'
-  },
-  {
-    id: '5',
-    slug: 'to-ndc-or-not-ndc',
-    title: 'To NDC or Not NDC?',
-    excerpt: 'After years of NDC discussions, the industry still needs demystifying. Are we asking the wrong questions?',
-    meta: 'LINKEDIN POST',
-    icon: 'rocket',
-    backgroundGradient: 'linear-gradient(135deg, #0a5c5c 0%, #084a4f 100%)',
-    previewImage: 'https://images.unsplash.com/photo-1569154941061-e231b4725ef1?w=600&h=400&fit=crop'
-  },
-];
+// Dynamically load all published blog posts for the carousel
+const blogModules = import.meta.glob('../content/blog/*.json', { eager: true });
+
+// Default preview images based on category/type
+const defaultImages: Record<string, string> = {
+  'LINKEDIN POST': 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=600&h=400&fit=crop',
+  'ARTICLE': 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop',
+  'BLOG POST': 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=600&h=400&fit=crop',
+  'REPORT': 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600&h=400&fit=crop',
+  'GUIDE': 'https://images.unsplash.com/photo-1569154941061-e231b4725ef1?w=600&h=400&fit=crop',
+};
+
+// Icon mapping based on type
+const iconMap: Record<string, string> = {
+  'LINKEDIN POST': 'rocket',
+  'ARTICLE': 'document',
+  'BLOG POST': 'globe',
+  'REPORT': 'chart',
+  'GUIDE': 'rocket',
+};
+
+// Process and filter published posts
+const insights = Object.values(blogModules)
+  .map((module: any) => module.default || module)
+  .filter(post => post && post.status === 'published')
+  .sort((a, b) => new Date(b.publishedAt || b.updatedAt).getTime() - new Date(a.publishedAt || a.updatedAt).getTime())
+  .map((post, index) => ({
+    id: String(index + 1),
+    slug: post.slug,
+    title: post.title,
+    excerpt: post.excerpt,
+    meta: post.type || 'ARTICLE',
+    icon: iconMap[post.type?.toUpperCase()] || 'document',
+    backgroundGradient: index % 2 === 0
+      ? 'linear-gradient(135deg, #0a5c5c 0%, #084a4f 100%)'
+      : 'linear-gradient(135deg, #f5b800 0%, #d9a400 100%)',
+    previewImage: post.coverImage || defaultImages[post.type?.toUpperCase()] || defaultImages['ARTICLE'],
+  }));
 ---
 
 <BaseLayout title="Retailaer – Modern Offer & Order. Real Revenue Lift." filePath={filePath}>
