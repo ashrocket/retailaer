@@ -125,9 +125,15 @@ Consent given: ${data.consent ? 'Yes' : 'No'}
 
     if (!emailResponse.ok) {
       const errorText = await emailResponse.text();
-      console.error('MailChannels error:', errorText);
-      // Still return success to user - we don't want form to appear broken
-      // But log the error for debugging
+      console.error('MailChannels error:', emailResponse.status, errorText);
+      // Return error for debugging - we can change this back later
+      return new Response(JSON.stringify({
+        success: false,
+        error: `Email failed: ${emailResponse.status} - ${errorText}`
+      }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
 
     return new Response(JSON.stringify({
