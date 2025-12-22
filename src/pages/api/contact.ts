@@ -13,30 +13,7 @@ interface ContactFormData {
   consent: string;
 }
 
-// Get Microsoft Graph access token using client credentials
-async function getMsGraphToken(tenantId: string, clientId: string, clientSecret: string): Promise<string> {
-  const tokenUrl = `https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/token`;
-
-  const response = await fetch(tokenUrl, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({
-      client_id: clientId,
-      client_secret: clientSecret,
-      scope: 'https://graph.microsoft.com/.default',
-      grant_type: 'client_credentials',
-    }),
-  });
-
-  if (!response.ok) {
-    throw new Error(`Token request failed: ${await response.text()}`);
-  }
-
-  const data = await response.json();
-  return data.access_token;
-}
-
-export const POST: APIRoute = async ({ request, locals }) => {
+export const POST: APIRoute = async ({ request }) => {
   try {
     const data: ContactFormData = await request.json();
 
@@ -62,6 +39,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     // Format email content
     const emailSubject = `New Contact: ${data.interest || 'General Inquiry'} from ${data.company}`;
+
     const emailHtml = `
       <h2>New Contact Form Submission</h2>
       <table style="border-collapse: collapse; width: 100%; max-width: 600px;">
@@ -96,60 +74,60 @@ export const POST: APIRoute = async ({ request, locals }) => {
       </p>
     `;
 
-    // Get Microsoft Graph credentials
-    const runtime = locals.runtime;
-    const tenantId = runtime?.env?.MS_TENANT_ID || import.meta.env.MS_TENANT_ID;
-    const clientId = runtime?.env?.MS_CLIENT_ID || import.meta.env.MS_CLIENT_ID;
-    const clientSecret = runtime?.env?.MS_CLIENT_SECRET || import.meta.env.MS_CLIENT_SECRET;
-    // Use sales@retailaer.com as both sender and recipient
-    const salesEmail = 'sales@retailaer.com';
+    const emailText = `
+New Contact Form Submission
 
-    if (tenantId && clientId && clientSecret) {
-      try {
-        const accessToken = await getMsGraphToken(tenantId, clientId, clientSecret);
+Name: ${data.firstName} ${data.lastName}
+Email: ${data.email}
+Company: ${data.company}
+Role: ${data.role || 'Not specified'}
+Interest: ${data.interest || 'Not specified'}
 
-        // Send email via Microsoft Graph
-        const sendMailUrl = `https://graph.microsoft.com/v1.0/users/${salesEmail}/sendMail`;
+Message:
+${data.message}
 
-        const emailResponse = await fetch(sendMailUrl, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${accessToken}`,
-            'Content-Type': 'application/json',
+---
+Submitted: ${new Date().toISOString()}
+Consent given: ${data.consent ? 'Yes' : 'No'}
+    `.trim();
+
+    // Send email via MailChannels (free for Cloudflare)
+    const emailResponse = await fetch('https://api.mailchannels.net/tx/v1/send', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        personalizations: [{
+          to: [{ email: 'sales@retailaer.com', name: 'Retailaer Sales' }]
+        }],
+        from: {
+          email: 'contact@retailaer.com',
+          name: 'Retailaer Contact Form'
+        },
+        reply_to: {
+          email: data.email,
+          name: `${data.firstName} ${data.lastName}`
+        },
+        subject: emailSubject,
+        content: [
+          {
+            type: 'text/plain',
+            value: emailText
           },
-          body: JSON.stringify({
-            message: {
-              subject: emailSubject,
-              body: {
-                contentType: 'HTML',
-                content: emailHtml,
-              },
-              toRecipients: [
-                { emailAddress: { address: salesEmail } }
-              ],
-              replyTo: [
-                { emailAddress: { address: data.email, name: `${data.firstName} ${data.lastName}` } }
-              ],
-            },
-          }),
-        });
+          {
+            type: 'text/html',
+            value: emailHtml
+          }
+        ]
+      })
+    });
 
-        if (!emailResponse.ok) {
-          const errorText = await emailResponse.text();
-          console.error('Microsoft Graph error:', errorText);
-        }
-      } catch (emailError) {
-        console.error('Email send error:', emailError);
-        console.log('=== CONTACT FORM SUBMISSION (email failed) ===');
-        console.log(JSON.stringify(data, null, 2));
-        console.log('==============================================');
-      }
-    } else {
-      // Log submission if MS Graph not configured
-      console.log('=== CONTACT FORM SUBMISSION ===');
-      console.log('Microsoft Graph not configured - logging submission');
-      console.log(JSON.stringify(data, null, 2));
-      console.log('===============================');
+    if (!emailResponse.ok) {
+      const errorText = await emailResponse.text();
+      console.error('MailChannels error:', errorText);
+      // Still return success to user - we don't want form to appear broken
+      // But log the error for debugging
     }
 
     return new Response(JSON.stringify({

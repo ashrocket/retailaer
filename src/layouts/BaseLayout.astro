@@ -302,6 +302,52 @@ const basePath = themePrefix ? `/${themePrefix}` : '';
         }
       });
     });
+
+    // Track section views using Intersection Observer
+    (function() {
+      var viewedSections = [];
+      var pagePath = window.location.pathname;
+
+      // Sections to track (by ID)
+      var trackableSections = [
+        'hero', 'benefits', 'why-retailaer', 'how-it-works', 'latest-insights',
+        'platform-overview', 'marketplace', 'distribution', 'travel-brands', 'integration',
+        'contact-form', 'faq'
+      ];
+
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            var sectionId = entry.target.id;
+            var trackingKey = pagePath + '#' + sectionId;
+
+            // Only track each section once per page load
+            if (viewedSections.indexOf(trackingKey) === -1) {
+              viewedSections.push(trackingKey);
+
+              if (typeof gtag !== 'undefined') {
+                gtag('event', 'section_view', {
+                  event_category: 'Section Engagement',
+                  event_label: sectionId,
+                  page_path: pagePath,
+                  section_id: sectionId
+                });
+              }
+            }
+          }
+        });
+      }, {
+        threshold: 0.3 // Trigger when 30% of section is visible
+      });
+
+      // Observe all sections with IDs
+      trackableSections.forEach(function(sectionId) {
+        var section = document.getElementById(sectionId);
+        if (section) {
+          observer.observe(section);
+        }
+      });
+    })();
   </script>
 </body>
 </html>
