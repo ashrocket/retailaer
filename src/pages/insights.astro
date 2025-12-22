@@ -479,38 +479,4 @@ const posts = allPosts
       }
     }
   </style>
-
-  <script>
-    // Newsletter form handler
-    const form = document.getElementById('newsletter-form');
-    form?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const input = form.querySelector('input[type="email"]') as HTMLInputElement;
-      const button = form.querySelector('button') as HTMLButtonElement;
-
-      if (!input || !button) return;
-
-      const email = input.value;
-
-      // Disable form
-      input.disabled = true;
-      button.disabled = true;
-      button.textContent = 'Subscribing...';
-
-      // Show success message
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      button.textContent = 'Subscribed!';
-      button.style.background = '#10b981';
-
-      setTimeout(() => {
-        input.value = '';
-        input.disabled = false;
-        button.disabled = false;
-        button.textContent = 'Subscribe';
-        button.style.background = '';
-      }, 3000);
-    });
-  </script>
 </BaseLayout>
