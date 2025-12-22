@@ -13,6 +13,30 @@ interface ContactFormData {
   consent: string;
 }
 
+// Get Microsoft Graph access token using client credentials
+async function getMsGraphToken(tenantId: string, clientId: string, clientSecret: string): Promise<string> {
+  const tokenUrl = `https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/token`;
+
+  const response = await fetch(tokenUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      client_id: clientId,
+      client_secret: clientSecret,
+      scope: 'https://graph.microsoft.com/.default',
+      grant_type: 'client_credentials',
+    }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Token request failed: ${errorText}`);
+  }
+
+  const data = await response.json();
+  return data.access_token;
+}
+
 export const POST: APIRoute = async ({ request, locals }) => {
   try {
     const data: ContactFormData = await request.json();
@@ -39,7 +63,6 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     // Format email content
     const emailSubject = `New Contact: ${data.interest || 'General Inquiry'} from ${data.company}`;
-
     const emailHtml = `
       <h2>New Contact Form Submission</h2>
       <table style="border-collapse: collapse; width: 100%; max-width: 600px;">
@@ -74,12 +97,15 @@ export const POST: APIRoute = async ({ request, locals }) => {
       </p>
     `;
 
-    // Get Resend API key from environment
+    // Get Microsoft Graph credentials
     const runtime = locals.runtime;
-    const resendApiKey = runtime?.env?.RESEND_API_KEY || import.meta.env.RESEND_API_KEY;
+    const tenantId = runtime?.env?.MS_TENANT_ID || import.meta.env.MS_TENANT_ID;
+    const clientId = runtime?.env?.MS_CLIENT_ID || import.meta.env.MS_CLIENT_ID;
+    const clientSecret = runtime?.env?.MS_CLIENT_SECRET || import.meta.env.MS_CLIENT_SECRET;
+    const senderEmail = 'sales@retailaer.com';
 
-    if (!resendApiKey) {
-      console.error('RESEND_API_KEY not configured');
+    if (!tenantId || !clientId || !clientSecret) {
+      console.error('Microsoft Graph credentials not configured');
       return new Response(JSON.stringify({
         error: 'Email service not configured. Please contact us directly at sales@retailaer.com'
       }), {
@@ -88,28 +114,40 @@ export const POST: APIRoute = async ({ request, locals }) => {
       });
     }
 
-    // Send email via Resend
-    const emailResponse = await fetch('https://api.resend.com/emails', {
+    // Get access token and send email
+    const accessToken = await getMsGraphToken(tenantId, clientId, clientSecret);
+    const sendMailUrl = `https://graph.microsoft.com/v1.0/users/${senderEmail}/sendMail`;
+
+    const emailResponse = await fetch(sendMailUrl, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${resendApiKey}`,
-        'Content-Type': 'application/json'
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Retailaer Contact Form <contact@retailaer.com>',
-        to: ['sales@retailaer.com', 'info@retailaer.com'],
-        reply_to: data.email,
-        subject: emailSubject,
-        html: emailHtml
-      })
+        message: {
+          subject: emailSubject,
+          body: {
+            contentType: 'HTML',
+            content: emailHtml,
+          },
+          toRecipients: [
+            { emailAddress: { address: 'sales@retailaer.com' } },
+            { emailAddress: { address: 'info@retailaer.com' } }
+          ],
+          replyTo: [
+            { emailAddress: { address: data.email, name: `${data.firstName} ${data.lastName}` } }
+          ],
+        },
+      }),
     });
 
     if (!emailResponse.ok) {
-      const errorData = await emailResponse.json();
-      console.error('Resend error:', emailResponse.status, errorData);
+      const errorText = await emailResponse.text();
+      console.error('Microsoft Graph error:', emailResponse.status, errorText);
       return new Response(JSON.stringify({
         success: false,
-        error: `Email failed: ${errorData.message || 'Unknown error'}`
+        error: `Email failed: ${errorText}`
       }), {
         status: 500,
         headers: { 'Content-Type': 'application/json' }
