@@ -289,7 +289,7 @@ a.btn.btn-gold:visited:hover {
   color: #FFFFFF !important;
 }
 
-/* Primary/Gold buttons on DARK backgrounds - white text, slate on hover */
+/* Primary/Gold buttons on DARK backgrounds - dark text, white on hover */
 .how-it-works a.btn.btn-gold,
 .how-it-works a.btn.btn-gold:link,
 .how-it-works a.btn.btn-gold:visited,
@@ -302,7 +302,7 @@ a.btn.btn-gold:visited:hover {
 .hero-section a.btn.btn-primary,
 .hero-section a.btn.btn-primary:link,
 .hero-section a.btn.btn-primary:visited {
-  color: #FFFFFF !important;
+  color: #1F2933 !important;
 }
 
 .how-it-works a.btn.btn-gold:hover,
@@ -321,7 +321,7 @@ a.btn.btn-gold:visited:hover {
 .hero-section a.btn.btn-primary:active,
 .hero-section a.btn.btn-primary:focus,
 .hero-section a.btn.btn-primary:visited:hover {
-  color: #1F2933 !important;
+  color: #FFFFFF !important;
 }
 
 /* Secondary/outline buttons - only on dark backgrounds */
