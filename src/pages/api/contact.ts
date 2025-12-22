@@ -13,7 +13,7 @@ interface ContactFormData {
   consent: string;
 }
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
   try {
     const data: ContactFormData = await request.json();
 
@@ -74,62 +74,42 @@ export const POST: APIRoute = async ({ request }) => {
       </p>
     `;
 
-    const emailText = `
-New Contact Form Submission
+    // Get Resend API key from environment
+    const runtime = locals.runtime;
+    const resendApiKey = runtime?.env?.RESEND_API_KEY || import.meta.env.RESEND_API_KEY;
 
-Name: ${data.firstName} ${data.lastName}
-Email: ${data.email}
-Company: ${data.company}
-Role: ${data.role || 'Not specified'}
-Interest: ${data.interest || 'Not specified'}
+    if (!resendApiKey) {
+      console.error('RESEND_API_KEY not configured');
+      return new Response(JSON.stringify({
+        error: 'Email service not configured. Please contact us directly at sales@retailaer.com'
+      }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
 
-Message:
-${data.message}
-
----
-Submitted: ${new Date().toISOString()}
-Consent given: ${data.consent ? 'Yes' : 'No'}
-    `.trim();
-
-    // Send email via MailChannels (free for Cloudflare)
-    const emailResponse = await fetch('https://api.mailchannels.net/tx/v1/send', {
+    // Send email via Resend
+    const emailResponse = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
+        'Authorization': `Bearer ${resendApiKey}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        personalizations: [{
-          to: [{ email: 'sales@retailaer.com', name: 'Retailaer Sales' }]
-        }],
-        from: {
-          email: 'contact@retailaer.com',
-          name: 'Retailaer Contact Form'
-        },
-        reply_to: {
-          email: data.email,
-          name: `${data.firstName} ${data.lastName}`
-        },
+        from: 'Retailaer Contact Form <contact@retailaer.com>',
+        to: ['sales@retailaer.com', 'info@retailaer.com'],
+        reply_to: data.email,
         subject: emailSubject,
-        content: [
-          {
-            type: 'text/plain',
-            value: emailText
-          },
-          {
-            type: 'text/html',
-            value: emailHtml
-          }
-        ]
+        html: emailHtml
       })
     });
 
     if (!emailResponse.ok) {
-      const errorText = await emailResponse.text();
-      console.error('MailChannels error:', emailResponse.status, errorText);
-      // Return error for debugging - we can change this back later
+      const errorData = await emailResponse.json();
+      console.error('Resend error:', emailResponse.status, errorData);
       return new Response(JSON.stringify({
         success: false,
-        error: `Email failed: ${emailResponse.status} - ${errorText}`
+        error: `Email failed: ${errorData.message || 'Unknown error'}`
       }), {
         status: 500,
         headers: { 'Content-Type': 'application/json' }
