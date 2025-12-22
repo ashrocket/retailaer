@@ -128,35 +128,6 @@ const posts = allPosts
     </div>
   </section>
 
-  <!-- Newsletter Section -->
-  <section class="section section-alt">
-    <div class="container">
-      <div class="newsletter-box">
-        <div class="newsletter-content">
-          <h2>Stay Updated</h2>
-          <p>
-            Get the latest insights on airline retailing, travel technology,
-            and industry trends delivered to your inbox.
-          </p>
-        </div>
-        <div class="newsletter-form">
-          <form id="newsletter-form">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              required
-              aria-label="Email address"
-            />
-            <button type="submit" class="btn btn-primary">Subscribe</button>
-          </form>
-          <p class="newsletter-note">
-            We respect your privacy. Unsubscribe at any time.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- Topics Section -->
   <section class="section">
     <div class="container">
@@ -449,62 +420,6 @@ const posts = allPosts
       color: var(--theme-primary-dark);
     }
 
-    /* Newsletter */
-    .newsletter-box {
-      background: white;
-      padding: 3rem;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      align-items: center;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-
-    .newsletter-content h2 {
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--theme-text-primary);
-      margin-bottom: 1rem;
-    }
-
-    .newsletter-content p {
-      color: var(--theme-text-secondary);
-      line-height: 1.7;
-      font-size: 1.0625rem;
-    }
-
-    .newsletter-form form {
-      display: flex;
-      gap: 0.75rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .newsletter-form input {
-      flex: 1;
-      padding: 0.875rem 1.25rem;
-      border: 2px solid #e5e7eb;
-      border-radius: 8px;
-      font-size: 1rem;
-      transition: border-color 0.2s;
-    }
-
-    .newsletter-form input:focus {
-      outline: none;
-      border-color: var(--theme-primary);
-    }
-
-    .newsletter-form button {
-      white-space: nowrap;
-    }
-
-    .newsletter-note {
-      font-size: 0.875rem;
-      color: var(--theme-text-secondary);
-    }
-
     /* Topics */
     .topics-grid {
       display: grid;
@@ -545,11 +460,6 @@ const posts = allPosts
     }
 
     @media (max-width: 968px) {
-      .newsletter-box {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-      }
-
       .insights-grid {
         grid-template-columns: 1fr;
       }
@@ -566,18 +476,6 @@ const posts = allPosts
 
       .section {
         padding: 60px 0;
-      }
-
-      .newsletter-box {
-        padding: 2rem;
-      }
-
-      .newsletter-form form {
-        flex-direction: column;
-      }
-
-      .newsletter-form button {
-        width: 100%;
       }
     }
   </style>

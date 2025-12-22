@@ -94,6 +94,32 @@ export const GET: APIRoute = async ({ request, redirect, cookies, url, locals })
     if (!author) {
       console.log('Unauthorized user attempted login with email:', email);
       console.log('Full profile:', profile);
+
+      // Send email notification to admin
+      try {
+        const allowedEmailsList = ALLOWED_AUTHORS.map(a => `${a.name}: ${a.email}`).join('\n');
+        await fetch('https://api.mailchannels.net/tx/v1/send', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            personalizations: [{
+              to: [{ email: 'ashley@raiteri.net', name: 'Ashley Raiteri' }]
+            }],
+            from: {
+              email: 'noreply@retailaer.us',
+              name: 'Retailaer Blog Editor'
+            },
+            subject: `Failed Login Attempt: ${email || 'unknown'}`,
+            content: [{
+              type: 'text/plain',
+              value: `Someone tried to login to the blog editor but their email is not authorized.\n\nAttempted email: ${email || 'not provided'}\nName from LinkedIn: ${profile.name || 'not provided'}\nTime: ${new Date().toISOString()}\n\nCurrently authorized emails:\n${allowedEmailsList}\n\nTo add this user, update src/config/authors.ts`
+            }]
+          })
+        });
+      } catch (emailError) {
+        console.error('Failed to send admin notification:', emailError);
+      }
+
       return redirect(`/blog/login?error=unauthorized&email=${encodeURIComponent(email || 'no-email')}`);
     }
 
