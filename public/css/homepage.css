@@ -9,7 +9,7 @@
 
 .hero-section {
   background: var(--theme-gradient-hero);
-  padding: 8rem 0 6rem;
+  padding: 5rem 0 3rem;
   position: relative;
   overflow: hidden;
   margin-top: 60px; /* Account for fixed nav */
@@ -58,8 +58,8 @@
 }
 
 .airplane-icon {
-  width: 220px;
-  height: 220px;
+  width: 180px;
+  height: 180px;
   opacity: 0.3;
   filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.2));
   animation: float 6s ease-in-out infinite;
