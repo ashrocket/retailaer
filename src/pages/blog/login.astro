@@ -16,8 +16,11 @@ if (session) {
 
 // Get error message from URL
 const error = Astro.url.searchParams.get('error');
+const attemptedEmail = Astro.url.searchParams.get('email');
 const errorMessages: Record<string, string> = {
-  'unauthorized': 'Your LinkedIn account is not authorized to access the blog editor.',
+  'unauthorized': attemptedEmail
+    ? `Your LinkedIn email (${attemptedEmail}) is not authorized. Make sure your LinkedIn account uses one of the registered emails.`
+    : 'Your LinkedIn account is not authorized to access the blog editor.',
   'missing_code': 'Authentication failed. Please try again.',
   'invalid_state': 'Security validation failed. Please try again.',
   'token_exchange_failed': 'Failed to authenticate with LinkedIn. Please try again.',
@@ -298,7 +301,14 @@ const errorMessages: Record<string, string> = {
           <line x1="12" y1="8" x2="12" y2="12"/>
           <line x1="12" y1="16" x2="12.01" y2="16"/>
         </svg>
-        {errorMessages[error] || 'An error occurred. Please try again.'}
+        <div>
+          {errorMessages[error] || 'An error occurred. Please try again.'}
+          {error === 'unauthorized' && (
+            <div style="margin-top: 8px; font-size: 12px; opacity: 0.8;">
+              Registered emails: lofgrena@gmail.com, ann.cederhall@hotmail.com, ashley@raiteri.net, juliadreichel@gmail.com
+            </div>
+          )}
+        </div>
       </div>
     )}
 
@@ -329,6 +339,12 @@ const errorMessages: Record<string, string> = {
             <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
           </svg>
           Ashley Raiteri
+        </div>
+        <div class="author-badge">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+          </svg>
+          Julia Reichel
         </div>
       </div>
     </div>
