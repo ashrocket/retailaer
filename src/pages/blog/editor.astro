@@ -1093,7 +1093,7 @@ if (!session) {
 
     async function loadExistingPost(postId: string) {
       try {
-        const response = await fetch(`/api/blog/${postId}`);
+        const response = await fetch(`/api/blog/get/${postId}`);
         if (!response.ok) {
           console.error('Failed to load post:', response.status);
           alert('Failed to load post for editing. It may not exist.');
