@@ -1087,45 +1087,138 @@ if (!session) {
       saveDraft(true);
     });
 
-    // Load draft
-    const draft = localStorage.getItem('article-draft');
-    if (draft) {
-      const draftData = JSON.parse(draft);
-      const { title, content, cover, carouselPreview } = draftData;
+    // Check if editing an existing post (via URL parameter)
+    const urlParams = new URLSearchParams(window.location.search);
+    const editId = urlParams.get('id') || urlParams.get('slug');
 
-      if (title) (document.getElementById('title') as HTMLInputElement).value = title;
-      if (content) (document.getElementById('editor') as HTMLElement).innerHTML = content;
-
-      if (cover && cover.startsWith('data:')) {
-        const preview = document.getElementById('cover-preview') as HTMLImageElement;
-        const btn = document.getElementById('cover-btn');
-        if (preview && btn) {
-          preview.src = cover;
-          preview.classList.remove('hidden');
-          btn.classList.add('hidden');
+    async function loadExistingPost(postId: string) {
+      try {
+        const response = await fetch(`/api/blog/${postId}`);
+        if (!response.ok) {
+          console.error('Failed to load post:', response.status);
+          alert('Failed to load post for editing. It may not exist.');
+          return false;
         }
-      }
 
-      // Restore carousel preview settings
-      if (carouselPreview) {
+        const post = await response.json();
+        console.log('Loaded post for editing:', post);
+
+        // Populate title
+        if (post.title) {
+          (document.getElementById('title') as HTMLInputElement).value = post.title;
+        }
+
+        // Populate content
+        if (post.content) {
+          (document.getElementById('editor') as HTMLElement).innerHTML = post.content;
+        }
+
+        // Populate cover image
+        if (post.coverImage) {
+          const preview = document.getElementById('cover-preview') as HTMLImageElement;
+          const btn = document.getElementById('cover-btn');
+          if (preview && btn) {
+            preview.src = post.coverImage;
+            preview.classList.remove('hidden');
+            btn.classList.add('hidden');
+          }
+        }
+
+        // Populate carousel preview settings
         const previewTitleInput = document.getElementById('preview-title') as HTMLInputElement;
         const previewExcerptInput = document.getElementById('preview-excerpt') as HTMLTextAreaElement;
         const previewMetaSelect = document.getElementById('preview-meta') as HTMLSelectElement;
         const previewIconSelect = document.getElementById('preview-icon') as HTMLSelectElement;
         const previewGradientSelect = document.getElementById('preview-gradient') as HTMLSelectElement;
 
-        if (previewTitleInput && carouselPreview.title) previewTitleInput.value = carouselPreview.title;
-        if (previewExcerptInput && carouselPreview.excerpt) previewExcerptInput.value = carouselPreview.excerpt;
-        if (previewMetaSelect && carouselPreview.meta) previewMetaSelect.value = carouselPreview.meta;
-        if (previewIconSelect && carouselPreview.icon) previewIconSelect.value = carouselPreview.icon;
-        if (previewGradientSelect && carouselPreview.backgroundGradient) previewGradientSelect.value = carouselPreview.backgroundGradient;
+        if (post.carouselPreview) {
+          if (previewTitleInput && post.carouselPreview.title) previewTitleInput.value = post.carouselPreview.title;
+          if (previewExcerptInput && post.carouselPreview.excerpt) previewExcerptInput.value = post.carouselPreview.excerpt;
+          if (previewMetaSelect && post.carouselPreview.meta) previewMetaSelect.value = post.carouselPreview.meta;
+          if (previewIconSelect && post.carouselPreview.icon) previewIconSelect.value = post.carouselPreview.icon;
+          if (previewGradientSelect && post.carouselPreview.backgroundGradient) previewGradientSelect.value = post.carouselPreview.backgroundGradient;
+        } else if (post.excerpt) {
+          // Fallback: use excerpt if no carouselPreview
+          if (previewExcerptInput) previewExcerptInput.value = post.excerpt;
+        }
+
+        // Also try the type field for badge
+        if (post.type && previewMetaSelect) {
+          previewMetaSelect.value = post.type;
+        }
 
         // Update the live preview
         updateCarouselPreview();
-      }
 
-      // Show notification that draft was loaded
-      console.log('Draft loaded from', new Date(draftData.timestamp).toLocaleString());
+        // Store post info in localStorage for saving
+        localStorage.setItem('article-draft', JSON.stringify({
+          id: post.slug || postId,
+          title: post.title,
+          content: post.content,
+          cover: post.coverImage,
+          carouselPreview: post.carouselPreview,
+          createdAt: post.createdAt || post.publishedAt,
+          publishedAt: post.publishedAt,
+          timestamp: Date.now(),
+        }));
+
+        // Update page title
+        document.title = `Edit: ${post.title} - Retailaer`;
+        const pageTitle = document.querySelector('.page-title');
+        if (pageTitle) pageTitle.textContent = 'Edit Article';
+
+        return true;
+      } catch (error) {
+        console.error('Error loading post:', error);
+        alert('Error loading post for editing.');
+        return false;
+      }
+    }
+
+    // If editing existing post, load it; otherwise load from localStorage draft
+    if (editId) {
+      loadExistingPost(editId);
+    } else {
+      // Load draft from localStorage (for new posts)
+      const draft = localStorage.getItem('article-draft');
+      if (draft) {
+        const draftData = JSON.parse(draft);
+        const { title, content, cover, carouselPreview } = draftData;
+
+        if (title) (document.getElementById('title') as HTMLInputElement).value = title;
+        if (content) (document.getElementById('editor') as HTMLElement).innerHTML = content;
+
+        if (cover && cover.startsWith('data:')) {
+          const preview = document.getElementById('cover-preview') as HTMLImageElement;
+          const btn = document.getElementById('cover-btn');
+          if (preview && btn) {
+            preview.src = cover;
+            preview.classList.remove('hidden');
+            btn.classList.add('hidden');
+          }
+        }
+
+        // Restore carousel preview settings
+        if (carouselPreview) {
+          const previewTitleInput = document.getElementById('preview-title') as HTMLInputElement;
+          const previewExcerptInput = document.getElementById('preview-excerpt') as HTMLTextAreaElement;
+          const previewMetaSelect = document.getElementById('preview-meta') as HTMLSelectElement;
+          const previewIconSelect = document.getElementById('preview-icon') as HTMLSelectElement;
+          const previewGradientSelect = document.getElementById('preview-gradient') as HTMLSelectElement;
+
+          if (previewTitleInput && carouselPreview.title) previewTitleInput.value = carouselPreview.title;
+          if (previewExcerptInput && carouselPreview.excerpt) previewExcerptInput.value = carouselPreview.excerpt;
+          if (previewMetaSelect && carouselPreview.meta) previewMetaSelect.value = carouselPreview.meta;
+          if (previewIconSelect && carouselPreview.icon) previewIconSelect.value = carouselPreview.icon;
+          if (previewGradientSelect && carouselPreview.backgroundGradient) previewGradientSelect.value = carouselPreview.backgroundGradient;
+
+          // Update the live preview
+          updateCarouselPreview();
+        }
+
+        // Show notification that draft was loaded
+        console.log('Draft loaded from', new Date(draftData.timestamp).toLocaleString());
+      }
     }
 
     // Preview button - opens full page preview in new tab
