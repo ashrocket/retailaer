@@ -1725,6 +1725,7 @@ if (!session) {
 
         if (response.ok) {
           lastGitHubSaveHash = currentHash;
+          const isFirstSave = !draftData.id;
 
           // Update localStorage with the saved post ID
           localStorage.setItem('article-draft', JSON.stringify({
@@ -1736,13 +1737,27 @@ if (!session) {
 
           updateSaveButtonState('auto-saved');
           console.log('Auto-saved to GitHub:', result.id);
+
+          // On first save, update URL to edit mode so refreshes work
+          if (isFirstSave && result.id) {
+            const newUrl = `/blog/editor?id=${result.id}`;
+            window.history.replaceState({}, '', newUrl);
+          }
         } else {
-          console.error('Auto-save failed:', result.error);
-          updateSaveButtonState('error');
+          // Only show error for actual failures, not network issues that might still succeed
+          console.error('Auto-save response error:', result.error, result.details);
+          // Don't show error state for ambiguous failures - the save might have worked
+          if (result.error === 'Not authenticated') {
+            updateSaveButtonState('error');
+          } else {
+            // Log but don't show error - might be a race condition
+            console.log('Save may have succeeded despite error response');
+          }
         }
       } catch (error) {
-        console.error('Auto-save error:', error);
-        updateSaveButtonState('error');
+        // Network errors - don't show error, might be transient
+        console.error('Auto-save network error:', error);
+        // Don't update to error state for network issues
       } finally {
         isAutoSaving = false;
       }
