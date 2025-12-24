@@ -334,6 +334,16 @@ if (!session) {
       color: white;
     }
 
+    .btn-text.saving {
+      background: #f0f7f7;
+      color: #0a5c5c;
+    }
+
+    .btn-text.error {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+
     .btn-primary {
       background: #0a5c5c;
       color: white;
@@ -1356,72 +1366,197 @@ if (!session) {
       });
     });
 
-    // Auto-save draft
-    let saveTimeout: number;
+    // Auto-save draft (localStorage + GitHub)
+    let localSaveTimeout: number;
+    let githubSaveTimeout: number;
     let lastSaveTime = 0;
+    let lastGitHubSaveHash = '';
+    let isAutoSaving = false;
 
-    function saveDraft(showFeedback = false) {
-      clearTimeout(saveTimeout);
-      saveTimeout = window.setTimeout(() => {
-        const title = (document.getElementById('title') as HTMLInputElement).value;
-        const content = (document.getElementById('editor') as HTMLElement).innerHTML;
-        const cover = (document.getElementById('cover-preview') as HTMLImageElement).src;
-
-        // Get carousel preview settings
-        const previewTitle = (document.getElementById('preview-title') as HTMLInputElement)?.value;
-        const previewExcerpt = (document.getElementById('preview-excerpt') as HTMLTextAreaElement)?.value;
-        const previewMeta = (document.getElementById('preview-meta') as HTMLSelectElement)?.value;
-        const previewIcon = (document.getElementById('preview-icon') as HTMLSelectElement)?.value;
-        const previewGradient = (document.getElementById('preview-gradient') as HTMLSelectElement)?.value;
-
-        localStorage.setItem('article-draft', JSON.stringify({
-          title,
-          content,
-          cover,
-          carouselPreview: {
-            title: previewTitle,
-            excerpt: previewExcerpt,
-            meta: previewMeta,
-            icon: previewIcon,
-            backgroundGradient: previewGradient
-          },
-          timestamp: Date.now()
-        }));
-
-        lastSaveTime = Date.now();
-
-        if (showFeedback) {
-          const saveBtn = document.getElementById('save-draft');
-          const saveText = saveBtn?.querySelector('.save-text');
-          if (saveText) {
-            const originalText = saveText.textContent;
-            saveText.textContent = 'Saved!';
-            saveBtn?.classList.add('saved');
-            setTimeout(() => {
-              saveText.textContent = originalText;
-              saveBtn?.classList.remove('saved');
-            }, 2000);
-          }
-        }
-
-        console.log('Draft auto-saved at', new Date().toLocaleTimeString());
-      }, 1000);
+    // Simple hash function to detect content changes
+    function hashContent(str: string): string {
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        const char = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+      }
+      return hash.toString();
     }
 
-    document.getElementById('title')?.addEventListener('input', () => saveDraft(false));
-    document.getElementById('editor')?.addEventListener('input', () => saveDraft(false));
+    function getPostData() {
+      const title = (document.getElementById('title') as HTMLInputElement).value;
+      const content = (document.getElementById('editor') as HTMLElement).innerHTML;
+      const cover = (document.getElementById('cover-preview') as HTMLImageElement).src;
+      const previewTitle = (document.getElementById('preview-title') as HTMLInputElement)?.value;
+      const previewExcerpt = (document.getElementById('preview-excerpt') as HTMLTextAreaElement)?.value;
+      const previewMeta = (document.getElementById('preview-meta') as HTMLSelectElement)?.value;
+      const previewIcon = (document.getElementById('preview-icon') as HTMLSelectElement)?.value;
+      const previewGradient = (document.getElementById('preview-gradient') as HTMLSelectElement)?.value;
 
-    // Also auto-save carousel preview changes
-    document.getElementById('preview-title')?.addEventListener('input', () => saveDraft(false));
-    document.getElementById('preview-excerpt')?.addEventListener('input', () => saveDraft(false));
-    document.getElementById('preview-meta')?.addEventListener('change', () => saveDraft(false));
-    document.getElementById('preview-icon')?.addEventListener('change', () => saveDraft(false));
-    document.getElementById('preview-gradient')?.addEventListener('change', () => saveDraft(false));
+      return {
+        title,
+        content,
+        cover,
+        carouselPreview: {
+          title: previewTitle,
+          excerpt: previewExcerpt,
+          meta: previewMeta,
+          icon: previewIcon,
+          backgroundGradient: previewGradient
+        }
+      };
+    }
 
-    // Save draft button
-    document.getElementById('save-draft')?.addEventListener('click', () => {
-      clearTimeout(saveTimeout);
-      saveDraft(true);
+    function saveDraftToLocalStorage() {
+      const data = getPostData();
+      localStorage.setItem('article-draft', JSON.stringify({
+        ...data,
+        timestamp: Date.now()
+      }));
+      lastSaveTime = Date.now();
+      console.log('Draft saved to localStorage at', new Date().toLocaleTimeString());
+    }
+
+    async function autoSaveToGitHub() {
+      const data = getPostData();
+
+      // Check if there's enough content to save
+      const contentText = data.content.replace(/<[^>]*>/g, '').trim();
+      if (!data.title || data.title.length < 3 || contentText.length < 50) {
+        console.log('Not enough content to auto-save to GitHub');
+        return;
+      }
+
+      // Check if content has actually changed
+      const currentHash = hashContent(data.title + data.content);
+      if (currentHash === lastGitHubSaveHash) {
+        console.log('No changes since last GitHub save');
+        return;
+      }
+
+      // Don't save if it contains the instructions template
+      if (data.content.includes('Welcome to the Retailaer Blog Editor')) {
+        console.log('Skipping auto-save - still showing instructions');
+        return;
+      }
+
+      isAutoSaving = true;
+      updateSaveButtonState('auto-saving');
+
+      try {
+        // Get existing post ID from localStorage draft if editing
+        const draft = localStorage.getItem('article-draft');
+        const draftData = draft ? JSON.parse(draft) : {};
+
+        const postData = {
+          title: data.title,
+          content: data.content,
+          status: 'draft',
+          carouselPreview: data.carouselPreview,
+          coverImage: data.cover && !data.cover.includes('undefined') ? data.cover : undefined,
+          excerpt: data.carouselPreview.excerpt,
+          id: draftData.id,
+          createdAt: draftData.createdAt,
+        };
+
+        const response = await fetch('/api/blog/publish', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(postData),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          lastGitHubSaveHash = currentHash;
+
+          // Update localStorage with the saved post ID
+          localStorage.setItem('article-draft', JSON.stringify({
+            ...data,
+            id: result.id,
+            createdAt: result.post?.createdAt || draftData.createdAt,
+            timestamp: Date.now(),
+          }));
+
+          updateSaveButtonState('auto-saved');
+          console.log('Auto-saved to GitHub:', result.id);
+        } else {
+          console.error('Auto-save failed:', result.error);
+          updateSaveButtonState('error');
+        }
+      } catch (error) {
+        console.error('Auto-save error:', error);
+        updateSaveButtonState('error');
+      } finally {
+        isAutoSaving = false;
+      }
+    }
+
+    function updateSaveButtonState(state: 'idle' | 'auto-saving' | 'auto-saved' | 'error') {
+      const saveBtn = document.getElementById('save-draft');
+      const saveText = saveBtn?.querySelector('.save-text');
+      if (!saveText) return;
+
+      switch (state) {
+        case 'auto-saving':
+          saveText.textContent = 'Auto-saving...';
+          saveBtn?.classList.add('saving');
+          saveBtn?.classList.remove('saved', 'error');
+          break;
+        case 'auto-saved':
+          saveText.textContent = 'Auto-saved';
+          saveBtn?.classList.add('saved');
+          saveBtn?.classList.remove('saving', 'error');
+          setTimeout(() => {
+            if (!isAutoSaving) {
+              saveText.textContent = 'Save Draft';
+              saveBtn?.classList.remove('saved');
+            }
+          }, 3000);
+          break;
+        case 'error':
+          saveText.textContent = 'Save failed';
+          saveBtn?.classList.add('error');
+          saveBtn?.classList.remove('saving', 'saved');
+          setTimeout(() => {
+            saveText.textContent = 'Save Draft';
+            saveBtn?.classList.remove('error');
+          }, 3000);
+          break;
+        default:
+          saveText.textContent = 'Save Draft';
+          saveBtn?.classList.remove('saving', 'saved', 'error');
+      }
+    }
+
+    function scheduleSaves() {
+      // Clear existing timeouts
+      clearTimeout(localSaveTimeout);
+      clearTimeout(githubSaveTimeout);
+
+      // Save to localStorage after 1 second of inactivity
+      localSaveTimeout = window.setTimeout(saveDraftToLocalStorage, 1000);
+
+      // Auto-save to GitHub after 30 seconds of inactivity
+      githubSaveTimeout = window.setTimeout(autoSaveToGitHub, 30000);
+    }
+
+    // Attach save listeners to all editable fields
+    document.getElementById('title')?.addEventListener('input', scheduleSaves);
+    document.getElementById('editor')?.addEventListener('input', scheduleSaves);
+    document.getElementById('preview-title')?.addEventListener('input', scheduleSaves);
+    document.getElementById('preview-excerpt')?.addEventListener('input', scheduleSaves);
+    document.getElementById('preview-meta')?.addEventListener('change', scheduleSaves);
+    document.getElementById('preview-icon')?.addEventListener('change', scheduleSaves);
+    document.getElementById('preview-gradient')?.addEventListener('change', scheduleSaves);
+
+    // Manual save draft button - saves immediately to GitHub
+    document.getElementById('save-draft')?.addEventListener('click', async () => {
+      clearTimeout(localSaveTimeout);
+      clearTimeout(githubSaveTimeout);
+      saveDraftToLocalStorage();
+      await autoSaveToGitHub();
     });
 
     // Check if editing an existing post (via URL parameter)
