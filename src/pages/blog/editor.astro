@@ -1423,6 +1423,44 @@ if (!session) {
     // Check if editing an existing post (via URL parameter)
     const urlParams = new URLSearchParams(window.location.search);
     const editId = urlParams.get('id') || urlParams.get('slug');
+    const isNewPost = urlParams.get('new') === 'true';
+
+    // If new post, clear localStorage and show instructions
+    if (isNewPost) {
+      localStorage.removeItem('article-draft');
+      showNewPostInstructions();
+    }
+
+    function showNewPostInstructions() {
+      const editor = document.getElementById('editor') as HTMLElement;
+      if (editor && !editor.innerHTML.trim()) {
+        editor.innerHTML = `
+          <h2>Welcome to the Retailaer Blog Editor</h2>
+          <p>Here's how to create a great article:</p>
+          <ol>
+            <li><strong>Add a title</strong> - Click the "Title" field above and enter a compelling headline</li>
+            <li><strong>Add a cover image</strong> - Click "Add cover image" to upload a featured image</li>
+            <li><strong>Write your content</strong> - Delete this text and start writing! Select text to see formatting options (bold, italic, headings, links)</li>
+            <li><strong>Use Insert Block</strong> - Click "Insert Block" below to add callouts, quotes, or LinkedIn CTAs</li>
+            <li><strong>Customize carousel preview</strong> - Expand "Carousel Preview Settings" to control how your post appears on the homepage</li>
+          </ol>
+          <h3>Formatting Tips</h3>
+          <ul>
+            <li>Select text and use the toolbar for <strong>bold</strong>, <em>italic</em>, headings, and links</li>
+            <li>Use H2 for main sections, H3 for subsections</li>
+            <li>Keep paragraphs short and scannable</li>
+            <li>Add relevant links to support your points</li>
+          </ul>
+          <h3>Saving & Publishing</h3>
+          <ul>
+            <li><strong>Save Draft</strong> - Saves your work to GitHub without publishing (you'll get a shareable preview link)</li>
+            <li><strong>Preview</strong> - Opens a preview of how your post will look when published</li>
+            <li><strong>Publish</strong> - Makes your post live on the website (deploys in 1-2 minutes)</li>
+          </ul>
+          <p><em>Delete all this text and start writing your article!</em></p>
+        `;
+      }
+    }
 
     async function loadExistingPost(postId: string) {
       try {
@@ -1508,11 +1546,11 @@ if (!session) {
       }
     }
 
-    // If editing existing post, load it; otherwise load from localStorage draft
+    // If editing existing post, load it; otherwise load from localStorage draft (unless ?new=true)
     if (editId) {
       loadExistingPost(editId);
-    } else {
-      // Load draft from localStorage (for new posts)
+    } else if (!isNewPost) {
+      // Load draft from localStorage (only if not explicitly creating new post)
       const draft = localStorage.getItem('article-draft');
       if (draft) {
         const draftData = JSON.parse(draft);
