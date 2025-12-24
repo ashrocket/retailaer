@@ -84,6 +84,46 @@ if (!session) {
       maxlength="150"
     />
 
+    <!-- Fixed Editor Toolbar -->
+    <div class="editor-toolbar" id="editor-toolbar">
+      <div class="toolbar-group">
+        <button data-cmd="bold" title="Bold (Ctrl+B)" class="toolbar-btn"><strong>B</strong></button>
+        <button data-cmd="italic" title="Italic (Ctrl+I)" class="toolbar-btn"><em>I</em></button>
+      </div>
+      <div class="toolbar-divider"></div>
+      <div class="toolbar-group">
+        <button data-cmd="formatBlock:h2" title="Heading 2" class="toolbar-btn">H2</button>
+        <button data-cmd="formatBlock:h3" title="Heading 3" class="toolbar-btn">H3</button>
+        <button data-cmd="formatBlock:p" title="Paragraph" class="toolbar-btn">¶</button>
+      </div>
+      <div class="toolbar-divider"></div>
+      <div class="toolbar-group">
+        <button data-cmd="insertUnorderedList" title="Bullet List" class="toolbar-btn">• List</button>
+        <button data-cmd="insertOrderedList" title="Numbered List" class="toolbar-btn">1. List</button>
+        <button data-cmd="formatBlock:blockquote" title="Blockquote" class="toolbar-btn">❝ Quote</button>
+      </div>
+      <div class="toolbar-divider"></div>
+      <div class="toolbar-group">
+        <button id="toolbar-link-btn" title="Add Link" class="toolbar-btn">🔗 Link</button>
+        <button id="toolbar-hr-btn" title="Horizontal Rule" class="toolbar-btn">― Line</button>
+      </div>
+      <div class="toolbar-divider"></div>
+      <div class="toolbar-group">
+        <button id="paste-markdown-btn" title="Paste Markdown" class="toolbar-btn toolbar-btn-accent">📋 Paste Markdown</button>
+      </div>
+      <div class="toolbar-group toolbar-insert">
+        <button id="toolbar-insert-btn" title="Insert Block" class="toolbar-btn">+ Insert Block</button>
+        <div class="toolbar-insert-menu hidden" id="toolbar-insert-menu">
+          <button data-template="callout-info" class="template-btn">💡 Info Callout</button>
+          <button data-template="callout-warning" class="template-btn">⚠️ Warning</button>
+          <button data-template="callout-success" class="template-btn">✅ Success</button>
+          <button data-template="linkedin-cta" class="template-btn">🔗 LinkedIn CTA</button>
+          <button data-template="key-points" class="template-btn">📋 Key Points</button>
+          <button data-template="quote-highlight" class="template-btn">❝ Highlight Quote</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Editor Body -->
     <div
       id="editor"
@@ -467,10 +507,109 @@ if (!session) {
       color: #9ca3af;
     }
 
+    /* Fixed Editor Toolbar */
+    .editor-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px 48px;
+      background: #f9fafb;
+      border-top: 1px solid #e5e7eb;
+      border-bottom: 1px solid #e5e7eb;
+      position: sticky;
+      top: 60px;
+      z-index: 50;
+    }
+
+    .toolbar-group {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .toolbar-divider {
+      width: 1px;
+      height: 24px;
+      background: #d1d5db;
+      margin: 0 4px;
+    }
+
+    .toolbar-btn {
+      background: white;
+      border: 1px solid #d1d5db;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      color: #374151;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+
+    .toolbar-btn:hover {
+      background: #f0f7f7;
+      border-color: #0a5c5c;
+      color: #0a5c5c;
+    }
+
+    .toolbar-btn:active {
+      background: #e6f0f0;
+    }
+
+    .toolbar-btn-accent {
+      background: #0a5c5c;
+      color: white;
+      border-color: #0a5c5c;
+    }
+
+    .toolbar-btn-accent:hover {
+      background: #084a4f;
+      border-color: #084a4f;
+      color: white;
+    }
+
+    .toolbar-insert {
+      position: relative;
+      margin-left: auto;
+    }
+
+    .toolbar-insert-menu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 4px;
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      min-width: 180px;
+      z-index: 100;
+      padding: 8px 0;
+    }
+
+    .toolbar-insert-menu .template-btn {
+      display: block;
+      width: 100%;
+      padding: 10px 16px;
+      background: none;
+      border: none;
+      text-align: left;
+      cursor: pointer;
+      font-size: 14px;
+      color: #374151;
+      transition: background 0.15s;
+    }
+
+    .toolbar-insert-menu .template-btn:hover {
+      background: #f0f7f7;
+      color: #0a5c5c;
+    }
+
     /* Editor Body */
     .editor-body {
       min-height: 500px;
-      padding: 0 48px 48px;
+      padding: 24px 48px 48px;
       outline: none;
       font-size: 18px;
       line-height: 1.7;
@@ -1175,10 +1314,82 @@ if (!session) {
         padding: 0 24px 24px;
         font-size: 16px;
       }
+
+      .editor-toolbar {
+        padding: 8px 16px;
+        gap: 4px;
+        overflow-x: auto;
+      }
+
+      .toolbar-btn {
+        padding: 6px 8px;
+        font-size: 12px;
+      }
+
+      .toolbar-divider {
+        display: none;
+      }
     }
   </style>
 
   <script>
+    // Template definitions (must be at top for toolbar to use)
+    const templates: Record<string, string> = {
+      'callout-info': `
+        <div class="callout callout-info" contenteditable="true">
+          <span class="callout-icon">💡</span>
+          <strong>Pro tip:</strong> Your helpful information goes here...
+        </div>
+      `,
+      'callout-warning': `
+        <div class="callout callout-warning" contenteditable="true">
+          <span class="callout-icon">⚠️</span>
+          <strong>Important:</strong> Your warning message goes here...
+        </div>
+      `,
+      'callout-success': `
+        <div class="callout callout-success" contenteditable="true">
+          <span class="callout-icon">✅</span>
+          <strong>Success:</strong> Your success message goes here...
+        </div>
+      `,
+      'linkedin-cta': `
+        <div class="linkedin-cta-box">
+          <p>This article continues on LinkedIn where the author explores:</p>
+          <ul>
+            <li>First key point</li>
+            <li>Second key point</li>
+            <li>Third key point</li>
+          </ul>
+          <a href="https://linkedin.com/..." class="linkedin-btn" target="_blank" rel="noopener noreferrer">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M5 3c0 1.1-.7 2-2 2-1.2 0-2-.9-2-1.9C1 2 1.8 1 3 1s2 .9 2 2zM1 19h4V6H1v13zM14.6 6.2c-2.1 0-3.3 1.2-3.8 2h-.1l-.2-1.7H6.9c0 1.1.1 2.4.1 3.9V19h4v-7.1c0-.4 0-.7.1-1 .3-.7.8-1.6 1.9-1.6 1.4 0 2 1.2 2 2.8V19h4v-7.4c0-3.7-1.9-5.4-4.4-5.4z"/></svg>
+            Read Full Article on LinkedIn
+          </a>
+        </div>
+      `,
+      'linkedin-banner': `
+        <div class="linkedin-banner">
+          <div class="banner-icon">🔗</div>
+          <div class="banner-label">Originally published on LinkedIn</div>
+        </div>
+      `,
+      'key-points': `
+        <div class="key-points">
+          <div class="key-points-title">📋 Key Takeaways</div>
+          <ul>
+            <li>First key point</li>
+            <li>Second key point</li>
+            <li>Third key point</li>
+          </ul>
+        </div>
+      `,
+      'quote-highlight': `
+        <div class="quote-highlight">
+          Your impactful quote goes here. Make it memorable and meaningful.
+        </div>
+      `
+    };
+
     // Cover image upload
     const coverInput = document.getElementById('cover-input') as HTMLInputElement;
     const coverBtn = document.getElementById('cover-btn');
@@ -1215,9 +1426,150 @@ if (!session) {
       }
     });
 
+    // Fixed toolbar functionality
+    const editor = document.getElementById('editor');
+
+    // Toolbar button commands
+    document.querySelectorAll('.editor-toolbar .toolbar-btn[data-cmd]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const cmd = (e.currentTarget as HTMLElement).dataset.cmd;
+        if (cmd) {
+          if (cmd.includes(':')) {
+            const [command, value] = cmd.split(':');
+            document.execCommand(command, false, value);
+          } else {
+            document.execCommand(cmd);
+          }
+        }
+        editor?.focus();
+      });
+    });
+
+    // Toolbar link button
+    document.getElementById('toolbar-link-btn')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      const url = prompt('Enter URL:');
+      if (url) {
+        document.execCommand('createLink', false, url);
+      }
+      editor?.focus();
+    });
+
+    // Toolbar HR button
+    document.getElementById('toolbar-hr-btn')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      document.execCommand('insertHTML', false, '<hr>');
+      editor?.focus();
+    });
+
+    // Toolbar Insert Block menu
+    const toolbarInsertBtn = document.getElementById('toolbar-insert-btn');
+    const toolbarInsertMenu = document.getElementById('toolbar-insert-menu');
+
+    toolbarInsertBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toolbarInsertMenu?.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!toolbarInsertBtn?.contains(e.target as Node) && !toolbarInsertMenu?.contains(e.target as Node)) {
+        toolbarInsertMenu?.classList.add('hidden');
+      }
+    });
+
+    // Toolbar Insert Block template buttons
+    document.querySelectorAll('#toolbar-insert-menu .template-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const templateId = (e.currentTarget as HTMLElement).dataset.template;
+        if (templateId && templates[templateId]) {
+          document.execCommand('insertHTML', false, templates[templateId]);
+          editor?.focus();
+        }
+        toolbarInsertMenu?.classList.add('hidden');
+      });
+    });
+
+    // Paste Markdown functionality
+    document.getElementById('paste-markdown-btn')?.addEventListener('click', async () => {
+      try {
+        const clipboardText = await navigator.clipboard.readText();
+        if (clipboardText) {
+          const html = convertMarkdownToHtml(clipboardText);
+          document.execCommand('insertHTML', false, html);
+          editor?.focus();
+        } else {
+          alert('No text found in clipboard. Copy your markdown first, then click Paste Markdown.');
+        }
+      } catch (err) {
+        // Fallback: prompt for markdown
+        const markdown = prompt('Paste your markdown here:');
+        if (markdown) {
+          const html = convertMarkdownToHtml(markdown);
+          document.execCommand('insertHTML', false, html);
+          editor?.focus();
+        }
+      }
+    });
+
+    // Convert Markdown to HTML
+    function convertMarkdownToHtml(md: string): string {
+      let html = md
+        // Escape HTML entities first
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+
+        // Horizontal rules (before headers to avoid conflicts)
+        .replace(/^---+$/gm, '<hr>')
+        .replace(/^\*\*\*+$/gm, '<hr>')
+
+        // Headers
+        .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+        .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+        .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+
+        // Bold and italic
+        .replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>')
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.+?)\*/g, '<em>$1</em>')
+        .replace(/_(.+?)_/g, '<em>$1</em>')
+
+        // Blockquotes
+        .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
+
+        // Unordered lists
+        .replace(/^- (.+)$/gm, '<li>$1</li>')
+        .replace(/^\* (.+)$/gm, '<li>$1</li>')
+
+        // Links
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
+
+        // Paragraphs (double newlines)
+        .replace(/\n\n+/g, '</p><p>')
+
+        // Single newlines to <br> within paragraphs
+        .replace(/\n/g, '<br>');
+
+      // Wrap in paragraph tags
+      html = '<p>' + html + '</p>';
+
+      // Clean up empty paragraphs
+      html = html.replace(/<p><\/p>/g, '');
+      html = html.replace(/<p><br><\/p>/g, '');
+
+      // Wrap consecutive <li> in <ul>
+      html = html.replace(/(<li>.*?<\/li>)(\s*<li>)/g, '$1$2');
+      html = html.replace(/(<li>.*?<\/li>)+/g, '<ul>$&</ul>');
+
+      // Clean up blockquotes
+      html = html.replace(/<\/blockquote><br><blockquote>/g, '<br>');
+
+      return html;
+    }
+
     // Floating toolbar for text selection
     const floatingToolbar = document.getElementById('floating-toolbar');
-    const editor = document.getElementById('editor');
 
     document.addEventListener('selectionchange', () => {
       const selection = window.getSelection();
@@ -1276,64 +1628,7 @@ if (!session) {
       }
     });
 
-    // Template definitions
-    const templates: Record<string, string> = {
-      'callout-info': `
-        <div class="callout callout-info" contenteditable="true">
-          <span class="callout-icon">💡</span>
-          <strong>Pro tip:</strong> Your helpful information goes here...
-        </div>
-      `,
-      'callout-warning': `
-        <div class="callout callout-warning" contenteditable="true">
-          <span class="callout-icon">⚠️</span>
-          <strong>Important:</strong> Your warning message goes here...
-        </div>
-      `,
-      'callout-success': `
-        <div class="callout callout-success" contenteditable="true">
-          <span class="callout-icon">✅</span>
-          <strong>Success:</strong> Your success message goes here...
-        </div>
-      `,
-      'linkedin-cta': `
-        <div class="linkedin-cta-box">
-          <p>This article continues on LinkedIn where the author explores:</p>
-          <ul>
-            <li>First key point</li>
-            <li>Second key point</li>
-            <li>Third key point</li>
-          </ul>
-          <a href="https://linkedin.com/..." class="linkedin-btn" target="_blank" rel="noopener noreferrer">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M5 3c0 1.1-.7 2-2 2-1.2 0-2-.9-2-1.9C1 2 1.8 1 3 1s2 .9 2 2zM1 19h4V6H1v13zM14.6 6.2c-2.1 0-3.3 1.2-3.8 2h-.1l-.2-1.7H6.9c0 1.1.1 2.4.1 3.9V19h4v-7.1c0-.4 0-.7.1-1 .3-.7.8-1.6 1.9-1.6 1.4 0 2 1.2 2 2.8V19h4v-7.4c0-3.7-1.9-5.4-4.4-5.4z"/></svg>
-            Read Full Article on LinkedIn
-          </a>
-        </div>
-      `,
-      'linkedin-banner': `
-        <div class="linkedin-banner">
-          <div class="banner-icon">🔗</div>
-          <div class="banner-label">Originally published on LinkedIn</div>
-        </div>
-      `,
-      'key-points': `
-        <div class="key-points">
-          <div class="key-points-title">📋 Key Takeaways</div>
-          <ul>
-            <li>First key point</li>
-            <li>Second key point</li>
-            <li>Third key point</li>
-          </ul>
-        </div>
-      `,
-      'quote-highlight': `
-        <div class="quote-highlight">
-          Your impactful quote goes here. Make it memorable and meaningful.
-        </div>
-      `
-    };
-
-    // Handle template insertion
+    // Handle template insertion (for old bottom insert block menu)
     document.querySelectorAll('.template-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         const templateId = (e.currentTarget as HTMLElement).dataset.template;
