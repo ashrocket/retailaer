@@ -71,17 +71,13 @@ const posts = Object.values(blogModules)
         <h1>Insights & Articles</h1>
         <p class="subtitle">Manage carousel order, visibility, and preview appearance</p>
       </div>
-      <div class="carousel-settings">
-        <label>
-          <span>Auto-rotate</span>
-          <input type="number" id="rotate-interval" value="15" min="5" max="60" />
-          <span>seconds</span>
-        </label>
-        <label>
-          <span>Visible cards</span>
-          <input type="number" id="visible-count" value="3" min="1" max="6" />
-        </label>
-      </div>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="filter-tabs">
+      <button class="filter-tab active" data-filter="all">All</button>
+      <button class="filter-tab" data-filter="published">Published</button>
+      <button class="filter-tab" data-filter="draft">Drafts</button>
     </div>
 
     <!-- Posts List -->
@@ -365,30 +361,34 @@ const posts = Object.values(blogModules)
       color: #6b7280;
     }
 
-    .carousel-settings {
+    /* Filter Tabs */
+    .filter-tabs {
       display: flex;
-      gap: 24px;
-      background: white;
-      padding: 16px 24px;
-      border-radius: 8px;
-      border: 1px solid #e5e7eb;
-    }
-
-    .carousel-settings label {
-      display: flex;
-      align-items: center;
       gap: 8px;
-      font-size: 14px;
-      color: #374151;
+      margin-bottom: 24px;
     }
 
-    .carousel-settings input[type="number"] {
-      width: 60px;
-      padding: 6px 8px;
+    .filter-tab {
+      padding: 8px 16px;
       border: 1px solid #e5e7eb;
-      border-radius: 4px;
+      background: white;
+      border-radius: 6px;
       font-size: 14px;
-      text-align: center;
+      font-weight: 500;
+      color: #6b7280;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .filter-tab:hover {
+      border-color: #0a5c5c;
+      color: #0a5c5c;
+    }
+
+    .filter-tab.active {
+      background: #0a5c5c;
+      border-color: #0a5c5c;
+      color: white;
     }
 
     /* Insights List */
@@ -756,6 +756,29 @@ const posts = Object.values(blogModules)
       if (!userMenuBtn?.contains(e.target as Node) && !userDropdown?.contains(e.target as Node)) {
         userDropdown?.classList.add('hidden');
       }
+    });
+
+    // Filter tabs
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+      tab.addEventListener('click', (e) => {
+        const filter = (e.currentTarget as HTMLElement).dataset.filter;
+
+        // Update active tab
+        document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+        (e.currentTarget as HTMLElement).classList.add('active');
+
+        // Filter posts
+        document.querySelectorAll('.insight-item').forEach(item => {
+          const status = (item as HTMLElement).dataset.status;
+          if (filter === 'all') {
+            (item as HTMLElement).style.display = '';
+          } else if (filter === status) {
+            (item as HTMLElement).style.display = '';
+          } else {
+            (item as HTMLElement).style.display = 'none';
+          }
+        });
+      });
     });
 
     // Preview toggle
