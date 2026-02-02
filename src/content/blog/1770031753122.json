@@ -1,0 +1,19 @@
+{
+  "id": "1770031753122",
+  "title": "Beyond the PNR",
+  "slug": "beyond-the-pnr",
+  "content": "<p>The Passenger Name Record has been the foundation of airline systems for decades. But as customer expectations evolve and technology advances, it's time to think beyond the PNR.</p>\n\n<h2>Understanding the PNR's Limitations</h2>\n<p>PNRs were designed for a different era:</p>\n<ul>\n<li>One booking per customer per trip</li>\n<li>Limited modification capabilities</li>\n<li>No persistent customer relationship</li>\n<li>Siloed data across different systems</li>\n</ul>\n\n<h2>The Order Management Alternative</h2>\n<p>Modern order management systems treat each purchase as part of an ongoing customer relationship rather than an isolated transaction. This enables:</p>\n\n<h3>Flexibility</h3>\n<p>Customers can easily modify, split, combine, or transfer orders without creating new bookings.</p>\n\n<h3>Visibility</h3>\n<p>All customer interactions are visible in one place, enabling better service and personalisation.</p>\n\n<h3>Continuity</h3>\n<p>The relationship persists beyond individual transactions, enabling long-term engagement.</p>\n\n<h2>Real-World Benefits</h2>\n<ul>\n<li>Reduced customer service workload</li>\n<li>More flexible change and cancellation policies</li>\n<li>Better data for personalisation</li>\n<li>Easier integration with partner systems</li>\n</ul>\n\n<h2>The Path Forward</h2>\n<p>You don't have to abandon PNRs overnight. The smart approach is to layer modern order management on top of existing systems, gradually expanding capabilities while maintaining backward compatibility.</p>\n\n<p>With 204 million orders processed, Retailaer has proven that this approach works at scale — delivering the flexibility customers demand while maintaining the reliability airlines require.</p>",
+  "excerpt": "Why traditional PNR systems hold airlines back and how modern order management unlocks new opportunities.",
+  "author": "Anders Lofgren",
+  "authorId": "anders-lofgren",
+  "status": "draft",
+  "createdAt": "2026-02-02T11:29:13.122Z",
+  "updatedAt": "2026-02-02T11:29:13.122Z",
+  "carouselPreview": {
+    "title": "Beyond the PNR",
+    "excerpt": "Why traditional PNR systems hold airlines back and how modern order management unlocks new opportunities.",
+    "meta": "GUIDE",
+    "icon": "plane",
+    "backgroundGradient": "linear-gradient(135deg, #FFF5E6 0%, #FFE4CC 100%)"
+  }
+}
