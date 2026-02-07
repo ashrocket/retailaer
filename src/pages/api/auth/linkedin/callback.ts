@@ -148,7 +148,7 @@ export const GET: APIRoute = async ({ request, redirect, cookies, url, locals })
     });
 
     // Get returnTo destination from cookie
-    const returnTo = cookies.get('linkedin_return_to')?.value || '/blog/editor';
+    const returnTo = cookies.get('linkedin_return_to')?.value || '/blog/manage';
 
     // Clear OAuth cookies
     cookies.delete('linkedin_oauth_state', { path: '/' });

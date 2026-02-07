@@ -21,7 +21,7 @@ export const GET: APIRoute = async ({ redirect, url, locals }) => {
   const callbackUrl = url.origin + '/api/auth/linkedin/callback';
 
   // Get returnTo parameter for redirect after auth
-  const returnTo = url.searchParams.get('returnTo') || '/blog/editor';
+  const returnTo = url.searchParams.get('returnTo') || '/blog/manage';
 
   // Generate state for CSRF protection
   const state = crypto.randomUUID();
