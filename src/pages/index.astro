@@ -2,31 +2,15 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ExpandableFeatureCards from '../components/ExpandableFeatureCards.astro';
 import InsightsCarousel from '../components/InsightsCarousel.astro';
-import { isAuthenticated } from '../lib/auth';
 
-export const prerender = false;
+export const prerender = true;
 
 // Enable editing for this page
 const filePath = 'src/pages/index.astro';
 
-// Check if user is logged in (for showing Manage Insights link)
-const isLoggedIn = isAuthenticated(Astro.cookies);
-
-// Import all blog posts explicitly
-import post1 from '../content/blog/15-wishes-better-customer-experience.json';
-import post2 from '../content/blog/customer-first-retailing.json';
-import post3 from '../content/blog/dynamic-offers-ndc.json';
-import post4 from '../content/blog/modern-airline-retailing-fact-or-fiction.json';
-import post5 from '../content/blog/oms-and-pss-how-they-work-together.json';
-import post6 from '../content/blog/oms-vs-order-based-systems.json';
-import post7 from '../content/blog/order-management-airline-retailing.json';
-import post8 from '../content/blog/orders-without-friction.json';
-import post9 from '../content/blog/payments-cfo-likes.json';
-import post10 from '../content/blog/three-pillars-of-ndc.json';
-import post11 from '../content/blog/to-ndc-or-not-ndc.json';
-import post12 from '../content/blog/what-should-oms-do.json';
-
-const allPosts = [post1, post2, post3, post4, post5, post6, post7, post8, post9, post10, post11, post12];
+// Dynamically import all blog posts — new posts appear automatically after deploy
+const blogModules = import.meta.glob('../content/blog/*.json', { eager: true });
+const allPosts = Object.values(blogModules).map((m: any) => m.default || m);
 
 // Default preview images based on category/type
 const defaultImages: Record<string, string> = {
@@ -319,9 +303,7 @@ const insights = allPosts
       <div class="section-header">
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <h2 data-editable="latest-insights-title">Latest Insights</h2>
-          {isLoggedIn && (
-            <a href="/blog/manage" class="view-all-link">Manage Insights →</a>
-          )}
+          <a href="/blog/manage" class="view-all-link" id="manage-insights-link" style="display:none">Manage Insights →</a>
         </div>
       </div>
 
@@ -621,5 +603,12 @@ const insights = allPosts
         });
       });
     });
+  </script>
+  <script>
+    // Show Manage Insights link if editor session cookie exists
+    if (document.cookie.includes('editor_session=')) {
+      const link = document.getElementById('manage-insights-link');
+      if (link) link.style.display = '';
+    }
   </script>
 </BaseLayout>

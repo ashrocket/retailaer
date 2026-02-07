@@ -2,6 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Icon } from 'astro-icon/components';
 
+export const prerender = true;
+
 // Dynamically import all blog posts — new posts appear automatically after deploy
 const blogModules = import.meta.glob('../content/blog/*.json', { eager: true });
 const allPosts = Object.values(blogModules).map((m: any) => m.default || m);

@@ -38,8 +38,8 @@ let themePrefix = Astro.locals.themePrefix || '';
 
 // Fallback: Parse theme from original request URL if locals not set
 if (!theme || theme === 'current') {
-  // Try to get theme from the original URL (before any rewrites)
-  const originalUrl = Astro.request.headers.get('x-original-url') || Astro.url.pathname;
+  // Parse theme from URL pathname
+  const originalUrl = Astro.url.pathname;
   const pathParts = originalUrl.split('/').filter(Boolean);
 
   if (pathParts.length > 0 && themeMap[pathParts[0]]) {
@@ -243,6 +243,24 @@ const basePath = themePrefix ? `/${themePrefix}` : '';
 
   <!-- GA4 Event Tracking -->
   <script is:inline>
+    // Navbar scroll effect - becomes solid when scrolled
+    (function() {
+      var navbar = document.querySelector('.navbar');
+      if (navbar) {
+        window.addEventListener('scroll', function() {
+          if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+          } else {
+            navbar.classList.remove('scrolled');
+          }
+        });
+        // Check on load in case page is already scrolled
+        if (window.scrollY > 50) {
+          navbar.classList.add('scrolled');
+        }
+      }
+    })();
+
     // Track CTA button clicks
     document.querySelectorAll('.btn-primary, [href="/contact"]').forEach(function(btn) {
       btn.addEventListener('click', function() {

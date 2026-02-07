@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
+export const prerender = false;
+
 // Helper to get editor session
 function getEditorSession(cookies: any) {
   const sessionCookie = cookies.get('editor_session')?.value;
