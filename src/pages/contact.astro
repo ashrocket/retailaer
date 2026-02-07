@@ -181,10 +181,10 @@ export const prerender = true;
   <!-- FAQ Link Section -->
   <section class="section section-alt">
     <div class="container">
-      <div class="faq-link-box">
+      <div class="faq-cta-box">
         <h3>Have questions?</h3>
         <p>Find answers to common questions about our platform, implementation, and support.</p>
-        <a href="/faq" class="btn btn-secondary">View FAQ</a>
+        <a href="/faq" class="btn btn-gold">View FAQ</a>
       </div>
     </div>
   </section>
@@ -422,28 +422,46 @@ export const prerender = true;
       border-bottom: 1px solid var(--theme-primary);
     }
 
-    /* FAQ Link */
-    .faq-link-box {
-      background: white;
+    /* FAQ CTA */
+    .faq-cta-box {
+      background: var(--theme-gradient-hero, linear-gradient(135deg, #2b3b4f 0%, #00baa3 100%));
       padding: 3rem;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      border-radius: 16px;
       text-align: center;
-      max-width: 600px;
+      max-width: 700px;
       margin: 0 auto;
+      color: white;
     }
 
-    .faq-link-box h3 {
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: var(--theme-text-primary);
+    .faq-cta-box h3 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: white;
       margin-bottom: 0.75rem;
     }
 
-    .faq-link-box p {
-      color: var(--theme-text-secondary);
+    .faq-cta-box p {
+      color: rgba(255, 255, 255, 0.9);
       line-height: 1.7;
       margin-bottom: 1.5rem;
+      font-size: 1.0625rem;
+    }
+
+    .faq-cta-box .btn-gold {
+      background: var(--theme-gradient-accent, linear-gradient(135deg, #f5b800, #d9a400));
+      color: var(--theme-text-on-accent, #1a1a1a);
+      font-weight: 600;
+      padding: 0.875rem 2rem;
+      border-radius: 50px;
+      border: none;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+    }
+
+    .faq-cta-box .btn-gold:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
     }
 
     @media (max-width: 968px) {
