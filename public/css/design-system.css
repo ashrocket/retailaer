@@ -267,9 +267,14 @@ a:hover {
   left: 0;
   right: 0;
   z-index: 1000;
-  background-color: var(--color-teal-primary);
+  background: transparent;
   padding: var(--space-sm) 0;
-  transition: var(--transition-base);
+  transition: background 0.3s ease, backdrop-filter 0.3s ease;
+}
+
+/* Navbar becomes solid when scrolled */
+.navbar.scrolled {
+  background: var(--theme-gradient-hero, linear-gradient(135deg, #2b3b4f 0%, #00baa3 100%));
 }
 
 .navbar .container {

@@ -9,10 +9,10 @@
 
 .hero-section {
   background: var(--theme-gradient-hero);
-  padding: 5rem 0 3rem;
+  padding: 8rem 0 3rem; /* Extra top padding to clear the navbar */
   position: relative;
   overflow: hidden;
-  margin-top: 60px; /* Account for fixed nav */
+  margin-top: 0; /* Hero extends behind transparent navbar */
 }
 
 .hero-section .container {
@@ -501,15 +501,14 @@
     text-align: center;
   }
 
-  /* Move airplane below content and make it smaller */
-  .hero-visual {
-    order: 1;
-    margin-top: var(--space-xl);
+  /* Hide trail link on mobile — redundant with benefits section directly below */
+  .hero-trail-link {
+    display: none;
   }
 
-  .airplane-icon {
-    width: 120px;
-    height: 120px;
+  /* Hide airplane on mobile to condense hero */
+  .hero-visual {
+    display: none;
   }
 
   .stats-grid {
