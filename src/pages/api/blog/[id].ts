@@ -133,15 +133,25 @@ export const PATCH: APIRoute = async ({ params, request, cookies, locals }) => {
       updatedAt: new Date().toISOString(),
     };
 
+    // If publishing, add publishedAt timestamp
+    if (updates.status === 'published' && !existingContent.publishedAt) {
+      updatedPost.publishedAt = new Date().toISOString();
+    }
+
     // If unpublishing, add unpublishedAt timestamp
     if (updates.status === 'draft' && existingContent.status === 'published') {
       updatedPost.unpublishedAt = new Date().toISOString();
     }
 
     // Commit updated file
-    const commitMessage = updates.status === 'draft'
-      ? `Unpublish: ${updatedPost.title}\n\nUnpublished by ${session.name}`
-      : `Update: ${updatedPost.title}\n\nUpdated by ${session.name}`;
+    let commitMessage: string;
+    if (updates.status === 'draft' && existingContent.status === 'published') {
+      commitMessage = `Unpublish: ${updatedPost.title}\n\nUnpublished by ${session.name}`;
+    } else if (updates.status === 'published') {
+      commitMessage = `Publish: ${updatedPost.title}\n\nPublished by ${session.name} via Manage`;
+    } else {
+      commitMessage = `Update: ${updatedPost.title}\n\nUpdated by ${session.name}`;
+    }
 
     const commitResponse = await fetch(
       `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`,

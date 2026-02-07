@@ -1614,7 +1614,7 @@ if (!session) {
               editor.innerHTML += templates[templateId];
             }
             // Trigger save
-            saveDraft(false);
+            saveDraftToLocalStorage();
           }
         }
         insertBlockMenu?.classList.add('hidden');
@@ -1821,14 +1821,6 @@ if (!session) {
     document.getElementById('preview-icon')?.addEventListener('change', scheduleSaves);
     document.getElementById('preview-gradient')?.addEventListener('change', scheduleSaves);
 
-    // Manual save draft button - saves immediately to GitHub
-    document.getElementById('save-draft')?.addEventListener('click', async () => {
-      clearTimeout(localSaveTimeout);
-      clearTimeout(githubSaveTimeout);
-      saveDraftToLocalStorage();
-      await autoSaveToGitHub();
-    });
-
     // Check if editing an existing post (via URL parameter)
     const urlParams = new URLSearchParams(window.location.search);
     const editId = urlParams.get('id') || urlParams.get('slug');
@@ -2014,7 +2006,7 @@ if (!session) {
       }
 
       // Save current state to localStorage so preview page can read it
-      saveDraft(false);
+      saveDraftToLocalStorage();
 
       // Small delay to ensure localStorage is updated
       setTimeout(() => {

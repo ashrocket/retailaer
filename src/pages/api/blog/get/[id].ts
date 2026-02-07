@@ -5,12 +5,16 @@ export const prerender = false;
 // Import all blog posts at build time (Cloudflare Workers compatible)
 const blogModules = import.meta.glob('../../../../content/blog/*.json', { eager: true });
 
-// Build a map of posts by slug/id
+// Build a map of posts by slug, id, and filename
 const postsMap: Record<string, any> = {};
 for (const [path, module] of Object.entries(blogModules)) {
   const data = (module as any).default || module;
-  if (data && data.slug) {
-    postsMap[data.slug] = data;
+  if (data) {
+    if (data.slug) postsMap[data.slug] = data;
+    if (data.id) postsMap[data.id] = data;
+    // Also map by filename (without extension) for direct file lookups
+    const filename = path.split('/').pop()?.replace('.json', '');
+    if (filename) postsMap[filename] = data;
   }
 }
 

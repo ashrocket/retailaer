@@ -2,21 +2,9 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Icon } from 'astro-icon/components';
 
-// Import all blog posts explicitly
-import post1 from '../content/blog/15-wishes-better-customer-experience.json';
-import post2 from '../content/blog/customer-first-retailing.json';
-import post3 from '../content/blog/dynamic-offers-ndc.json';
-import post4 from '../content/blog/modern-airline-retailing-fact-or-fiction.json';
-import post5 from '../content/blog/oms-and-pss-how-they-work-together.json';
-import post6 from '../content/blog/oms-vs-order-based-systems.json';
-import post7 from '../content/blog/order-management-airline-retailing.json';
-import post8 from '../content/blog/orders-without-friction.json';
-import post9 from '../content/blog/payments-cfo-likes.json';
-import post10 from '../content/blog/three-pillars-of-ndc.json';
-import post11 from '../content/blog/to-ndc-or-not-ndc.json';
-import post12 from '../content/blog/what-should-oms-do.json';
-
-const allPosts = [post1, post2, post3, post4, post5, post6, post7, post8, post9, post10, post11, post12];
+// Dynamically import all blog posts — new posts appear automatically after deploy
+const blogModules = import.meta.glob('../content/blog/*.json', { eager: true });
+const allPosts = Object.values(blogModules).map((m: any) => m.default || m);
 
 // Calculate read time (approx 200 words per minute)
 function getReadTime(content: string): number {
