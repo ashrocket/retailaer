@@ -294,9 +294,17 @@ if (!session) {
 
     // Back to editor button
     document.getElementById('back-to-editor')?.addEventListener('click', () => {
-      window.close();
-      // Fallback if window.close() doesn't work (wasn't opened by script)
-      window.location.href = '/blog/editor';
+      // If opened via window.open(), close the tab
+      if (window.opener) {
+        window.close();
+        return;
+      }
+      // Otherwise navigate back (or to editor as fallback)
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.href = '/blog/editor';
+      }
     });
 
     // Publish from preview

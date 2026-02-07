@@ -103,6 +103,11 @@ const posts = Object.values(blogModules)
                   <span class={`status-badge ${post.status}`}>
                     {post.status === 'published' ? '✓ Published' : '📝 Draft'}
                   </span>
+                  {post.type && (
+                    <span class={`type-badge ${post.type === 'LINKEDIN POST' ? 'type-linkedin' : ''}`}>
+                      {post.type === 'LINKEDIN POST' ? '🔗 LinkedIn' : post.type}
+                    </span>
+                  )}
                   <span class="date">
                     {new Date(post.updatedAt || post.createdAt).toLocaleDateString('en-US', {
                       year: 'numeric',
@@ -647,6 +652,20 @@ const posts = Object.values(blogModules)
     .status-badge.draft {
       background: #fef3c7;
       color: #d97706;
+    }
+
+    .type-badge {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      background: #f3f4f6;
+      color: #6b7280;
+    }
+
+    .type-badge.type-linkedin {
+      background: #dbeafe;
+      color: #1d4ed8;
     }
 
     /* Post actions row */
