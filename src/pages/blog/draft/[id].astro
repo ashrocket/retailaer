@@ -51,9 +51,12 @@ try {
         <div class="draft-banner-content">
           <span class="draft-badge">DRAFT PREVIEW</span>
           <span class="draft-text">This is an unpublished draft shared for review.</span>
-          {post.status === 'published' && (
-            <a href={`/blog/${post.slug}`} class="view-live-btn">View Published Version →</a>
-          )}
+          <div class="draft-actions">
+            {post.status === 'published' && (
+              <a href={`/blog/${post.slug}`} class="view-live-btn">View Published Version →</a>
+            )}
+            <button id="close-draft" class="close-draft-btn">← Back</button>
+          </div>
         </div>
       </div>
 
@@ -177,6 +180,27 @@ try {
     }
 
     .view-live-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .draft-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .close-draft-btn {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .close-draft-btn:hover {
       background: rgba(255, 255, 255, 0.3);
     }
 
@@ -308,4 +332,17 @@ try {
       }
     }
   </style>
+  <script>
+    document.getElementById('close-draft')?.addEventListener('click', () => {
+      if (window.opener) {
+        window.close();
+        return;
+      }
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.href = '/blog/manage';
+      }
+    });
+  </script>
 </BaseLayout>
