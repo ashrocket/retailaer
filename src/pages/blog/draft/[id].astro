@@ -13,10 +13,11 @@ try {
   // Import all blog posts at build time (Cloudflare Workers compatible)
   const blogModules = import.meta.glob('../../../content/blog/*.json', { eager: true });
 
-  // Find the post with matching ID
+  // Find the post by id, slug, or filename (old posts have no id field)
   for (const [path, module] of Object.entries(blogModules)) {
     const data = (module as any).default || module;
-    if (data.id === id) {
+    const filename = path.split('/').pop()?.replace('.json', '');
+    if (data.id === id || data.slug === id || filename === id) {
       post = data;
       break;
     }
