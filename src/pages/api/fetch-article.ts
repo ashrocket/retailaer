@@ -56,8 +56,11 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     const image = extractMeta(html, 'og:image');
     const siteName = extractMeta(html, 'og:site_name');
 
+    // Extract body HTML for client-side screenshot capture (strip scripts for safety)
+    const bodyHtml = extractBodyHtml(html, url);
+
     return new Response(
-      JSON.stringify({ title, description, image, siteName }),
+      JSON.stringify({ title, description, image, siteName, bodyHtml }),
       { status: 200, headers: { 'Content-Type': 'application/json' } },
     );
   } catch (err) {
@@ -92,6 +95,32 @@ function extractTitle(html: string): string | null {
 
 function escapeRegex(str: string): string {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/** Extract <body> content, strip scripts, and resolve relative URLs */
+function extractBodyHtml(html: string, baseUrl: string): string | null {
+  const bodyMatch = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+  if (!bodyMatch?.[1]) return null;
+
+  let body = bodyMatch[1];
+  // Strip all <script> tags and their contents
+  body = body.replace(/<script[\s\S]*?<\/script>/gi, '');
+  // Strip inline event handlers
+  body = body.replace(/\s+on\w+="[^"]*"/gi, '');
+  body = body.replace(/\s+on\w+='[^']*'/gi, '');
+
+  // Extract <head> content for stylesheets
+  const headMatch = html.match(/<head[^>]*>([\s\S]*?)<\/head>/i);
+  let styles = '';
+  if (headMatch?.[1]) {
+    // Pull out <link rel="stylesheet"> and <style> tags
+    const linkMatches = headMatch[1].match(/<link[^>]+rel=["']stylesheet["'][^>]*>/gi) || [];
+    const styleMatches = headMatch[1].match(/<style[\s\S]*?<\/style>/gi) || [];
+    styles = [...linkMatches, ...styleMatches].join('\n');
+  }
+
+  // Build a self-contained HTML doc with <base> for resolving relative URLs
+  return `<!DOCTYPE html><html><head><base href="${baseUrl}">${styles}</head><body>${body}</body></html>`;
 }
 
 function decodeHtmlEntities(str: string): string {

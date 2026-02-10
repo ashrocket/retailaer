@@ -112,6 +112,32 @@ if (!session) {
       </div>
     </div>
 
+    <!-- Screenshot Approval (shown between Step 1 and Step 2 for press articles) -->
+    <div class="step-section hidden" id="screenshot-approval">
+      <div class="step-header">
+        <div class="step-number">📸</div>
+        <h2>Article Screenshot</h2>
+      </div>
+      <div class="step-content">
+        <div id="screenshot-capturing" class="screenshot-capture-status">
+          <div class="loading-spinner"></div>
+          <p>Capturing screenshot of the article...</p>
+        </div>
+        <div id="screenshot-result" class="hidden">
+          <div class="screenshot-approval-preview">
+            <img id="screenshot-approval-image" alt="Article screenshot preview" />
+          </div>
+          <div class="screenshot-approval-actions">
+            <button id="approve-screenshot-btn" class="btn-primary">Use This Screenshot</button>
+            <button id="skip-screenshot-btn" class="btn-secondary">Skip Screenshot</button>
+          </div>
+        </div>
+        <div id="screenshot-failed" class="hidden">
+          <p class="screenshot-fail-msg">Could not capture screenshot — proceeding without one.</p>
+        </div>
+      </div>
+    </div>
+
     <!-- Step 2: Preview & Edit -->
     <div class="step-section hidden" id="step-2">
       <div class="step-header">
@@ -806,6 +832,41 @@ if (!session) {
       justify-content: center;
     }
 
+    /* Screenshot approval */
+    .screenshot-capture-status {
+      text-align: center;
+      padding: 32px;
+      color: #6b7280;
+    }
+
+    .screenshot-approval-preview {
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 24px;
+      max-height: 500px;
+      overflow-y: auto;
+    }
+
+    .screenshot-approval-preview img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .screenshot-approval-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+    }
+
+    .screenshot-fail-msg {
+      text-align: center;
+      color: #6b7280;
+      padding: 24px;
+      font-style: italic;
+    }
+
     @media (max-width: 768px) {
       .container {
         padding: 16px;
@@ -940,27 +1001,23 @@ if (!session) {
           (document.getElementById('preview-excerpt') as HTMLTextAreaElement).value = description;
           (document.getElementById('original-url') as HTMLInputElement).value = url;
 
-          // Show OG image as preview if available
-          if (ogImageUrl) {
-            const screenshotContainer = document.getElementById('screenshot-container');
-            const screenshotImage = document.getElementById('screenshot-image') as HTMLImageElement;
-            const fullScreenshotDisplay = document.getElementById('full-screenshot-display');
-            const fullScreenshotImage = document.getElementById('full-screenshot-image') as HTMLImageElement;
-
-            if (screenshotImage && screenshotContainer) {
-              screenshotImage.src = ogImageUrl;
-              screenshotImage.alt = title;
-              screenshotContainer.classList.remove('hidden');
-            }
-            if (fullScreenshotImage && fullScreenshotDisplay) {
-              fullScreenshotImage.src = ogImageUrl;
-              fullScreenshotDisplay.classList.remove('hidden');
-            }
-          }
-
           // Default badge to PRESS for press articles
           const metaSelect = document.getElementById('preview-meta') as HTMLSelectElement;
           if (metaSelect) metaSelect.value = 'PRESS';
+
+          // Hide loading, show screenshot approval step
+          loadingState?.classList.add('hidden');
+          if (fetchBtn) (fetchBtn as HTMLButtonElement).disabled = false;
+          document.getElementById('step-1')?.classList.add('hidden');
+          document.getElementById('screenshot-approval')?.classList.remove('hidden');
+
+          // Attempt screenshot capture from bodyHtml
+          attemptScreenshotCapture(data.bodyHtml);
+
+          // Update previews and CTA (will be applied when Step 2 is shown)
+          updateCtaStyle();
+          updatePreviews();
+          return; // Flow continues via approval buttons
 
         } else {
           // LinkedIn mode: use screenshot API
@@ -1222,6 +1279,118 @@ if (!session) {
           createBtn.textContent = 'Create Preview Post';
         }
       }
+    });
+    // ── Screenshot capture for press articles ──
+    async function attemptScreenshotCapture(bodyHtml: string | null) {
+      const capturingEl = document.getElementById('screenshot-capturing');
+      const resultEl = document.getElementById('screenshot-result');
+      const failedEl = document.getElementById('screenshot-failed');
+
+      if (!bodyHtml) {
+        // No body HTML available — auto-skip after brief pause
+        if (capturingEl) capturingEl.classList.add('hidden');
+        if (failedEl) failedEl.classList.remove('hidden');
+        setTimeout(() => proceedToStep2(), 1500);
+        return;
+      }
+
+      try {
+        const html2canvas = (await import('html2canvas')).default;
+
+        // Create hidden iframe
+        const iframe = document.createElement('iframe');
+        iframe.style.cssText = 'position:fixed;left:-9999px;top:0;width:1200px;height:2000px;border:none;';
+        iframe.sandbox.add('allow-same-origin'); // needed for html2canvas to read DOM
+        document.body.appendChild(iframe);
+
+        // Write content via srcdoc
+        iframe.srcdoc = bodyHtml;
+
+        await new Promise<void>((resolve, reject) => {
+          iframe.onload = () => resolve();
+          iframe.onerror = () => reject(new Error('Iframe failed to load'));
+          setTimeout(() => resolve(), 8000); // safety timeout
+        });
+
+        // Wait for external resources (images, CSS) to settle
+        await new Promise(r => setTimeout(r, 2500));
+
+        const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+        if (!iframeDoc?.body) throw new Error('Cannot access iframe document');
+
+        const canvas = await html2canvas(iframeDoc.body, {
+          allowTaint: true,
+          useCORS: true,
+          scale: 0.8,
+          windowWidth: 1200,
+          windowHeight: 2000,
+          width: 1200,
+          height: Math.min(iframeDoc.body.scrollHeight, 2000),
+        });
+
+        // Cleanup iframe
+        document.body.removeChild(iframe);
+
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+
+        // Show approval UI
+        if (capturingEl) capturingEl.classList.add('hidden');
+        const previewImg = document.getElementById('screenshot-approval-image') as HTMLImageElement;
+        if (previewImg) previewImg.src = dataUrl;
+        if (resultEl) resultEl.classList.remove('hidden');
+
+        // Store temporarily — approval handler will use it
+        (window as any).__pendingScreenshot = dataUrl;
+
+      } catch (err) {
+        console.error('Screenshot capture failed:', err);
+        // Remove iframe if it's still around
+        const leftoverIframe = document.querySelector('iframe[style*="-9999px"]');
+        if (leftoverIframe) leftoverIframe.remove();
+
+        if (capturingEl) capturingEl.classList.add('hidden');
+        if (failedEl) failedEl.classList.remove('hidden');
+        setTimeout(() => proceedToStep2(), 1500);
+      }
+    }
+
+    function proceedToStep2() {
+      document.getElementById('screenshot-approval')?.classList.add('hidden');
+      document.getElementById('step-2')?.classList.remove('hidden');
+    }
+
+    function applyScreenshotToPreview(dataUrl: string) {
+      ogImageUrl = dataUrl;
+
+      const screenshotContainer = document.getElementById('screenshot-container');
+      const screenshotImage = document.getElementById('screenshot-image') as HTMLImageElement;
+      const fullScreenshotDisplay = document.getElementById('full-screenshot-display');
+      const fullScreenshotImage = document.getElementById('full-screenshot-image') as HTMLImageElement;
+
+      if (screenshotImage && screenshotContainer) {
+        screenshotImage.src = dataUrl;
+        screenshotImage.alt = 'Article screenshot';
+        screenshotContainer.classList.remove('hidden');
+      }
+      if (fullScreenshotImage && fullScreenshotDisplay) {
+        fullScreenshotImage.src = dataUrl;
+        fullScreenshotDisplay.classList.remove('hidden');
+      }
+    }
+
+    // Approval buttons
+    document.getElementById('approve-screenshot-btn')?.addEventListener('click', () => {
+      const dataUrl = (window as any).__pendingScreenshot;
+      if (dataUrl) {
+        applyScreenshotToPreview(dataUrl);
+        delete (window as any).__pendingScreenshot;
+      }
+      proceedToStep2();
+    });
+
+    document.getElementById('skip-screenshot-btn')?.addEventListener('click', () => {
+      delete (window as any).__pendingScreenshot;
+      proceedToStep2();
     });
   </script>
 </body>
