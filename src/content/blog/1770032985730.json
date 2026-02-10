@@ -6,9 +6,9 @@
   "excerpt": "Running an&nbsp;Order Management System (OMS) on top of an existing Passenger Service System (PSS)&nbsp;delivers strong commercial upside with far lower risk...",
   "author": "Anders Lofgren",
   "authorId": "anders-lofgren",
-  "status": "published",
+  "status": "draft",
   "createdAt": "2026-02-02T11:49:45.730Z",
-  "updatedAt": "2026-02-07T17:19:34.974Z",
+  "updatedAt": "2026-02-10T08:41:41.515Z",
   "coverImage": "/images/blog/cover-1770032985730.png",
   "carouselPreview": {
     "title": "",
@@ -17,5 +17,6 @@
     "icon": "plane",
     "backgroundGradient": "linear-gradient(135deg, #FFF5E6 0%, #FFE4CC 100%)"
   },
-  "publishedAt": "2026-02-07T17:19:34.974Z"
+  "publishedAt": "2026-02-07T17:19:34.974Z",
+  "unpublishedAt": "2026-02-10T08:41:41.515Z"
 }
