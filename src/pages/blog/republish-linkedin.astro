@@ -16,7 +16,7 @@ if (!session) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Republish LinkedIn Post - Retailaer</title>
+  <title>Import Article - Retailaer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -27,7 +27,7 @@ if (!session) {
     <div class="header-left">
       <a href="/" class="logo">Retailaer</a>
       <span class="divider">|</span>
-      <span class="page-title">Republish LinkedIn Post</span>
+      <span class="page-title">Import Article</span>
     </div>
     <div class="header-actions">
       <a href="/blog/editor" class="btn-text">New Post</a>
@@ -50,46 +50,64 @@ if (!session) {
   <!-- Main Content -->
   <div class="container">
     <div class="intro-section">
-      <h1>Republish LinkedIn Article</h1>
-      <p class="subtitle">Import an article you've published on LinkedIn and create a preview post that links to the original</p>
+      <h1>Import Article</h1>
+      <p class="subtitle">Import a LinkedIn post or press article and create a preview post that links to the original</p>
     </div>
 
-    <!-- Step 1: Enter LinkedIn URL -->
+    <!-- Step 1: Enter Article URL -->
     <div class="step-section" id="step-1">
       <div class="step-header">
         <div class="step-number">1</div>
-        <h2>Enter LinkedIn Article URL</h2>
+        <h2>Enter Article URL</h2>
       </div>
       <div class="step-content">
+        <!-- Source type tabs -->
+        <div class="source-tabs">
+          <button class="source-tab active" data-source="linkedin">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M5 3c0 1.1-.7 2-2 2-1.2 0-2-.9-2-1.9C1 2 1.8 1 3 1s2 .9 2 2zM1 19h4V6H1v13zM14.6 6.2c-2.1 0-3.3 1.2-3.8 2h-.1l-.2-1.7H6.9c0 1.1.1 2.4.1 3.9V19h4v-7.1c0-.4 0-.7.1-1 .3-.7.8-1.6 1.9-1.6 1.4 0 2 1.2 2 2.8V19h4v-7.4c0-3.7-1.9-5.4-4.4-5.4z"/>
+            </svg>
+            LinkedIn
+          </button>
+          <button class="source-tab" data-source="press">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 22h16a2 2 0 002-2V4a2 2 0 00-2-2H8a2 2 0 00-2 2v16a2 2 0 01-2 2zm0 0a2 2 0 01-2-2v-9c0-1.1.9-2 2-2h2"/>
+              <path d="M18 14h-8M18 18h-8M18 10h-8"/>
+            </svg>
+            Press Article
+          </button>
+        </div>
+
         <div class="form-group">
-          <label for="linkedin-url">LinkedIn Article or Post URL</label>
+          <label for="article-url" id="url-label">LinkedIn Article or Post URL</label>
           <input
             type="url"
-            id="linkedin-url"
+            id="article-url"
             placeholder="https://www.linkedin.com/pulse/..."
             class="url-input"
           />
-          <p class="help-text">Paste the URL of your LinkedIn article or post</p>
+          <p class="help-text" id="url-help">Paste the URL of your LinkedIn article or post</p>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" id="screenshot-option">
           <label>
             <input type="checkbox" id="capture-screenshot" checked />
-            Capture screenshot of the LinkedIn article
+            Capture screenshot of the article
           </label>
-          <p class="help-text">Takes a visual snapshot including images (recommended for rich content)</p>
+          <p class="help-text">Takes a visual snapshot including images (LinkedIn only)</p>
         </div>
 
         <button id="fetch-btn" class="btn-primary">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M8 5a3 3 0 100-6 3 3 0 000 6zm2-3a2 2 0 11-4 0 2 2 0 014 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 7.68 10.289 7 8 7c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12a9 9 0 11-6.22-8.56"/>
+            <path d="M21 3v6h-6"/>
           </svg>
           Fetch Article
         </button>
 
         <div id="loading-state" class="hidden">
           <div class="loading-spinner"></div>
-          <p>Capturing article screenshot...</p>
+          <p id="loading-text">Fetching article...</p>
         </div>
       </div>
     </div>
@@ -114,13 +132,23 @@ if (!session) {
             </div>
 
             <div class="form-group full-width">
-              <label for="preview-excerpt">Preview Content</label>
+              <label for="preview-excerpt">Summary / Excerpt</label>
               <textarea
                 id="preview-excerpt"
-                placeholder="Short excerpt or summary (2-3 paragraphs)"
-                rows="6"
+                placeholder="Short excerpt or summary (2-3 sentences)"
+                rows="4"
               ></textarea>
-              <p class="help-text">This will be shown on your site. The reader will click "Continue Reading on LinkedIn" to see the full article.</p>
+              <p class="help-text">Brief description shown on the card and insights listing</p>
+            </div>
+
+            <div class="form-group full-width">
+              <label for="preview-commentary">Your Commentary</label>
+              <textarea
+                id="preview-commentary"
+                placeholder="Add your take on this article (optional)"
+                rows="5"
+              ></textarea>
+              <p class="help-text">Your perspective or key takeaways — shown in the full post above the link to the original</p>
             </div>
 
             <div class="form-group">
@@ -128,6 +156,8 @@ if (!session) {
               <select id="preview-meta">
                 <option value="ARTICLE">ARTICLE</option>
                 <option value="LINKEDIN POST">LINKEDIN POST</option>
+                <option value="PRESS">PRESS</option>
+                <option value="NEWS">NEWS</option>
                 <option value="THOUGHT LEADERSHIP">THOUGHT LEADERSHIP</option>
                 <option value="INDUSTRY INSIGHTS">INDUSTRY INSIGHTS</option>
               </select>
@@ -157,10 +187,10 @@ if (!session) {
             </div>
 
             <div class="form-group full-width">
-              <label for="linkedin-original-url">Original LinkedIn URL</label>
+              <label for="original-url">Original Article URL</label>
               <input
                 type="url"
-                id="linkedin-original-url"
+                id="original-url"
                 readonly
                 class="readonly-input"
               />
@@ -195,11 +225,16 @@ if (!session) {
               <div id="full-excerpt-display" class="excerpt-content">
                 <p>Your preview content will appear here...</p>
               </div>
-              <a href="#" id="linkedin-cta-preview" class="linkedin-cta" target="_blank">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+              <a href="#" id="cta-preview" class="article-cta" target="_blank">
+                <svg id="cta-icon-linkedin" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M5 3c0 1.1-.7 2-2 2-1.2 0-2-.9-2-1.9C1 2 1.8 1 3 1s2 .9 2 2zM1 19h4V6H1v13zM14.6 6.2c-2.1 0-3.3 1.2-3.8 2h-.1l-.2-1.7H6.9c0 1.1.1 2.4.1 3.9V19h4v-7.1c0-.4 0-.7.1-1 .3-.7.8-1.6 1.9-1.6 1.4 0 2 1.2 2 2.8V19h4v-7.4c0-3.7-1.9-5.4-4.4-5.4z"/>
                 </svg>
-                Continue Reading on LinkedIn →
+                <svg id="cta-icon-press" class="hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+                  <polyline points="15 3 21 3 21 9"/>
+                  <line x1="10" y1="14" x2="21" y2="3"/>
+                </svg>
+                <span id="cta-text">Continue Reading on LinkedIn</span> →
               </a>
             </div>
           </div>
@@ -220,7 +255,10 @@ if (!session) {
           <path d="M20 32l8 8 16-16" stroke="#0a5c5c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
         <h2>Preview Post Created!</h2>
-        <p>Your LinkedIn article preview has been created and added to the carousel.</p>
+        <p id="success-message">Your article preview has been published and will be live in 1-2 minutes.</p>
+        <div id="success-link" class="hidden" style="margin-bottom: 24px;">
+          <a id="success-post-url" href="#" target="_blank" class="btn-text" style="color: #0a5c5c; font-weight: 600;">View Post →</a>
+        </div>
         <div class="success-actions">
           <a href="/blog/manage" class="btn-primary">Go to Manage</a>
           <a href="/blog/republish-linkedin" class="btn-secondary">Import Another</a>
@@ -666,7 +704,44 @@ if (!session) {
       margin-bottom: 16px;
     }
 
-    .linkedin-cta {
+    /* Source type tabs */
+    .source-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .source-tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      background: white;
+      font-size: 14px;
+      font-weight: 500;
+      color: #6b7280;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .source-tab:hover {
+      border-color: #0a5c5c;
+      color: #0a5c5c;
+    }
+
+    .source-tab.active {
+      background: #0a5c5c;
+      border-color: #0a5c5c;
+      color: white;
+    }
+
+    .source-tab svg {
+      flex-shrink: 0;
+    }
+
+    .article-cta {
       display: inline-flex;
       align-items: center;
       gap: 8px;
@@ -680,10 +755,19 @@ if (!session) {
       transition: all 0.2s;
     }
 
-    .linkedin-cta:hover {
+    .article-cta:hover {
       background: #005885;
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(0, 119, 181, 0.3);
+    }
+
+    .article-cta.press-cta {
+      background: #0a5c5c;
+    }
+
+    .article-cta.press-cta:hover {
+      background: #084a4f;
+      box-shadow: 0 4px 12px rgba(10, 92, 92, 0.3);
     }
 
     .action-buttons {
@@ -750,21 +834,11 @@ if (!session) {
   </style>
 
   <script>
-    // User dropdown
-    const userMenuBtn = document.getElementById('user-menu-btn');
-    const userDropdown = document.getElementById('user-dropdown');
+    // ── State ──
+    let sourceType: 'linkedin' | 'press' = 'linkedin';
+    let screenshotDataUrl: string | null = null;
+    let ogImageUrl: string | null = null;
 
-    userMenuBtn?.addEventListener('click', () => {
-      userDropdown?.classList.toggle('hidden');
-    });
-
-    document.addEventListener('click', (e) => {
-      if (!userMenuBtn?.contains(e.target as Node) && !userDropdown?.contains(e.target as Node)) {
-        userDropdown?.classList.add('hidden');
-      }
-    });
-
-    // Icon mapping
     const iconMap: Record<string, string> = {
       'plane': '✈️',
       'document': '📄',
@@ -773,104 +847,214 @@ if (!session) {
       'rocket': '🚀'
     };
 
-    // Fetch LinkedIn article
+    // ── User dropdown ──
+    const userMenuBtn = document.getElementById('user-menu-btn');
+    const userDropdown = document.getElementById('user-dropdown');
+    userMenuBtn?.addEventListener('click', () => userDropdown?.classList.toggle('hidden'));
+    document.addEventListener('click', (e) => {
+      if (!userMenuBtn?.contains(e.target as Node) && !userDropdown?.contains(e.target as Node)) {
+        userDropdown?.classList.add('hidden');
+      }
+    });
+
+    // ── Source type tabs ──
+    document.querySelectorAll('.source-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.source-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        sourceType = (tab as HTMLElement).dataset.source as 'linkedin' | 'press';
+        updateStep1ForSource();
+      });
+    });
+
+    function updateStep1ForSource() {
+      const urlInput = document.getElementById('article-url') as HTMLInputElement;
+      const urlLabel = document.getElementById('url-label');
+      const urlHelp = document.getElementById('url-help');
+      const screenshotOption = document.getElementById('screenshot-option');
+
+      if (sourceType === 'press') {
+        if (urlLabel) urlLabel.textContent = 'Article URL';
+        if (urlInput) urlInput.placeholder = 'https://www.example.com/article/...';
+        if (urlHelp) urlHelp.textContent = 'Paste the URL of the press article or news story';
+        screenshotOption?.classList.add('hidden');
+      } else {
+        if (urlLabel) urlLabel.textContent = 'LinkedIn Article or Post URL';
+        if (urlInput) urlInput.placeholder = 'https://www.linkedin.com/pulse/...';
+        if (urlHelp) urlHelp.textContent = 'Paste the URL of your LinkedIn article or post';
+        screenshotOption?.classList.remove('hidden');
+      }
+    }
+
+    // ── Fetch article ──
     const fetchBtn = document.getElementById('fetch-btn');
-    const linkedinUrlInput = document.getElementById('linkedin-url') as HTMLInputElement;
-    const captureScreenshotCheckbox = document.getElementById('capture-screenshot') as HTMLInputElement;
     const loadingState = document.getElementById('loading-state');
 
-    let screenshotDataUrl: string | null = null;
-
     fetchBtn?.addEventListener('click', async () => {
-      const url = linkedinUrlInput?.value;
-      const captureScreenshot = captureScreenshotCheckbox?.checked;
+      const urlInput = document.getElementById('article-url') as HTMLInputElement;
+      const url = urlInput?.value?.trim();
 
-      if (!url || !url.includes('linkedin.com')) {
+      if (!url) {
+        alert('Please enter a URL');
+        return;
+      }
+
+      // Validate: LinkedIn mode requires linkedin.com, press mode accepts any URL
+      if (sourceType === 'linkedin' && !url.includes('linkedin.com')) {
         alert('Please enter a valid LinkedIn URL');
         return;
       }
 
+      if (!url.startsWith('http')) {
+        alert('Please enter a valid URL starting with http:// or https://');
+        return;
+      }
+
       try {
-        // Show loading
-        if (fetchBtn) fetchBtn.disabled = true;
+        if (fetchBtn) (fetchBtn as HTMLButtonElement).disabled = true;
         loadingState?.classList.remove('hidden');
+        const loadingText = document.getElementById('loading-text');
 
-        // Fetch article content and optionally screenshot
-        const response = await fetch('/api/screenshot', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url })
-        });
+        if (sourceType === 'press') {
+          // Use fetch-article API for press articles
+          if (loadingText) loadingText.textContent = 'Fetching article metadata...';
 
-        if (!response.ok) {
-          throw new Error('Failed to fetch article');
-        }
+          const response = await fetch('/api/fetch-article', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url })
+          });
 
-        const data = await response.json();
-
-        // Set screenshot if captured
-        if (captureScreenshot && data.screenshot) {
-          screenshotDataUrl = data.screenshot;
-        }
-
-        // Use extracted data, fallback to defaults
-        const title = data.title || 'LinkedIn Article';
-        const content = data.content || '';
-
-        // Create excerpt from first 2-3 paragraphs
-        const paragraphs = content.split('\n\n').filter(p => p.length > 50);
-        const excerpt = paragraphs.slice(0, 3).join('\n\n');
-
-        // Populate form
-        (document.getElementById('preview-title') as HTMLInputElement).value = title;
-        (document.getElementById('preview-excerpt') as HTMLTextAreaElement).value = excerpt || content.substring(0, 500);
-        (document.getElementById('linkedin-original-url') as HTMLInputElement).value = url;
-
-        // Show screenshot if captured
-        if (screenshotDataUrl) {
-          const screenshotContainer = document.getElementById('screenshot-container');
-          const screenshotImage = document.getElementById('screenshot-image') as HTMLImageElement;
-          const fullScreenshotDisplay = document.getElementById('full-screenshot-display');
-          const fullScreenshotImage = document.getElementById('full-screenshot-image') as HTMLImageElement;
-
-          if (screenshotImage && screenshotContainer) {
-            screenshotImage.src = screenshotDataUrl;
-            screenshotContainer.classList.remove('hidden');
+          if (!response.ok) {
+            const err = await response.json().catch(() => ({}));
+            throw new Error(err.error || 'Failed to fetch article');
           }
 
-          if (fullScreenshotImage && fullScreenshotDisplay) {
-            fullScreenshotImage.src = screenshotDataUrl;
-            fullScreenshotDisplay.classList.remove('hidden');
+          const data = await response.json();
+          const title = data.title || 'Untitled Article';
+          const description = data.description || '';
+          ogImageUrl = data.image || null;
+
+          // Populate form
+          (document.getElementById('preview-title') as HTMLInputElement).value = title;
+          (document.getElementById('preview-excerpt') as HTMLTextAreaElement).value = description;
+          (document.getElementById('original-url') as HTMLInputElement).value = url;
+
+          // Show OG image as preview if available
+          if (ogImageUrl) {
+            const screenshotContainer = document.getElementById('screenshot-container');
+            const screenshotImage = document.getElementById('screenshot-image') as HTMLImageElement;
+            const fullScreenshotDisplay = document.getElementById('full-screenshot-display');
+            const fullScreenshotImage = document.getElementById('full-screenshot-image') as HTMLImageElement;
+
+            if (screenshotImage && screenshotContainer) {
+              screenshotImage.src = ogImageUrl;
+              screenshotImage.alt = title;
+              screenshotContainer.classList.remove('hidden');
+            }
+            if (fullScreenshotImage && fullScreenshotDisplay) {
+              fullScreenshotImage.src = ogImageUrl;
+              fullScreenshotDisplay.classList.remove('hidden');
+            }
+          }
+
+          // Default badge to PRESS for press articles
+          const metaSelect = document.getElementById('preview-meta') as HTMLSelectElement;
+          if (metaSelect) metaSelect.value = 'PRESS';
+
+        } else {
+          // LinkedIn mode: use screenshot API
+          if (loadingText) loadingText.textContent = 'Capturing article screenshot...';
+          const captureScreenshot = (document.getElementById('capture-screenshot') as HTMLInputElement)?.checked;
+
+          const response = await fetch('/api/screenshot', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url })
+          });
+
+          if (!response.ok) throw new Error('Failed to fetch article');
+
+          const data = await response.json();
+          if (captureScreenshot && data.screenshot) {
+            screenshotDataUrl = data.screenshot;
+          }
+
+          const title = data.title || 'LinkedIn Article';
+          const content = data.content || '';
+          const paragraphs = content.split('\n\n').filter((p: string) => p.length > 50);
+          const excerpt = paragraphs.slice(0, 3).join('\n\n');
+
+          (document.getElementById('preview-title') as HTMLInputElement).value = title;
+          (document.getElementById('preview-excerpt') as HTMLTextAreaElement).value = excerpt || content.substring(0, 500);
+          (document.getElementById('original-url') as HTMLInputElement).value = url;
+
+          if (screenshotDataUrl) {
+            const screenshotContainer = document.getElementById('screenshot-container');
+            const screenshotImage = document.getElementById('screenshot-image') as HTMLImageElement;
+            const fullScreenshotDisplay = document.getElementById('full-screenshot-display');
+            const fullScreenshotImage = document.getElementById('full-screenshot-image') as HTMLImageElement;
+
+            if (screenshotImage && screenshotContainer) {
+              screenshotImage.src = screenshotDataUrl;
+              screenshotContainer.classList.remove('hidden');
+            }
+            if (fullScreenshotImage && fullScreenshotDisplay) {
+              fullScreenshotImage.src = screenshotDataUrl;
+              fullScreenshotDisplay.classList.remove('hidden');
+            }
           }
         }
 
-        // Update previews
+        // Update CTA style based on source type
+        updateCtaStyle();
         updatePreviews();
 
-        // Hide loading
         loadingState?.classList.add('hidden');
-        if (fetchBtn) fetchBtn.disabled = false;
+        if (fetchBtn) (fetchBtn as HTMLButtonElement).disabled = false;
 
-        // Show step 2
         document.getElementById('step-1')?.classList.add('hidden');
         document.getElementById('step-2')?.classList.remove('hidden');
 
       } catch (error) {
         console.error('Error fetching article:', error);
-        alert('Failed to fetch article. Please try again.');
+        alert(error instanceof Error ? error.message : 'Failed to fetch article. Please try again.');
         loadingState?.classList.add('hidden');
-        if (fetchBtn) fetchBtn.disabled = false;
+        if (fetchBtn) (fetchBtn as HTMLButtonElement).disabled = false;
       }
     });
 
-    // Update preview live
+    // ── CTA style ──
+    function updateCtaStyle() {
+      const cta = document.getElementById('cta-preview');
+      const ctaText = document.getElementById('cta-text');
+      const linkedinIcon = document.getElementById('cta-icon-linkedin');
+      const pressIcon = document.getElementById('cta-icon-press');
+
+      if (sourceType === 'press') {
+        cta?.classList.add('press-cta');
+        if (ctaText) ctaText.textContent = 'Read Original Article';
+        linkedinIcon?.classList.add('hidden');
+        pressIcon?.classList.remove('hidden');
+      } else {
+        cta?.classList.remove('press-cta');
+        if (ctaText) ctaText.textContent = 'Continue Reading on LinkedIn';
+        linkedinIcon?.classList.remove('hidden');
+        pressIcon?.classList.add('hidden');
+      }
+    }
+
+    // ── Live preview updates ──
+    // Note: This page is behind authentication — only logged-in editors can
+    // reach it, and the preview content comes from their own form inputs.
     function updatePreviews() {
       const title = (document.getElementById('preview-title') as HTMLInputElement)?.value || 'Your article title';
       const excerpt = (document.getElementById('preview-excerpt') as HTMLTextAreaElement)?.value || 'Your preview excerpt will appear here...';
+      const commentary = (document.getElementById('preview-commentary') as HTMLTextAreaElement)?.value || '';
       const meta = (document.getElementById('preview-meta') as HTMLSelectElement)?.value || 'ARTICLE';
       const icon = (document.getElementById('preview-icon') as HTMLSelectElement)?.value || 'plane';
       const gradient = (document.getElementById('preview-gradient') as HTMLSelectElement)?.value;
-      const linkedinUrl = (document.getElementById('linkedin-original-url') as HTMLInputElement)?.value;
+      const articleUrl = (document.getElementById('original-url') as HTMLInputElement)?.value;
 
       // Update carousel card
       const carouselCard = document.getElementById('carousel-card-preview');
@@ -880,65 +1064,164 @@ if (!session) {
       const previewIconDisplay = document.getElementById('preview-icon-display');
 
       if (previewTitleDisplay) previewTitleDisplay.textContent = title;
-      if (previewExcerptDisplay) previewExcerptDisplay.textContent = excerpt.substring(0, 150) + '...';
+      if (previewExcerptDisplay) previewExcerptDisplay.textContent = excerpt.substring(0, 150) + (excerpt.length > 150 ? '...' : '');
       if (previewBadgeDisplay) previewBadgeDisplay.textContent = meta;
       if (previewIconDisplay) previewIconDisplay.textContent = iconMap[icon] || '✈️';
       if (carouselCard && gradient) carouselCard.style.background = gradient;
 
-      // Update full post preview
+      // Update full post preview — content authored by authenticated editor
       const fullTitleDisplay = document.getElementById('full-title-display');
       const fullExcerptDisplay = document.getElementById('full-excerpt-display');
-      const linkedinCtaPreview = document.getElementById('linkedin-cta-preview') as HTMLAnchorElement;
+      const ctaPreview = document.getElementById('cta-preview') as HTMLAnchorElement;
 
       if (fullTitleDisplay) fullTitleDisplay.textContent = title;
       if (fullExcerptDisplay) {
-        fullExcerptDisplay.innerHTML = excerpt.split('\n').map(p => `<p>${p}</p>`).join('');
+        // Build preview paragraphs from editor's own text
+        const excerptParas = excerpt.split('\n').filter(Boolean);
+        const commentaryParas = commentary ? commentary.split('\n').filter(Boolean) : [];
+
+        // Clear existing content and build with DOM methods
+        fullExcerptDisplay.textContent = '';
+        excerptParas.forEach(text => {
+          const p = document.createElement('p');
+          p.textContent = text;
+          fullExcerptDisplay.appendChild(p);
+        });
+        if (commentaryParas.length > 0) {
+          const hr = document.createElement('hr');
+          hr.style.cssText = 'margin: 24px 0; border: none; border-top: 1px solid #e5e7eb;';
+          fullExcerptDisplay.appendChild(hr);
+          commentaryParas.forEach(text => {
+            const p = document.createElement('p');
+            const em = document.createElement('em');
+            em.textContent = text;
+            p.appendChild(em);
+            fullExcerptDisplay.appendChild(p);
+          });
+        }
       }
-      if (linkedinCtaPreview && linkedinUrl) linkedinCtaPreview.href = linkedinUrl;
+      if (ctaPreview && articleUrl) ctaPreview.href = articleUrl;
     }
 
-    // Attach listeners
-    document.getElementById('preview-title')?.addEventListener('input', updatePreviews);
-    document.getElementById('preview-excerpt')?.addEventListener('input', updatePreviews);
-    document.getElementById('preview-meta')?.addEventListener('change', updatePreviews);
-    document.getElementById('preview-icon')?.addEventListener('change', updatePreviews);
-    document.getElementById('preview-gradient')?.addEventListener('change', updatePreviews);
+    // Attach live-update listeners
+    ['preview-title', 'preview-excerpt', 'preview-commentary'].forEach(id => {
+      document.getElementById(id)?.addEventListener('input', updatePreviews);
+    });
+    ['preview-meta', 'preview-icon', 'preview-gradient'].forEach(id => {
+      document.getElementById(id)?.addEventListener('change', updatePreviews);
+    });
 
-    // Back button
+    // ── Back button ──
     document.getElementById('back-btn')?.addEventListener('click', () => {
       document.getElementById('step-2')?.classList.add('hidden');
       document.getElementById('step-1')?.classList.remove('hidden');
     });
 
-    // Remove screenshot
+    // ── Remove screenshot/image ──
     document.getElementById('remove-screenshot')?.addEventListener('click', () => {
       screenshotDataUrl = null;
+      ogImageUrl = null;
       document.getElementById('screenshot-container')?.classList.add('hidden');
       document.getElementById('full-screenshot-display')?.classList.add('hidden');
     });
 
-    // Create preview post
+    // ── Create preview post (real publish) ──
     document.getElementById('create-preview-btn')?.addEventListener('click', async () => {
       const title = (document.getElementById('preview-title') as HTMLInputElement)?.value;
       const excerpt = (document.getElementById('preview-excerpt') as HTMLTextAreaElement)?.value;
-      const linkedinUrl = (document.getElementById('linkedin-original-url') as HTMLInputElement)?.value;
+      const commentary = (document.getElementById('preview-commentary') as HTMLTextAreaElement)?.value || '';
+      const articleUrl = (document.getElementById('original-url') as HTMLInputElement)?.value;
+      const meta = (document.getElementById('preview-meta') as HTMLSelectElement)?.value;
+      const icon = (document.getElementById('preview-icon') as HTMLSelectElement)?.value;
+      const gradient = (document.getElementById('preview-gradient') as HTMLSelectElement)?.value;
 
-      if (!title || !excerpt || !linkedinUrl) {
-        alert('Please fill in all required fields');
+      if (!title || !articleUrl) {
+        alert('Please fill in at least the title and article URL');
         return;
       }
 
-      console.log('Creating preview post:', {
-        title,
-        excerpt,
-        linkedinUrl,
-        screenshot: screenshotDataUrl,
-        type: 'linkedin-republish'
-      });
+      const createBtn = document.getElementById('create-preview-btn') as HTMLButtonElement;
+      if (createBtn) {
+        createBtn.disabled = true;
+        createBtn.textContent = 'Publishing...';
+      }
 
-      // Show success
-      document.getElementById('step-2')?.classList.add('hidden');
-      document.getElementById('step-3')?.classList.remove('hidden');
+      try {
+        // Build the post content HTML
+        const ctaLabel = sourceType === 'press' ? 'Read Original Article' : 'Continue Reading on LinkedIn';
+        let contentParts: string[] = [];
+        if (excerpt) {
+          contentParts.push(...excerpt.split('\n').filter(Boolean).map(p => '<p>' + p + '</p>'));
+        }
+        if (commentary) {
+          contentParts.push('<hr>');
+          contentParts.push(...commentary.split('\n').filter(Boolean).map(p => '<p>' + p + '</p>'));
+        }
+        contentParts.push('<p><a href="' + articleUrl + '" target="_blank" rel="noopener">' + ctaLabel + ' →</a></p>');
+        const contentHtml = contentParts.join('\n');
+
+        // Generate slug from title
+        const slug = title
+          .toLowerCase()
+          .replace(/[^a-z0-9\s-]/g, '')
+          .replace(/\s+/g, '-')
+          .replace(/-+/g, '-')
+          .replace(/^-|-$/g, '')
+          .substring(0, 60);
+
+        const coverImage = ogImageUrl || undefined;
+
+        const response = await fetch('/api/blog/publish', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title,
+            slug,
+            content: contentHtml,
+            excerpt: excerpt || title,
+            status: 'published',
+            coverImage,
+            carouselPreview: {
+              title,
+              excerpt: excerpt || title,
+              meta: meta || 'ARTICLE',
+              icon: icon || 'plane',
+              backgroundGradient: gradient,
+            },
+          })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.error || 'Failed to publish');
+        }
+
+        // Show success with link
+        const successMsg = document.getElementById('success-message');
+        const successLink = document.getElementById('success-link');
+        const successPostUrl = document.getElementById('success-post-url') as HTMLAnchorElement;
+
+        if (successMsg) {
+          successMsg.textContent = result.message || 'Your article preview has been published!';
+        }
+        if (result.post?.url && successLink && successPostUrl) {
+          successPostUrl.href = result.post.url;
+          successPostUrl.textContent = result.post.url;
+          successLink.classList.remove('hidden');
+        }
+
+        document.getElementById('step-2')?.classList.add('hidden');
+        document.getElementById('step-3')?.classList.remove('hidden');
+
+      } catch (error) {
+        console.error('Publish error:', error);
+        alert(error instanceof Error ? error.message : 'Failed to publish. Please try again.');
+        if (createBtn) {
+          createBtn.disabled = false;
+          createBtn.textContent = 'Create Preview Post';
+        }
+      }
     });
   </script>
 </body>

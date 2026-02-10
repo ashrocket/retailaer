@@ -56,7 +56,7 @@ const iconMap: Record<string, string> = {
           )}
           <div class="insight-meta">{insight.meta}</div>
           <h3 class="insight-title">{insight.title}</h3>
-          <p class="insight-excerpt">{insight.excerpt}</p>
+          <p class="insight-excerpt" set:html={insight.excerpt} />
         </a>
       ))}
     </div>
