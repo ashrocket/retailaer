@@ -735,8 +735,6 @@ ul {
 
 .insight-image {
     height: 192px;
-    background-color: var(--color-primary);
-    opacity: 0.1;
     position: relative;
     overflow: hidden;
 }

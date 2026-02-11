@@ -114,9 +114,7 @@ const posts = allPosts
 
                 <div class="insight-footer">
                   <span class="insight-author">By {post.author}</span>
-                  <a href={`/blog/${post.slug}`} class="read-more">
-                    Read Article →
-                  </a>
+                  <span class="read-more">Read Article →</span>
                 </div>
               </div>
             </article>
@@ -280,6 +278,8 @@ const posts = allPosts
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       display: flex;
       flex-direction: column;
+      position: relative;
+      cursor: pointer;
     }
 
     .insight-card:nth-child(even) {
@@ -395,6 +395,15 @@ const posts = allPosts
       color: var(--color-gray-900, #2b3b4f);
       text-decoration: none;
       transition: color 0.2s;
+    }
+
+    .insight-title a::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
     }
 
     .insight-title a:hover {
