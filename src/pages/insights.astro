@@ -76,9 +76,15 @@ const posts = allPosts
         <div class="insights-grid">
           {posts.map(post => (
             <article class="insight-card">
-              {post.coverImage && (
+              {post.coverImage ? (
                 <div class="insight-image">
                   <img src={post.coverImage} alt={post.title} />
+                </div>
+              ) : (
+                <div class="insight-image-placeholder">
+                  <div class="placeholder-icon">
+                    <Icon name={getTypeIcon(post.type)} />
+                  </div>
                 </div>
               )}
               <div class="insight-content">
@@ -286,13 +292,6 @@ const posts = allPosts
       transform: translateY(-4px);
     }
 
-    /* Gradient header for cards without images */
-    .insight-card-header {
-      height: 8px;
-      background: linear-gradient(90deg, #2b3b4f 0%, #00baa3 100%);
-      border-radius: 18px 18px 0 0;
-    }
-
     .insight-image {
       width: 100%;
       height: 220px;
@@ -308,6 +307,31 @@ const posts = allPosts
 
     .insight-card:hover .insight-image img {
       transform: scale(1.05);
+    }
+
+    .insight-image-placeholder {
+      width: 100%;
+      height: 220px;
+      background: linear-gradient(135deg, #e8f4f4 0%, #d4ecec 50%, #e0f0ef 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .placeholder-icon {
+      width: 64px;
+      height: 64px;
+      background: rgba(0, 186, 163, 0.12);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-teal-light, #00baa3);
+    }
+
+    .placeholder-icon [data-icon] {
+      width: 32px;
+      height: 32px;
     }
 
     .insight-content {
@@ -391,6 +415,7 @@ const posts = allPosts
       align-items: center;
       padding-top: 1rem;
       border-top: 1px solid #e5e7eb;
+      margin-top: auto;
     }
 
     .insight-author {
